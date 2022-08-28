@@ -10,12 +10,10 @@ func TestParseConfigType(t *testing.T) {
 	t.Parallel()
 	assert := require.New(t)
 
-	type test struct {
+	data := []struct {
 		input    string
 		expected Type
-	}
-
-	data := []test{
+	}{
 		{"json", JSON},
 		{"yaml", YAML},
 		{"", YAML},
@@ -23,9 +21,11 @@ func TestParseConfigType(t *testing.T) {
 	}
 
 	for _, item := range data {
-		configType, err := ParseConfigType(item.input)
-		assert.NoError(err)
-		assert.Equal(item.expected, configType)
+		t.Run("Parsing Config Type: "+item.input, func(t *testing.T) {
+			configType, err := ParseConfigType(item.input)
+			assert.NoError(err)
+			assert.Equal(item.expected, configType)
+		})
 	}
 }
 

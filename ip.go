@@ -6,9 +6,9 @@ import (
 )
 
 var (
-	ip     string   = ""
-	ips    []string = make([]string, 0, 5)
-	onceIp          = &sync.Once{}
+	ip      string   = ""
+	ips     []string = make([]string, 0, 5)
+	onceIp           = &sync.Once{}
 	onceIps          = &sync.Once{}
 )
 

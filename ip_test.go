@@ -33,7 +33,6 @@ func TestGetLocalIP(t *testing.T) {
 	localIp = utils.GetLocalIP()
 
 	assert.Equal(ip, localIp)
-
 }
 
 func TestGetLocalIPs(t *testing.T) {

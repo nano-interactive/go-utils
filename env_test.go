@@ -34,7 +34,6 @@ func TestParseEnvironment(t *testing.T) {
 	}
 }
 
-
 func TestParseEnvironment_Error(t *testing.T) {
 	t.Parallel()
 	assert := require.New(t)
