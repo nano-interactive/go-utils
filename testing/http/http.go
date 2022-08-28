@@ -33,7 +33,7 @@ func Get[TSender RequestSender](t testing.TB, app TSender, uri string, modifiers
 
 	res, err := app.Test(req)
 	if err != nil {
-		t.Log("Cannot get response")
+		t.Log(err)
 		t.FailNow()
 	}
 
@@ -45,7 +45,7 @@ func Post[TSender RequestSender, TBody any](t testing.TB, app TSender, uri strin
 
 	res, err := app.Test(req)
 	if err != nil {
-		t.Log("Cannot get response")
+		t.Log(err)
 		t.FailNow()
 	}
 
@@ -57,7 +57,7 @@ func Put[TSender RequestSender, TBody any](t testing.TB, app TSender, uri string
 
 	res, err := app.Test(req)
 	if err != nil {
-		t.Log("Cannot get response")
+		t.Log(err)
 		t.FailNow()
 	}
 
@@ -69,7 +69,7 @@ func Patch[TSender RequestSender, TBody any](t testing.TB, app TSender, uri stri
 
 	res, err := app.Test(req)
 	if err != nil {
-		t.Log("Cannot get response")
+		t.Log(err)
 		t.FailNow()
 	}
 
@@ -81,7 +81,7 @@ func Delete[TSender RequestSender](t testing.TB, app TSender, uri string, modifi
 
 	res, err := app.Test(req)
 	if err != nil {
-		t.Log("Cannot get response")
+		t.Log(err)
 		t.FailNow()
 	}
 

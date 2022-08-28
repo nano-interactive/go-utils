@@ -4,7 +4,6 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"io/fs"
-	"net"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -160,22 +159,4 @@ func CreateDirectory(path string, perm fs.FileMode) (string, error) {
 	}
 
 	return p, nil
-}
-
-func GetLocalIP() string {
-	addrs, err := net.InterfaceAddrs()
-	if err != nil {
-		return ""
-	}
-
-	for _, address := range addrs {
-		ipnet, ok := address.(*net.IPNet)
-
-		// check the address type and if it is not a loopback the display it
-		if ok && !ipnet.IP.IsLoopback() && ipnet.IP.To4() != nil {
-			return ipnet.IP.String()
-		}
-	}
-
-	return ""
 }

@@ -7,8 +7,6 @@ import (
 
 type Env uint8
 
-var ErrInvalidEnvironment = errors.New("invalid environment")
-
 const (
 	Testing Env = iota
 	Development
@@ -24,6 +22,6 @@ func ParseEnvironment(env string) (Env, error) {
 	case "testing", "test":
 		return Testing, nil
 	default:
-		return 0, errors.New("Invalid Configuration Type: JSON, YAML, TOML or \"\"(empty string), Given: " + env)
+		return 0, errors.New("Invalid Environment: prod, production, dev, development, develop, testing, test, Given: " + env)
 	}
 }
