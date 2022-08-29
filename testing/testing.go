@@ -7,16 +7,25 @@ import (
 	"path/filepath"
 
 	"github.com/spf13/viper"
-	"github.com/valyala/fasthttp"
 
 	utils "github.com/nano-interactive/go-utils"
 )
 
-type AppCreater[T any] interface {
-	Create(context.Context, *viper.Viper) (*fasthttp.Server, T)
+type AppCreater[TServer, TContainer any] interface {
+	Create(context.Context, *viper.Viper) (TServer, TContainer)
 }
 
-func CreateApplication[T any](creater AppCreater[T]) (*fasthttp.Server, T) {
+type AppCreaterFunc[TServer, TContainer any] func(context.Context, *viper.Viper) (TServer, TContainer)
+
+func (h AppCreaterFunc[TServer, TContainer]) Create(ctx context.Context, config *viper.Viper) (TServer, TContainer) {
+	return h(ctx, config)
+}
+
+func CreateApplicationFunc[TServer, TContainer any](creater AppCreaterFunc[TServer, TContainer]) (TServer, TContainer) {
+	return CreateApplication[TServer, TContainer](creater)
+}
+
+func CreateApplication[TServer, TContainer any](creater AppCreater[TServer, TContainer]) (TServer, TContainer) {
 	wd, err := os.Getwd()
 	if err != nil {
 		panic(err)
