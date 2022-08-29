@@ -1,4 +1,4 @@
-package utils
+package config
 
 import (
 	"errors"
@@ -13,7 +13,7 @@ const (
 	TOML Type = "toml"
 )
 
-func ParseConfigType(configType string) (Type, error) {
+func ParseType(configType string) (Type, error) {
 	switch strings.ToLower(configType) {
 	case "json":
 		return JSON, nil

@@ -1,4 +1,4 @@
-package utils
+package environment
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestParseEnvironment(t *testing.T) {
+func TestParse(t *testing.T) {
 	t.Parallel()
 	assert := require.New(t)
 
@@ -26,7 +26,7 @@ func TestParseEnvironment(t *testing.T) {
 
 	for _, item := range data {
 		t.Run(fmt.Sprintf("Parsing String: %s", item.env), func(t *testing.T) {
-			expected, err := ParseEnvironment(item.env)
+			expected, err := Parse(item.env)
 
 			assert.NoError(err)
 			assert.Equal(item.expected, expected)
@@ -48,7 +48,7 @@ func TestParseEnvironment_Error(t *testing.T) {
 
 	for _, item := range data {
 		t.Run(fmt.Sprintf("Parsing String: %s", item.env), func(t *testing.T) {
-			_, err := ParseEnvironment(item.env)
+			_, err := Parse(item.env)
 
 			assert.Error(err)
 			assert.Equal(item.expected, err.Error())

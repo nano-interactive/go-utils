@@ -1,4 +1,4 @@
-package utils
+package config
 
 import (
 	"testing"
@@ -22,7 +22,7 @@ func TestParseConfigType(t *testing.T) {
 
 	for _, item := range data {
 		t.Run("Parsing Config Type: "+item.input, func(t *testing.T) {
-			configType, err := ParseConfigType(item.input)
+			configType, err := ParseType(item.input)
 			assert.NoError(err)
 			assert.Equal(item.expected, configType)
 		})
@@ -33,6 +33,6 @@ func TestParseConfigType_Error(t *testing.T) {
 	t.Parallel()
 	assert := require.New(t)
 
-	_, err := ParseConfigType("invalid_type")
+	_, err := ParseType("invalid_type")
 	assert.Error(err)
 }

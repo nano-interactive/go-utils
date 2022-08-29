@@ -1,7 +1,7 @@
-//go:build windows
-// +build windows
+//go:build unix
+// +build unix
 
-package utils
+package signals
 
 import (
 	"os"
@@ -15,4 +15,6 @@ var signals = map[string]os.Signal{
 	"SIGKILL": syscall.SIGKILL,
 	"SIGALRM": syscall.SIGALRM,
 	"SIGTERM": syscall.SIGTERM,
+	"SIGUSR1": syscall.SIGUSR1,
+	"SIGUSR2": syscall.SIGUSR2,
 }

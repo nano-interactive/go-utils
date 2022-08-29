@@ -1,4 +1,4 @@
-package utils
+package environment
 
 import (
 	"errors"
@@ -13,7 +13,7 @@ const (
 	Production
 )
 
-func ParseEnvironment(env string) (Env, error) {
+func Parse(env string) (Env, error) {
 	switch strings.ToLower(env) {
 	case "prod", "production":
 		return Production, nil
