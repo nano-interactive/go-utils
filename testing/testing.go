@@ -52,7 +52,7 @@ func CreateApplication[TServer, TContainer any](creater AppCreater[TServer, TCon
 func findConfig(workingDir string, configName ...string) (string, error) {
 	cfgName := "config.yml"
 
-	if len(configName) == 0 {
+	if len(configName) > 0 {
 		cfgName = configName[0]
 	}
 
