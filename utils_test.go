@@ -25,6 +25,39 @@ func TestCreateLogFile(t *testing.T) {
 	assert.FileExists(path)
 }
 
+func TestFileExistsSuccess(t *testing.T) {
+	// Arrange
+	t.Parallel()
+	assert := require.New(t)
+	path := "./log.json"
+	file, err := CreateLogFile(path)
+
+	// Act
+	exists := FileExists(path)
+
+	// Assert
+	assert.NoError(err)
+	assert.NotNil(file)
+	assert.True(exists)
+
+	t.Cleanup(func() {
+		_ = os.Remove(path)
+	})
+}
+
+func TestFileExistsNoFile(t *testing.T) {
+	// Arrange
+	t.Parallel()
+	assert := require.New(t)
+	path := "./file-does-not-exist.json"
+
+	// Act
+	exists := FileExists(path)
+
+	// Assert
+	assert.False(exists)
+}
+
 func TestCreateDirectory(t *testing.T) {
 	t.Parallel()
 	assert := require.New(t)

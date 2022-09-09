@@ -36,7 +36,7 @@ func TestName(t *testing.T) {
 	req, _ := http.NewRequest(http.MethodGet, "", nil)
 
 	// Act
-	r := WithHeaders(headers)
+	r := WithHeaders(t, headers)
 
 	// Assert
 	assert.Equal(r(req).Header.Get("Content-Type"), "application/json")
@@ -51,7 +51,7 @@ func TestWithCookie(t *testing.T) {
 	}
 	req, _ := http.NewRequest(http.MethodGet, "", nil)
 	// Act
-	res := WithCookies(cookies)
+	res := WithCookies(t, cookies)
 	// Assert
 	a, _ := res(req).Cookie("test")
 	assert.Equal(a.Name, "test")

@@ -145,7 +145,7 @@ func CreateLogFile(path string) (file *os.File, err error) {
 func FileExists(path string) bool {
 	_, err := os.Stat(path)
 
-	return err != nil
+	return err == nil
 }
 
 func CreateDirectory(path string, perm fs.FileMode) (string, error) {

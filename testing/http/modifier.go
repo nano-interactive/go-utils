@@ -8,7 +8,7 @@ import (
 
 type RequestModifier func(*http.Request) *http.Request
 
-func WithHeaders(headers http.Header) RequestModifier {
+func WithHeaders(t testing.TB, headers http.Header) RequestModifier {
 	return func(req *http.Request) *http.Request {
 		if headers.Get("Content-Type") == "" {
 			headers.Set("Content-Type", "application/json")
@@ -35,7 +35,7 @@ func WithHeaders(headers http.Header) RequestModifier {
 //	})
 //
 // Returns URL?id=mongoid
-func WithQuery[T any](t *testing.T, queryMap map[string]string) RequestModifier {
+func WithQuery[T any](t testing.TB, queryMap map[string]string) RequestModifier {
 	return func(req *http.Request) *http.Request {
 		newReq := httptest.NewRequest(req.Method, req.URL.Path, nil)
 		newReq.Header = req.Header
@@ -65,7 +65,7 @@ func WithBody[T any](t testing.TB, body T) RequestModifier {
 	}
 }
 
-func WithCookies(cookies []*http.Cookie) RequestModifier {
+func WithCookies(t testing.TB, cookies []*http.Cookie) RequestModifier {
 	return func(req *http.Request) *http.Request {
 		for _, cookie := range cookies {
 			req.AddCookie(cookie)
@@ -81,12 +81,12 @@ func MakeRequest[T any](t testing.TB, method, uri string, modifiers ...RequestMo
 	switch method {
 	case http.MethodPost, http.MethodPut, http.MethodPatch:
 		defaults = []func(*http.Request) *http.Request{
-			WithHeaders(http.Header{}),
+			WithHeaders(t, http.Header{}),
 			WithBody[any](t, nil),
 		}
 	default:
 		defaults = []func(*http.Request) *http.Request{
-			WithHeaders(http.Header{}),
+			WithHeaders(t, http.Header{}),
 		}
 	}
 
