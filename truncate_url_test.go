@@ -25,7 +25,7 @@ var data2 = []string{
 	"https://www.example.com/data/",                               // valid
 	"https://www.example.com/data",                                // missing the last slash
 	"http://www.example.com/data",                                 // missing https
-	"www.example.com/data/",                                       // missing protocl
+	"www.example.com/data/",                                       // missing protocol
 	"www.example.com/data",                                        // missing protocol and slash
 	"www.example.com/data?one=two",                                // query string
 	"www.example.com/data#one=two",                                // query string with #
@@ -53,6 +53,23 @@ func TestTruncateUrlDeepLink(t *testing.T) {
 	for _, url := range data2 {
 		result := TruncateUrl([]byte(url))
 		assert.Equal([]byte("https://www.example.com/data/"), result, "URL not matches")
+	}
+}
+
+func TestTruncateUrlSpecialCasesSuccess(t *testing.T) {
+	// Arrange
+	t.Parallel()
+	assert := require.New(t)
+	data := [][]byte{
+		GooglePlay,
+		ITunesApple,
+	}
+
+	// Act
+	for _, url := range data {
+		result := TruncateUrl(url)
+		// Assert
+		assert.Equal(url, result)
 	}
 }
 

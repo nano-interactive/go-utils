@@ -12,17 +12,21 @@ import (
 )
 
 type FastHttpSender[T any] struct {
-	app     *fasthttp.Server
-	testing testing.TB
+	app            *fasthttp.Server
+	testing        testing.TB
+	followRedirect bool
 }
 
-func New[T any](t testing.TB, app *fasthttp.Server) *FastHttpSender[T] {
+// New Instantiate new Fast HTTP Client
+func New[T any](t testing.TB, app *fasthttp.Server, followRedirect bool) *FastHttpSender[T] {
 	return &FastHttpSender[T]{
-		app:     app,
-		testing: t,
+		app:            app,
+		testing:        t,
+		followRedirect: followRedirect,
 	}
 }
 
+// Test Sends a HTTP request
 func (s *FastHttpSender[T]) Test(req *http.Request, timeout ...time.Duration) (*http.Response, error) {
 	ln := fasthttputil.NewInmemoryListener()
 
@@ -41,7 +45,14 @@ func (s *FastHttpSender[T]) Test(req *http.Request, timeout ...time.Duration) (*
 		},
 	}
 
+	if s.followRedirect {
+		client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		}
+	}
+
 	res, err := client.Do(req)
+
 	if err != nil {
 		s.testing.Log(err)
 		s.testing.FailNow()
