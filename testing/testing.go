@@ -8,7 +8,11 @@ import (
 
 	"github.com/spf13/viper"
 
-	utils "github.com/nano-interactive/go-utils"
+	"github.com/nano-interactive/go-utils"
+)
+
+var (
+	ErrConfigNotFound = errors.New("config file not found")
 )
 
 type AppCreater[TServer, TContainer any] interface {
@@ -72,5 +76,5 @@ func findConfig(workingDir string, configName ...string) (string, error) {
 		entries, err = os.ReadDir(workingDir)
 	}
 
-	return "", errors.New("config file not found")
+	return "", ErrConfigNotFound
 }

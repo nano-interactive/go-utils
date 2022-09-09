@@ -9,14 +9,16 @@ import (
 )
 
 type GoFiberSender[T any] struct {
-	app     *fiber.App
-	testing testing.TB
+	app            *fiber.App
+	testing        testing.TB
+	followRedirect bool
 }
 
-func New[T any](t testing.TB, app *fiber.App) *GoFiberSender[T] {
+func New[T any](t testing.TB, app *fiber.App, followRedirect bool) *GoFiberSender[T] {
 	return &GoFiberSender[T]{
-		app:     app,
-		testing: t,
+		app:            app,
+		testing:        t,
+		followRedirect: followRedirect,
 	}
 }
 

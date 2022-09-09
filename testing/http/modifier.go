@@ -8,7 +8,7 @@ import (
 
 type RequestModifier func(*http.Request) *http.Request
 
-func WithHeaders(t testing.TB, headers http.Header) RequestModifier {
+func WithHeaders(headers http.Header) RequestModifier {
 	return func(req *http.Request) *http.Request {
 		if headers.Get("Content-Type") == "" {
 			headers.Set("Content-Type", "application/json")
@@ -19,7 +19,7 @@ func WithHeaders(t testing.TB, headers http.Header) RequestModifier {
 		}
 
 		if headers.Get("User-Agent") == "" {
-			headers.Set("User-Agent", "TestFastHTTPUserAgent")
+			headers.Set("User-Agent", "TestHTTPUserAgent")
 		}
 
 		req.Header = headers
@@ -28,9 +28,32 @@ func WithHeaders(t testing.TB, headers http.Header) RequestModifier {
 	}
 }
 
+// WithQuery Provides a way to put query string params.
+//
+//	WithQuery(map[string]string{
+//		"id": "mongoid",
+//	})
+//
+// Returns URL?id=mongoid
+func WithQuery[T any](t *testing.T, queryMap map[string]string) RequestModifier {
+	return func(req *http.Request) *http.Request {
+		newReq := httptest.NewRequest(req.Method, req.URL.Path, nil)
+		newReq.Header = req.Header
+		query := newReq.URL.Query()
+
+		for key, value := range queryMap {
+			query.Add(key, value)
+		}
+
+		newReq.URL.RawQuery = query.Encode()
+
+		return newReq
+	}
+}
+
 func WithBody[T any](t testing.TB, body T) RequestModifier {
 	return func(req *http.Request) *http.Request {
-		newReq := httptest.NewRequest(req.Method, req.URL.Path, getBody(t, req.Header, body))
+		newReq := httptest.NewRequest(req.Method, req.URL.Path, getBody[T](t, req.Header, body))
 		newReq.Header = req.Header
 		newReq.URL.RawQuery = req.URL.Query().Encode()
 
@@ -42,7 +65,7 @@ func WithBody[T any](t testing.TB, body T) RequestModifier {
 	}
 }
 
-func WithCookies(t testing.TB, cookies []*http.Cookie) RequestModifier {
+func WithCookies(cookies []*http.Cookie) RequestModifier {
 	return func(req *http.Request) *http.Request {
 		for _, cookie := range cookies {
 			req.AddCookie(cookie)
@@ -58,12 +81,12 @@ func MakeRequest[T any](t testing.TB, method, uri string, modifiers ...RequestMo
 	switch method {
 	case http.MethodPost, http.MethodPut, http.MethodPatch:
 		defaults = []func(*http.Request) *http.Request{
-			WithHeaders(t, http.Header{}),
+			WithHeaders(http.Header{}),
 			WithBody[any](t, nil),
 		}
 	default:
 		defaults = []func(*http.Request) *http.Request{
-			WithHeaders(t, http.Header{}),
+			WithHeaders(http.Header{}),
 		}
 	}
 
