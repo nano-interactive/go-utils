@@ -2,7 +2,6 @@ package http
 
 import (
 	"net/http"
-	"net/http/httptest"
 	"testing"
 )
 
@@ -37,7 +36,12 @@ func WithHeaders(t testing.TB, headers http.Header) RequestModifier {
 // Returns URL?id=mongoid
 func WithQuery[T any](t testing.TB, queryMap map[string]string) RequestModifier {
 	return func(req *http.Request) *http.Request {
-		newReq := httptest.NewRequest(req.Method, req.URL.Path, nil)
+		newReq, err := http.NewRequest(req.Method, req.URL.Path, nil)
+		if err != nil {
+			t.Log(err)
+			t.FailNow()
+		}
+
 		newReq.Header = req.Header
 		query := newReq.URL.Query()
 
@@ -53,7 +57,12 @@ func WithQuery[T any](t testing.TB, queryMap map[string]string) RequestModifier 
 
 func WithBody[T any](t testing.TB, body T) RequestModifier {
 	return func(req *http.Request) *http.Request {
-		newReq := httptest.NewRequest(req.Method, req.URL.Path, getBody[T](t, req.Header, body))
+		newReq, err := http.NewRequest(req.Method, req.URL.Path, getBody[T](t, req.Header, body))
+		if err != nil {
+			t.Log(err)
+			t.FailNow()
+		}
+
 		newReq.Header = req.Header
 		newReq.URL.RawQuery = req.URL.Query().Encode()
 
@@ -90,7 +99,11 @@ func MakeRequest[T any](t testing.TB, method, uri string, modifiers ...RequestMo
 		}
 	}
 
-	req := httptest.NewRequest(method, uri, nil)
+	req, err := http.NewRequest(method, uri, nil)
+	if err != nil {
+		t.Log(err)
+		t.FailNow()
+	}
 
 	for _, modifier := range defaults {
 		req = modifier(req)
