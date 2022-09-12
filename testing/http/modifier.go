@@ -35,7 +35,7 @@ func WithHeaders(t testing.TB, headers http.Header) RequestModifier {
 //	})
 //
 // Returns URL?id=mongoid
-func WithQuery[T any](t testing.TB, queryMap map[string]string) RequestModifier {
+func WithQuery(t testing.TB, queryMap map[string]string) RequestModifier {
 	return func(req *http.Request) *http.Request {
 		newReq := httptest.NewRequest(req.Method, req.URL.Path, nil)
 		newReq.Header = req.Header

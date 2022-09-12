@@ -16,12 +16,8 @@ func TestWithQuerySuccess(t *testing.T) {
 
 	httpReq, _ := http.NewRequest(http.MethodGet, "http://localhost:8080/click", nil)
 
-	type Test struct {
-		Id int64
-	}
-
 	// Act
-	req := WithQuery[Test](t, qs)
+	req := WithQuery(t, qs)
 
 	// Assert
 	assert.Equal("12345", req(httpReq).URL.Query().Get("id"))
