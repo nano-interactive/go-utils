@@ -4,7 +4,6 @@ go 1.19
 
 require (
 	github.com/gofiber/fiber/v2 v2.36.0
-	github.com/nano-interactive/go-utils v0.2.6
 	github.com/rs/zerolog v1.27.0
 	github.com/rzajac/zltest v0.12.0
 	github.com/spf13/viper v1.12.0
