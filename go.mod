@@ -1,4 +1,4 @@
-module c
+module github.com/nano-interactive/go-utils
 
 go 1.19
 
