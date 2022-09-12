@@ -7,7 +7,7 @@ import (
 	"github.com/rzajac/zltest"
 )
 
-func NewTestLogger(t *testing.T, level zerolog.Level) (zerolog.Logger, *zltest.Tester) {
+func NewAppTestLogger(t *testing.T, level zerolog.Level) (zerolog.Logger, *zltest.Tester) {
 	t.Helper()
 	tst := zltest.New(t)
 	testWriter := zerolog.NewTestWriter(t)
