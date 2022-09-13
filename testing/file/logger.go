@@ -24,42 +24,49 @@ func WithPermissions(perms os.FileMode) Modifier {
 	}
 }
 
+// WithName set file name
 func WithName(name string) Modifier {
 	return func(c *fileConfig) {
 		c.name = name
 	}
 }
 
+// WithDirectory set directory
 func WithDirectory(dir string) Modifier {
 	return func(fc *fileConfig) {
 		fc.dir = dir
 	}
 }
 
+// Append Set Append flag to a file
 func Append() Modifier {
 	return func(c *fileConfig) {
 		c.flags |= os.O_APPEND
 	}
 }
 
+// ReadOnly Mark file as read only
 func ReadOnly() Modifier {
 	return func(c *fileConfig) {
 		c.flags |= os.O_RDONLY
 	}
 }
 
+// ReadWrite Mark file as read-write
 func ReadWrite() Modifier {
 	return func(c *fileConfig) {
 		c.flags |= os.O_RDWR
 	}
 }
 
+// WriteOnly Mark file as write-only
 func WriteOnly() Modifier {
 	return func(c *fileConfig) {
 		c.flags |= os.O_WRONLY
 	}
 }
 
+// Truncate Mark file as truncate
 func Truncate() Modifier {
 	return func(c *fileConfig) {
 		c.flags |= os.O_TRUNC
@@ -71,9 +78,6 @@ func Create() Modifier {
 		c.flags |= os.O_CREATE
 	}
 }
-
-// io.Reader io.Write io.Closer io.Seeker fmt.Stringer error
-// net.Addr net.Conn net.Listener net.Dialer
 
 func ReadJsonLine[T any](t testing.TB, input io.Reader) func() (T, bool) {
 	t.Helper()
@@ -160,6 +164,7 @@ func ReadLines(t testing.TB, input io.Reader) []string {
 	return lines
 }
 
+// #nosec 304
 func TempJsonLogFile(t testing.TB, modifiers ...Modifier) *os.File {
 	t.Helper()
 
@@ -175,6 +180,7 @@ func TempJsonLogFile(t testing.TB, modifiers ...Modifier) *os.File {
 
 	filePath := filepath.Join(cfg.dir, cfg.name)
 
+	// #nosec 304
 	file, err := os.OpenFile(filePath, cfg.flags, cfg.permissions)
 	if err != nil {
 		t.Log(err)
