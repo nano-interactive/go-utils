@@ -31,36 +31,42 @@ func WithName(name string) Modifier {
 	}
 }
 
+// WithDirectory set directory
 func WithDirectory(dir string) Modifier {
 	return func(fc *fileConfig) {
 		fc.dir = dir
 	}
 }
 
+// Append Set Append flag to a file
 func Append() Modifier {
 	return func(c *fileConfig) {
 		c.flags |= os.O_APPEND
 	}
 }
 
+// ReadOnly Mark file as read only
 func ReadOnly() Modifier {
 	return func(c *fileConfig) {
 		c.flags |= os.O_RDONLY
 	}
 }
 
+// ReadWrite Mark file as read-write
 func ReadWrite() Modifier {
 	return func(c *fileConfig) {
 		c.flags |= os.O_RDWR
 	}
 }
 
+// WriteOnly Mark file as write-only
 func WriteOnly() Modifier {
 	return func(c *fileConfig) {
 		c.flags |= os.O_WRONLY
 	}
 }
 
+// Truncate Mark file as truncate
 func Truncate() Modifier {
 	return func(c *fileConfig) {
 		c.flags |= os.O_TRUNC

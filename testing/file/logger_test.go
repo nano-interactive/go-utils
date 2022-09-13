@@ -80,7 +80,7 @@ func TestReadJsonDataSuccess(t *testing.T) {
 	// Arrange
 	t.Parallel()
 	assert := require.New(t)
-	const fileName = "products.json"
+	const fileName = "data.json"
 
 	type Product struct {
 		Name  string  `json:"name"`
