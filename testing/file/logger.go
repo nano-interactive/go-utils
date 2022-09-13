@@ -24,6 +24,7 @@ func WithPermissions(perms os.FileMode) Modifier {
 	}
 }
 
+// WithName set file name
 func WithName(name string) Modifier {
 	return func(c *fileConfig) {
 		c.name = name
@@ -71,9 +72,6 @@ func Create() Modifier {
 		c.flags |= os.O_CREATE
 	}
 }
-
-// io.Reader io.Write io.Closer io.Seeker fmt.Stringer error
-// net.Addr net.Conn net.Listener net.Dialer
 
 func ReadJsonLine[T any](t testing.TB, input io.Reader) func() (T, bool) {
 	t.Helper()
