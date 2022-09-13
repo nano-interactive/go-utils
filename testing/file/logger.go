@@ -164,6 +164,7 @@ func ReadLines(t testing.TB, input io.Reader) []string {
 	return lines
 }
 
+// #nosec 304
 func TempJsonLogFile(t testing.TB, modifiers ...Modifier) *os.File {
 	t.Helper()
 
@@ -179,6 +180,7 @@ func TempJsonLogFile(t testing.TB, modifiers ...Modifier) *os.File {
 
 	filePath := filepath.Join(cfg.dir, cfg.name)
 
+	// #nosec 304
 	file, err := os.OpenFile(filePath, cfg.flags, cfg.permissions)
 	if err != nil {
 		t.Log(err)
