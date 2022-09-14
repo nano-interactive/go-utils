@@ -1,2 +1,4 @@
 test-logs/
 .idea
+*.json
+coverage.txt
