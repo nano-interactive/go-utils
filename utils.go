@@ -160,3 +160,11 @@ func CreateDirectory(path string, perm fs.FileMode) (string, error) {
 
 	return p, nil
 }
+
+func CopyBytes(input []byte) []byte {
+	c := make([]byte, len(input))
+
+	copy(c, input)
+
+	return c
+}
