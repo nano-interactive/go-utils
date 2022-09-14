@@ -81,7 +81,7 @@ func AnonymizeIp(ip []byte) []byte {
 	return anonymous
 }
 
-// GetRequestId returns hashed hostname trimmed to first 6 characters
+// GetRequestId returns random byte slice of length 32
 func GetRequestId() ([32]byte, error) {
 	var bytes [32]byte
 	n, err := rand.Read(bytes[:])
