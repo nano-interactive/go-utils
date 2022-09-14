@@ -60,3 +60,46 @@ func TestGetLocalIPs(t *testing.T) {
 
 	assert.EqualValues(ips, localIps)
 }
+
+func TestAnonymizeIpSuccess(t *testing.T) {
+	// Arrange
+	t.Parallel()
+	assert := require.New(t)
+
+	ip := []byte("192.172.90.70")
+	expectedIp := []byte("192.172.90.0")
+
+	// Act
+	anonymizedIp := utils.AnonymizeIp(ip)
+
+	// Assert
+	assert.NotEqual(ip, anonymizedIp)
+	assert.Equal(expectedIp, anonymizedIp)
+}
+
+func TestAnonymizeIpInvalidIp(t *testing.T) {
+	// Arrange
+	t.Parallel()
+	assert := require.New(t)
+
+	ip := []byte("invalid_ip")
+
+	// Act
+	anonymizedIp := utils.AnonymizeIp(ip)
+
+	// Assert
+	assert.Equal([]byte(utils.UnknownIp), anonymizedIp)
+}
+
+func TestGetRequestId(t *testing.T) {
+	// Arrange
+	t.Parallel()
+	assert := require.New(t)
+
+	// Act
+	requestId, err := utils.GetRequestId()
+
+	// Assert
+	assert.Len(requestId, 32)
+	assert.Nil(err)
+}
