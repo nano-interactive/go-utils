@@ -1,5 +1,9 @@
 # GoUtils
 
+[![Testing](https://github.com/nano-interactive/go-utils/actions/workflows/test.yml/badge.svg)](https://github.com/nano-interactive/go-utils/actions/workflows/test.yml)
+
+[![codecov](https://codecov.io/gh/nano-interactive/go-utils/branch/master/graph/badge.svg?token=JQTAGQ11DS)](https://codecov.io/gh/nano-interactive/go-utils)
+
 ## This is a collection of useful packages including:
 
 - Config
