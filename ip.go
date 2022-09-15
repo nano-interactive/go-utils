@@ -2,8 +2,6 @@ package utils
 
 import (
 	"bytes"
-	"crypto/rand"
-	"errors"
 	"net"
 	"sync"
 )
@@ -79,18 +77,4 @@ func AnonymizeIp(ip []byte) []byte {
 	anonymous = append(anonymous, '.', '0')
 
 	return anonymous
-}
-
-// GetRequestId returns random byte slice of length 32
-func GetRequestId() ([32]byte, error) {
-	var bytes [32]byte
-	n, err := rand.Read(bytes[:])
-	if err != nil {
-		return [32]byte{}, err
-	}
-	if n != 32 {
-		return [32]byte{}, errors.New("not enough bytes")
-	}
-
-	return bytes, nil
 }

@@ -90,16 +90,3 @@ func TestAnonymizeIpInvalidIp(t *testing.T) {
 	// Assert
 	assert.Equal([]byte(utils.UnknownIp), anonymizedIp)
 }
-
-func TestGetRequestId(t *testing.T) {
-	// Arrange
-	t.Parallel()
-	assert := require.New(t)
-
-	// Act
-	requestId, err := utils.GetRequestId()
-
-	// Assert
-	assert.Len(requestId, 32)
-	assert.Nil(err)
-}
