@@ -24,13 +24,13 @@ func CreateApplicationFunc[TServer, TContainer any](creater AppCreaterFunc[TServ
 	return CreateApplication[TServer, TContainer](creater)
 }
 
-func CreateApplication[TServer, TContainer any](creater AppCreater[TServer, TContainer]) (TServer, TContainer) {
+func CreateApplication[TServer, TContainer any](creater AppCreater[TServer, TContainer], configName ...string) (TServer, TContainer) {
 	wd, err := os.Getwd()
 	if err != nil {
 		panic(err)
 	}
 
-	configPath, err := findConfig(wd)
+	configPath, err := FindConfig(wd, configName...)
 	if err != nil {
 		panic(err)
 	}
@@ -48,16 +48,20 @@ func CreateApplication[TServer, TContainer any](creater AppCreater[TServer, TCon
 	return creater.Create(context.Background(), cfg)
 }
 
-func findConfig(workingDir string, configName ...string) (string, error) {
+func FindConfig(workingDir string, configName ...string) (string, error) {
 	cfgName := "config.yml"
 
 	if len(configName) > 0 {
 		cfgName = configName[0]
 	}
 
+	return FindFile(workingDir, cfgName)
+}
+
+func FindFile(workingDir string, fileName string) (string, error) {
 	for entries, err := os.ReadDir(workingDir); err == nil; {
 		for _, entry := range entries {
-			if !entry.IsDir() && entry.Name() == cfgName {
+			if entry.Name() == fileName {
 				return workingDir, nil
 			}
 		}
@@ -71,5 +75,5 @@ func findConfig(workingDir string, configName ...string) (string, error) {
 		entries, err = os.ReadDir(workingDir)
 	}
 
-	return "", errors.New("config file not found")
+	return "", errors.New("file or directory not found")
 }
