@@ -26,6 +26,33 @@ var DefaultConfig = Config{
 }
 
 func NewWithModifier(cfg Config, modifiers ...Modifier) (*viper.Viper, error) {
+	if cfg.Env == "" {
+		cfg.Env = DefaultConfig.Env
+	}
+
+	if cfg.Name == "" {
+		cfg.Name = DefaultConfig.Name
+	}
+
+	if cfg.Type == "" {
+		cfg.Type = DefaultConfig.Type
+	}
+
+	env, err := environment.Parse(cfg.Env)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(cfg.Paths) == 0 {
+		cfg.Paths = DefaultConfig.Paths
+
+		if env == environment.Production {
+			cfg.Paths = append(cfg.Paths, ".", fmt.Sprintf("/etc/%s", cfg.ProjectName))
+		} else {
+			cfg.Paths = append(cfg.Paths, ".")
+		}
+	}
+
 	configType, err := ParseType(cfg.Type)
 	if err != nil {
 		return nil, err
@@ -54,36 +81,6 @@ func NewWithModifier(cfg Config, modifiers ...Modifier) (*viper.Viper, error) {
 func New(c ...Config) (*viper.Viper, error) {
 	cfg := DefaultConfig
 
-	if len(c) > 0 {
-		cfg = c[0]
-	}
-
-	if cfg.Env == "" {
-		cfg.Env = DefaultConfig.Env
-	}
-
-	if cfg.Name == "" {
-		cfg.Name = DefaultConfig.Name
-	}
-
-	if cfg.Type == "" {
-		cfg.Type = DefaultConfig.Type
-	}
-
-	env, err := environment.Parse(cfg.Env)
-	if err != nil {
-		return nil, err
-	}
-
-	if len(cfg.Paths) == 0 {
-		cfg.Paths = DefaultConfig.Paths
-
-		if env == environment.Production {
-			cfg.Paths = append(cfg.Paths, ".", fmt.Sprintf("/etc/%s", cfg.ProjectName))
-		} else {
-			cfg.Paths = append(cfg.Paths, ".")
-		}
-	}
 
 	return NewWithModifier(cfg)
 }
