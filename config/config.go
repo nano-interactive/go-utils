@@ -81,6 +81,9 @@ func NewWithModifier(cfg Config, modifiers ...Modifier) (*viper.Viper, error) {
 func New(c ...Config) (*viper.Viper, error) {
 	cfg := DefaultConfig
 
+	if len(c) > 0 {
+		cfg = c[0]
+	}
 
 	return NewWithModifier(cfg)
 }
