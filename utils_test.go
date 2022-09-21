@@ -201,3 +201,16 @@ func TestIsInt(t *testing.T) {
 		assert.False(IsInt("023355"))
 	})
 }
+
+func TestCopyBytesSuccess(t *testing.T) {
+	// Arrange
+	t.Parallel()
+	assert := require.New(t)
+	data := []byte("test")
+
+	// Act
+	bytes := CopyBytes(data)
+
+	// Assert
+	assert.Equal(bytes, data)
+}
