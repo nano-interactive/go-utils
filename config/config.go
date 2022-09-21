@@ -7,18 +7,48 @@ import (
 	"github.com/spf13/viper"
 )
 
-type Config struct {
-	ProjectName string
-	Env string
-	Name string
-	Type string
-	Paths []string
-}
+type (
+	Config struct {
+		ProjectName string
+		Env         string
+		Name        string
+		Type        string
+		Paths       []string
+	}
 
-var DefaultConfig = Config {
-	Env: "development",
+	Modifier func(*viper.Viper)
+)
+
+var DefaultConfig = Config{
+	Env:  "development",
 	Name: "config",
 	Type: "yaml",
+}
+
+func NewWithModifier(cfg Config, modifiers ...Modifier) (*viper.Viper, error) {
+	configType, err := ParseType(cfg.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	v := viper.New()
+
+	v.SetConfigName(cfg.Name)
+	v.SetConfigType(string(configType))
+
+	for _, path := range cfg.Paths {
+		v.AddConfigPath(path)
+	}
+
+	for _, modifier := range modifiers {
+		modifier(v)
+	}
+
+	if err := v.ReadInConfig(); err != nil {
+		return nil, err
+	}
+
+	return v, nil
 }
 
 func New(c ...Config) (*viper.Viper, error) {
@@ -50,29 +80,10 @@ func New(c ...Config) (*viper.Viper, error) {
 
 		if env == environment.Production {
 			cfg.Paths = append(cfg.Paths, ".", fmt.Sprintf("/etc/%s", cfg.ProjectName))
-
 		} else {
 			cfg.Paths = append(cfg.Paths, ".")
 		}
 	}
 
-	configType, err := ParseType(cfg.Type)
-	if err != nil {
-		return nil, err
-	}
-
-	v := viper.New()
-
-	v.SetConfigName(cfg.Name)
-	v.SetConfigType(string(configType))
-
-	for _ , path := range cfg.Paths {
-		v.AddConfigPath(path)
-	}
-
-	if err := v.ReadInConfig(); err != nil {
-		return nil, err
-	}
-
-	return v, nil
+	return NewWithModifier(cfg)
 }
