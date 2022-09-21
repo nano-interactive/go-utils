@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+<<<<<<< Updated upstream
 type (
 	Config struct {
 		ProjectName string
@@ -19,6 +20,16 @@ type (
 	Modifier func(*viper.Viper)
 )
 
+=======
+type Config struct {
+	ProjectName string
+	Env         string
+	Name        string
+	Type        string
+	Paths       []string
+}
+
+>>>>>>> Stashed changes
 var DefaultConfig = Config{
 	Env:  "development",
 	Name: "config",
@@ -85,5 +96,27 @@ func New(c ...Config) (*viper.Viper, error) {
 		}
 	}
 
+<<<<<<< Updated upstream
 	return NewWithModifier(cfg)
+=======
+	configType, err := ParseType(cfg.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	v := viper.New()
+
+	v.SetConfigName(cfg.Name)
+	v.SetConfigType(string(configType))
+
+	for _, path := range cfg.Paths {
+		v.AddConfigPath(path)
+	}
+
+	if err := v.ReadInConfig(); err != nil {
+		return nil, err
+	}
+
+	return v, nil
+>>>>>>> Stashed changes
 }
