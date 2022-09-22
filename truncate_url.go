@@ -12,6 +12,7 @@ var (
 	HTTPProtocol  = []byte("http:")
 )
 
+// Truncates a given url
 func TruncateUrl(value []byte) []byte {
 	if bytes.Contains(value, GooglePlay) || bytes.Contains(value, ITunesApple) {
 		return value

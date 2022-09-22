@@ -60,7 +60,7 @@ func GetLocalIPs() []string {
 	return ips
 }
 
-// AnonymizeIp slices ip address byte array and writes 0 to last octet
+// Slices ip address byte array and writes 0 to last octet
 // example 192.172.90.70 -> 192.172.90.0
 func AnonymizeIp(ip []byte) []byte {
 	position := bytes.LastIndexByte(ip, '.')
