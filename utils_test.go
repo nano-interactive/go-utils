@@ -32,6 +32,10 @@ func TestFileExistsSuccess(t *testing.T) {
 	path := "./log.json"
 	file, err := CreateLogFile(path)
 
+	t.Cleanup(func() {
+		_ = os.Remove(path)
+	})
+
 	// Act
 	exists := FileExists(path)
 
@@ -39,10 +43,6 @@ func TestFileExistsSuccess(t *testing.T) {
 	assert.NoError(err)
 	assert.NotNil(file)
 	assert.True(exists)
-
-	t.Cleanup(func() {
-		_ = os.Remove(path)
-	})
 }
 
 func TestFileExistsNoFile(t *testing.T) {
@@ -150,7 +150,6 @@ func TestUnsafeBytes(t *testing.T) {
 func TestUnsafeString(t *testing.T) {
 	t.Parallel()
 	assert := require.New(t)
-
 	bytes := []byte("Hello World")
 
 	str := UnsafeString(bytes)
@@ -173,7 +172,7 @@ func TestGetenv(t *testing.T) {
 	})
 
 	t.Run("WithEnvSet", func(t *testing.T) {
-		os.Setenv("HELLO_ENV", "value")
+		_ = os.Setenv("HELLO_ENV", "value")
 
 		value := Getenv("HELLO_ENV")
 		assert.NotEmpty(value)
