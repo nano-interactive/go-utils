@@ -6,10 +6,14 @@ import (
 )
 
 const (
+	// RequestIdLength
 	RequestIdLength = 32
+
+	// MaxEncodedLength
 	MaxEncodedLength = (RequestIdLength*8 + 5) / 6
 )
-// GetRequestId returns random byte slice of length 32
+
+// Returns 32 character string of random bytes
 func GetRequestId() (string, error) {
 	var bytes [RequestIdLength]byte
 

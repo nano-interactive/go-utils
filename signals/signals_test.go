@@ -11,13 +11,14 @@ func TestInvalidSignalError(t *testing.T) {
 	t.Parallel()
 	assert := require.New(t)
 	signal := "TEST"
+
 	// Act
 	sig, err := GetSignal(signal)
 
 	// Assert
 	assert.Nil(sig)
 	assert.Error(err)
-	assert.Equal("Cannot find signal TEST", err.Error())
+	assert.EqualError(err, "Cannot find signal TEST")
 }
 
 func TestGetSignalSuccess(t *testing.T) {

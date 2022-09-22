@@ -51,7 +51,7 @@ func TestParseEnvironment_Error(t *testing.T) {
 			_, err := Parse(item.env)
 
 			assert.Error(err)
-			assert.Equal(item.expected, err.Error())
+			assert.EqualError(err, item.expected)
 		})
 	}
 }
