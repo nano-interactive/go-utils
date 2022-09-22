@@ -17,7 +17,7 @@ const (
 	UnknownIp = "UNKNOWN IP"
 )
 
-// Returns ip address of local machine, empty string if fails
+// Returns IP address of local machine, empty string if fails
 func GetLocalIP() string {
 	onceIp.Do(func() {
 		addrs, err := net.InterfaceAddrs()
@@ -40,7 +40,7 @@ func GetLocalIP() string {
 	return ip
 }
 
-// Returns strinngs slice of ip found on local machine
+// Returns strinngs slice of IP found on local machine
 func GetLocalIPs() []string {
 	onceIps.Do(func() {
 		addrs, err := net.InterfaceAddrs()
@@ -62,7 +62,7 @@ func GetLocalIPs() []string {
 	return ips
 }
 
-// Slices ip address byte slice and writes 0 to last octet
+// Slices IP address byte slice and writes 0 to last octet
 // Example: AnonymizeIp([]byte{'1','9','2','.','1','7','2','.','9','0','.','7','0'})
 // Returns []byte{'1','9','2','.','1','7','2','.','9','0','.','0'}
 func AnonymizeIp(ip []byte) []byte {
