@@ -9,6 +9,8 @@ import (
 	"testing"
 )
 
+// type fileConfig
+// Structure contains basic file options: name of file, directory to be written to, permissions and flags
 type fileConfig struct {
 	name        string
 	dir         string
@@ -16,72 +18,74 @@ type fileConfig struct {
 	flags       int
 }
 
+// type Modifier
+// Delegates functions for a given file
 type Modifier func(*fileConfig)
 
-// Sets file premissions
+// Sets file premissions for testing purposes
 func WithPermissions(perms os.FileMode) Modifier {
 	return func(c *fileConfig) {
 		c.permissions = perms
 	}
 }
 
-// Sets file name
+// Sets file name for testing purposes
 func WithName(name string) Modifier {
 	return func(c *fileConfig) {
 		c.name = name
 	}
 }
 
-// Sets directory
+// Sets directory for testing purposes
 func WithDirectory(dir string) Modifier {
 	return func(fc *fileConfig) {
 		fc.dir = dir
 	}
 }
 
-// Sets Append flag to a file
+// Sets Append flag to a file for testing purposes
 func Append() Modifier {
 	return func(c *fileConfig) {
 		c.flags |= os.O_APPEND
 	}
 }
 
-// Marks file as read only
+// Marks file as read only for testing purposes
 func ReadOnly() Modifier {
 	return func(c *fileConfig) {
 		c.flags |= os.O_RDONLY
 	}
 }
 
-// Marks file as read-write
+// Marks file as read-write for testing purposes
 func ReadWrite() Modifier {
 	return func(c *fileConfig) {
 		c.flags |= os.O_RDWR
 	}
 }
 
-// Marks file as write-only
+// Marks file as write-only for testing purposes
 func WriteOnly() Modifier {
 	return func(c *fileConfig) {
 		c.flags |= os.O_WRONLY
 	}
 }
 
-// Marks file as truncate
+// Marks file as truncate for testing purposes
 func Truncate() Modifier {
 	return func(c *fileConfig) {
 		c.flags |= os.O_TRUNC
 	}
 }
 
-// Sets Create flag to a file
+// Sets Create flag to a file for testing purposes
 func Create() Modifier {
 	return func(c *fileConfig) {
 		c.flags |= os.O_CREATE
 	}
 }
 
-// Returns log data in Json format for single line
+// Returns T and bool depending on failing or not for a given file for testing purposes
 func ReadJsonLine[T any](t testing.TB, input io.Reader) func() (T, bool) {
 	t.Helper()
 
@@ -112,7 +116,7 @@ func ReadJsonLine[T any](t testing.TB, input io.Reader) func() (T, bool) {
 	}
 }
 
-// Returns log data in Json format for multiple lines
+// Returns []T for given file for testing purposes
 func ReadJsonData[T any](t testing.TB, input io.Reader) []T {
 	t.Helper()
 
@@ -132,7 +136,7 @@ func ReadJsonData[T any](t testing.TB, input io.Reader) []T {
 	return storage
 }
 
-// Returns log data in Byte format for single line
+// Returns log data in Byte format for single line for testing purposes
 func ReadLinesInBytes(t testing.TB, input io.Reader) [][]byte {
 	t.Helper()
 
@@ -155,7 +159,7 @@ func ReadLinesInBytes(t testing.TB, input io.Reader) [][]byte {
 	return lines
 }
 
-// Returns log data in String slice format from Byte format
+// Returns log data in String slice format from Byte format for testing purposes
 func ReadLines(t testing.TB, input io.Reader) []string {
 	t.Helper()
 
@@ -170,7 +174,7 @@ func ReadLines(t testing.TB, input io.Reader) []string {
 	return lines
 }
 
-// Creates temporary Json log file used for tests
+// Creates temporary JSON log file for testing purposes
 func TempJsonLogFile(t testing.TB, modifiers ...Modifier) *os.File {
 	t.Helper()
 

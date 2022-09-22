@@ -5,8 +5,11 @@ import (
 	"testing"
 )
 
+// type RequestModifier
+// Delegates http.Request functions
 type RequestModifier func(*http.Request) *http.Request
 
+// Provides a way to set Headers of a request for testing purposes
 func WithHeaders(t testing.TB, headers http.Header) RequestModifier {
 	return func(req *http.Request) *http.Request {
 		if headers.Get("Content-Type") == "" {
@@ -27,7 +30,7 @@ func WithHeaders(t testing.TB, headers http.Header) RequestModifier {
 	}
 }
 
-// WithQuery Provides a way to put query string params.
+// Provides a way to put query string params.
 //
 //	WithQuery(map[string]string{
 //		"id": "mongoid",
@@ -55,6 +58,7 @@ func WithQuery(t testing.TB, queryMap map[string]string) RequestModifier {
 	}
 }
 
+// Provides a way to set Body of a request for testing purposes
 func WithBody[T any](t testing.TB, body T) RequestModifier {
 	return func(req *http.Request) *http.Request {
 		newReq, err := http.NewRequest(req.Method, req.URL.String(), getBody(t, req.Header, body))
@@ -74,6 +78,14 @@ func WithBody[T any](t testing.TB, body T) RequestModifier {
 	}
 }
 
+// Provides a way to set Cookies of a request for testing purposes
+// Example:
+//
+//	cookies := []*http.Cookie{
+//			{Name: "jwt-token"},
+//		}
+//
+// WithCookies(t, cookies)
 func WithCookies(t testing.TB, cookies []*http.Cookie) RequestModifier {
 	return func(req *http.Request) *http.Request {
 		for _, cookie := range cookies {
@@ -84,6 +96,7 @@ func WithCookies(t testing.TB, cookies []*http.Cookie) RequestModifier {
 	}
 }
 
+// Provides a way to create a request for testing purposes
 func MakeRequest[T any](t testing.TB, method, uri string, modifiers ...RequestModifier) *http.Request {
 	var defaults []func(*http.Request) *http.Request
 

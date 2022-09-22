@@ -9,14 +9,14 @@ import (
 )
 
 // type GoFiberSender
-// A GoFiberSender is wrapper for fiber
+// Sturcture contains in memory server and client for testing purposes
 type GoFiberSender[T any] struct {
 	app            *fiber.App
 	testing        testing.TB
 	followRedirect bool
 }
 
-// Instantiate New fiber client
+// Instantiate New fiber client for testing purposes
 func New[T any](t testing.TB, app *fiber.App, followRedirect bool) *GoFiberSender[T] {
 	return &GoFiberSender[T]{
 		app:            app,
@@ -25,7 +25,7 @@ func New[T any](t testing.TB, app *fiber.App, followRedirect bool) *GoFiberSende
 	}
 }
 
-// Sends a new Fiber request for tests
+// Sends a new Fiber request for testing purposes
 func (s *GoFiberSender[T]) Test(req *http.Request, timeout ...time.Duration) (*http.Response, error) {
 	t := -1
 
