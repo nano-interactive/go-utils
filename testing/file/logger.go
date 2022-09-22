@@ -18,67 +18,70 @@ type fileConfig struct {
 
 type Modifier func(*fileConfig)
 
+// Sets file premissions
 func WithPermissions(perms os.FileMode) Modifier {
 	return func(c *fileConfig) {
 		c.permissions = perms
 	}
 }
 
-// WithName set file name
+// Sets file name
 func WithName(name string) Modifier {
 	return func(c *fileConfig) {
 		c.name = name
 	}
 }
 
-// WithDirectory set directory
+// Sets directory
 func WithDirectory(dir string) Modifier {
 	return func(fc *fileConfig) {
 		fc.dir = dir
 	}
 }
 
-// Append Set Append flag to a file
+// Sets Append flag to a file
 func Append() Modifier {
 	return func(c *fileConfig) {
 		c.flags |= os.O_APPEND
 	}
 }
 
-// ReadOnly Mark file as read only
+// Marks file as read only
 func ReadOnly() Modifier {
 	return func(c *fileConfig) {
 		c.flags |= os.O_RDONLY
 	}
 }
 
-// ReadWrite Mark file as read-write
+// Marks file as read-write
 func ReadWrite() Modifier {
 	return func(c *fileConfig) {
 		c.flags |= os.O_RDWR
 	}
 }
 
-// WriteOnly Mark file as write-only
+// Marks file as write-only
 func WriteOnly() Modifier {
 	return func(c *fileConfig) {
 		c.flags |= os.O_WRONLY
 	}
 }
 
-// Truncate Mark file as truncate
+// Marks file as truncate
 func Truncate() Modifier {
 	return func(c *fileConfig) {
 		c.flags |= os.O_TRUNC
 	}
 }
 
+// Sets Create flag to a file
 func Create() Modifier {
 	return func(c *fileConfig) {
 		c.flags |= os.O_CREATE
 	}
 }
 
+// Returns log data in Json format for single line
 func ReadJsonLine[T any](t testing.TB, input io.Reader) func() (T, bool) {
 	t.Helper()
 
@@ -109,6 +112,7 @@ func ReadJsonLine[T any](t testing.TB, input io.Reader) func() (T, bool) {
 	}
 }
 
+// Returns log data in Json format for multiple lines
 func ReadJsonData[T any](t testing.TB, input io.Reader) []T {
 	t.Helper()
 
@@ -128,6 +132,7 @@ func ReadJsonData[T any](t testing.TB, input io.Reader) []T {
 	return storage
 }
 
+// Returns log data in Byte format for single line
 func ReadLinesInBytes(t testing.TB, input io.Reader) [][]byte {
 	t.Helper()
 
@@ -150,6 +155,7 @@ func ReadLinesInBytes(t testing.TB, input io.Reader) [][]byte {
 	return lines
 }
 
+// Returns log data in String slice format from Byte format
 func ReadLines(t testing.TB, input io.Reader) []string {
 	t.Helper()
 
@@ -164,7 +170,7 @@ func ReadLines(t testing.TB, input io.Reader) []string {
 	return lines
 }
 
-// #nosec 304
+// Creates temporary Json log file used for tests
 func TempJsonLogFile(t testing.TB, modifiers ...Modifier) *os.File {
 	t.Helper()
 
