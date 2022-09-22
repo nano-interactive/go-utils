@@ -13,6 +13,7 @@ const (
 	Production
 )
 
+// Parses environment and returns constant
 func Parse(env string) (Env, error) {
 	switch strings.ToLower(env) {
 	case "prod", "production":

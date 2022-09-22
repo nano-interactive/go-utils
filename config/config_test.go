@@ -77,3 +77,30 @@ func TestNewSuccess(t *testing.T) {
 	assert.NotNil(cfg)
 	assert.Equal("test", cfg.Get("key"))
 }
+
+func TestProduction(t *testing.T) {
+	// Arrange
+	t.Parallel()
+	assert := require.New(t)
+	file, _ := os.Create("test.json")
+	type testConfig struct {
+		Key string `json:"key"`
+	}
+	config := testConfig{Key: "test"}
+	val, _ := json.Marshal(config)
+	_, _ = file.Write(val)
+	t.Cleanup(func() {
+		_ = os.Remove(file.Name())
+	})
+	// Act
+	cfg, err := New(Config{
+		Env:  "production",
+		Name: "test",
+		Type: "json",
+	})
+
+	// Assert
+	assert.NoError(err)
+	assert.NotNil(cfg)
+	assert.Equal("test", cfg.Get("key"))
+}
