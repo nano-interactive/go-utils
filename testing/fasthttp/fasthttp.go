@@ -11,13 +11,15 @@ import (
 	"github.com/valyala/fasthttp/fasthttputil"
 )
 
+// Type FastHttpSender
+// Sturcture contains in memory server and client for testing purposes
 type FastHttpSender[T any] struct {
 	app            *fasthttp.Server
 	testing        testing.TB
 	followRedirect bool
 }
 
-// New Instantiate new Fast HTTP Client
+// Instantiate new Fast HTTP Client for testing purposes
 func New[T any](t testing.TB, app *fasthttp.Server, followRedirect bool) *FastHttpSender[T] {
 	return &FastHttpSender[T]{
 		app:            app,
@@ -26,7 +28,7 @@ func New[T any](t testing.TB, app *fasthttp.Server, followRedirect bool) *FastHt
 	}
 }
 
-// Test Sends a HTTP request
+// Sends a HTTP request for testing purposes
 func (s *FastHttpSender[T]) Test(req *http.Request, timeout ...time.Duration) (*http.Response, error) {
 	ln := fasthttputil.NewInmemoryListener()
 
