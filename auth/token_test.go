@@ -13,7 +13,7 @@ func TestParseTokenFromHeader(t *testing.T) {
 	assert := require.New(t)
 	header := "Bearer U_lENfGpWMPoD6fP7resxu9ZH2b0B5QfpufFDMOSwgs"
 
-	token, err := auth.ParseTokenFromHeader(header)
+	token, err := auth.ParseTokenFromHeader(header, auth.AuthTypeBearer)
 
 	assert.NoError(err)
 	assert.Len(token, 32)
@@ -25,7 +25,7 @@ func TestParseTokenFromHeaderInvalidHeader(t *testing.T) {
 	assert := require.New(t)
 	header := "Invalid"
 
-	token, err := auth.ParseTokenFromHeader(header)
+	token, err := auth.ParseTokenFromHeader(header, auth.AuthTypeBearer)
 
 	assert.Nil(token)
 	assert.Error(err)
@@ -38,7 +38,7 @@ func TestParseTokenFromHeaderInvalidAuthType(t *testing.T) {
 	assert := require.New(t)
 	header := "Basic U_lENfGpWMPoD6fP7resxu9ZH2b0B5QfpufFDMOSwgs"
 
-	token, err := auth.ParseTokenFromHeader(header)
+	token, err := auth.ParseTokenFromHeader(header, auth.AuthTypeBearer)
 
 	assert.Nil(token)
 	assert.Error(err)
@@ -51,7 +51,7 @@ func TestParseTokenFromHeaderInvalidTokenContents(t *testing.T) {
 	assert := require.New(t)
 	header := "Bearer not_base64_encoded"
 
-	token, err := auth.ParseTokenFromHeader(header)
+	token, err := auth.ParseTokenFromHeader(header, auth.AuthTypeBearer)
 
 	assert.Nil(token)
 	assert.Error(err)
