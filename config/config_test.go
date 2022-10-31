@@ -82,7 +82,7 @@ func TestProduction(t *testing.T) {
 	// Arrange
 	t.Parallel()
 	assert := require.New(t)
-	file, _ := os.Create("test.json")
+	file, _ := os.Create("test-production.json")
 	type testConfig struct {
 		Key string `json:"key"`
 	}
@@ -95,7 +95,7 @@ func TestProduction(t *testing.T) {
 	// Act
 	cfg, err := New(Config{
 		Env:  "production",
-		Name: "test",
+		Name: "test-production",
 		Type: "json",
 	})
 
