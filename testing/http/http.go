@@ -12,6 +12,7 @@ import (
 // Type RequestSender
 // Sturcture contains in memory HTTP Server and Client for testing purposes
 type RequestSender interface {
+	io.Closer
 	Test(req *http.Request, timeout ...time.Duration) (*http.Response, error)
 }
 
