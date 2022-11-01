@@ -10,21 +10,21 @@ import (
 
 // type GoFiberSender
 // Sturcture contains in memory server and client for testing purposes
-type GoFiberSender[T any] struct {
+type GoFiberSender struct {
 	app            *fiber.App
 	testing        testing.TB
 	followRedirect bool
 }
 
 // Instantiate New fiber client for testing purposes
-func New[T any](t testing.TB, app *fiber.App, followRedirects ...bool) *GoFiberSender[T] {
+func New(t testing.TB, app *fiber.App, followRedirects ...bool) *GoFiberSender {
 	var followRedirect bool
 
 	if len(followRedirects) > 0 {
 		followRedirect = followRedirects[0]
 	}
 
-	sender := &GoFiberSender[T]{
+	sender := &GoFiberSender{
 		app:            app,
 		testing:        t,
 		followRedirect: followRedirect,
@@ -41,7 +41,7 @@ func New[T any](t testing.TB, app *fiber.App, followRedirects ...bool) *GoFiberS
 }
 
 // Sends a new Fiber request for testing purposes
-func (s *GoFiberSender[T]) Test(req *http.Request, timeout ...time.Duration) (*http.Response, error) {
+func (s *GoFiberSender) Test(req *http.Request, timeout ...time.Duration) (*http.Response, error) {
 	t := -1
 
 	if len(timeout) > 0 {
@@ -51,6 +51,6 @@ func (s *GoFiberSender[T]) Test(req *http.Request, timeout ...time.Duration) (*h
 	return s.app.Test(req, t)
 }
 
-func (s *GoFiberSender[T]) Close() error {
+func (s *GoFiberSender) Close() error {
 	return s.app.Shutdown()
 }

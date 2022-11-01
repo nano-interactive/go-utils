@@ -6,39 +6,26 @@ import (
 	"net/http"
 	"testing"
 	"time"
-
-	"github.com/valyala/fasthttp"
-	"github.com/valyala/fasthttp/fasthttputil"
 )
 
 // Type FastHttpSender
 // Sturcture contains in memory server and client for testing purposes
-type FastHttpSender[T any] struct {
-	app            *fasthttp.Server
+type FastHttpSender struct {
+	dialer         func() (net.Conn, error)
 	testing        testing.TB
 	followRedirect bool
-	ln             *fasthttputil.InmemoryListener
 }
 
 // Instantiate new Fast HTTP Client for testing purposes
-func New[T any](t testing.TB, app *fasthttp.Server, followRedirects ...bool) *FastHttpSender[T] {
-	ln := fasthttputil.NewInmemoryListener()
-
+func New(t testing.TB, dialer func() (net.Conn, error), followRedirects ...bool) *FastHttpSender {
 	var followRedirect bool
 
 	if len(followRedirects) > 0 {
 		followRedirect = followRedirects[0]
 	}
 
-	go func() {
-		if err := app.Serve(ln); err != nil {
-			t.Fatalf("failed to serve: %v", err)
-		}
-	}()
-
-	sender := &FastHttpSender[T]{
-		ln:             ln,
-		app:            app,
+	sender := &FastHttpSender{
+		dialer:         dialer,
 		testing:        t,
 		followRedirect: followRedirect,
 	}
@@ -54,7 +41,7 @@ func New[T any](t testing.TB, app *fasthttp.Server, followRedirects ...bool) *Fa
 }
 
 // Sends a HTTP request for testing purposes
-func (s *FastHttpSender[T]) Test(req *http.Request, timeout ...time.Duration) (*http.Response, error) {
+func (s *FastHttpSender) Test(req *http.Request, timeout ...time.Duration) (*http.Response, error) {
 	var tmout time.Duration
 
 	if len(timeout) > 0 {
@@ -64,8 +51,14 @@ func (s *FastHttpSender[T]) Test(req *http.Request, timeout ...time.Duration) (*
 	client := &http.Client{
 		Transport: &http.Transport{
 			DialContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
-				return s.ln.Dial()
+				return s.dialer()
 			},
+			DialTLSContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
+				return s.dialer()
+			},
+			DisableKeepAlives:  true,
+			DisableCompression: true,
+			MaxIdleConns:       1,
 		},
 		Timeout: tmout,
 	}
@@ -79,13 +72,12 @@ func (s *FastHttpSender[T]) Test(req *http.Request, timeout ...time.Duration) (*
 	res, err := client.Do(req)
 
 	if err != nil {
-		s.testing.Log(err)
-		s.testing.FailNow()
+		s.testing.Fatalf("failed to send request: %v", err)
 	}
 
 	return res, nil
 }
 
-func (s FastHttpSender[T]) Close() error {
-	return s.app.Shutdown()
+func (s FastHttpSender) Close() error {
+	return nil
 }
