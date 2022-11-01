@@ -22,8 +22,7 @@ func getBody[T any](t testing.TB, headers http.Header, body T) io.Reader {
 	case "application/json":
 		jsonStr, err := json.Marshal(body)
 		if err != nil {
-			t.Log(err)
-			t.FailNow()
+			t.Fatalf("Error while sending request: %v", err)
 		}
 
 		return bytes.NewReader(jsonStr)
@@ -38,8 +37,7 @@ func Get[TSender RequestSender](t testing.TB, app TSender, uri string, modifiers
 
 	res, err := app.Test(req)
 	if err != nil {
-		t.Log(err)
-		t.FailNow()
+		t.Fatalf("Error while sending request: %v", err)
 	}
 
 	return res
@@ -51,8 +49,7 @@ func Post[TSender RequestSender, TBody any](t testing.TB, app TSender, uri strin
 
 	res, err := app.Test(req)
 	if err != nil {
-		t.Log(err)
-		t.FailNow()
+		t.Fatalf("Error while sending request: %v", err)
 	}
 
 	return res
@@ -64,8 +61,7 @@ func Put[TSender RequestSender, TBody any](t testing.TB, app TSender, uri string
 
 	res, err := app.Test(req)
 	if err != nil {
-		t.Log(err)
-		t.FailNow()
+		t.Fatalf("Error while sending request: %v", err)
 	}
 
 	return res
@@ -77,8 +73,7 @@ func Patch[TSender RequestSender, TBody any](t testing.TB, app TSender, uri stri
 
 	res, err := app.Test(req)
 	if err != nil {
-		t.Log(err)
-		t.FailNow()
+		t.Fatalf("Error while sending request: %v", err)
 	}
 
 	return res
@@ -90,8 +85,7 @@ func Delete[TSender RequestSender](t testing.TB, app TSender, uri string, modifi
 
 	res, err := app.Test(req)
 	if err != nil {
-		t.Log(err)
-		t.FailNow()
+		t.Fatalf("Error while sending request: %v", err)
 	}
 
 	return res
