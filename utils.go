@@ -184,3 +184,22 @@ func CopyBytes(input []byte) []byte {
 
 	return c
 }
+
+var pixel []byte = nil
+
+const image = "R0lGODlhAQABAIAAAP///wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+
+func init() {
+	if pixel == nil {
+		var err error
+		pixel, err = base64.StdEncoding.DecodeString(image)
+
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
+func GetBrokenImageBytes() []byte {
+	return pixel
+}

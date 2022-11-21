@@ -213,3 +213,32 @@ func TestCopyBytesSuccess(t *testing.T) {
 	// Assert
 	assert.Equal(bytes, data)
 }
+
+
+func TestGetBrokenImageBytesSuccess(t *testing.T) {
+	// Arrange
+	t.Parallel()
+	assert := require.New(t)
+
+	// Act
+	bytes := GetBrokenImageBytes()
+
+	// Assert
+	assert.NotEmpty(bytes)
+}
+
+func BenchmarkGetBrokenImageBytes(b *testing.B) {
+	b.ReportAllocs()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		GetBrokenImageBytes()
+	}
+}
+
+func BenchmarkBase64DecodeImage(b *testing.B) {
+	b.ReportAllocs()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = base64.StdEncoding.DecodeString("R0lGODlhAQABAIAAAP///wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==")
+	}
+}
