@@ -5,8 +5,10 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"testing"
 
 	"github.com/nano-interactive/go-utils"
+	"github.com/nano-interactive/go-utils/config"
 	"github.com/spf13/viper"
 )
 
@@ -85,3 +87,43 @@ func FindFile(workingDir string, fileName string) (string, error) {
 
 	return "", errors.New("file or directory not found")
 }
+
+func WorkingDir(t testing.TB) string {
+	t.Helper()
+	wd, err := os.Getwd()
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
+
+	return wd
+}
+
+func GetConfig[T any](t testing.TB, create func(*viper.Viper) (T, error)) T {
+	t.Helper()
+	configPath, err := FindConfig(WorkingDir(t))
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
+
+	viperCfg, err := config.New(config.Config{
+		Env:   "testing",
+		Name:  "config",
+		Type:  "yaml",
+		Paths: []string{configPath},
+	})
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
+
+	cfg, err := create(viperCfg)
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
+
+	return cfg
+}
+

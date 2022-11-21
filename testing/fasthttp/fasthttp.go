@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/valyala/fasthttp"
 )
 
 // Type FastHttpSender
@@ -80,4 +82,30 @@ func (s *FastHttpSender) Test(req *http.Request, timeout ...time.Duration) (*htt
 
 func (s FastHttpSender) Close() error {
 	return nil
+}
+
+func QueryArgsFromUrl(url string) *fasthttp.Args {
+	args := &fasthttp.Args{}
+
+	args.Parse(url)
+
+	return args
+}
+
+func CallHandler(t testing.TB, url string, h fasthttp.RequestHandler) *fasthttp.RequestCtx {
+	u := fasthttp.URI{}
+	u.Update(url)
+
+	fastHttpCtx := &fasthttp.RequestCtx{
+		Request: fasthttp.Request{
+			Header:        fasthttp.RequestHeader{},
+			UseHostHeader: false,
+		},
+		Response: fasthttp.Response{},
+	}
+	fastHttpCtx.Request.SetURI(&u)
+
+	h(fastHttpCtx)
+
+	return fastHttpCtx
 }
