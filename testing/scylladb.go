@@ -1,7 +1,6 @@
 package testing
 
 import (
-	"math/rand"
 	"os"
 	"strconv"
 	"strings"
@@ -34,7 +33,7 @@ func getScyllaDBConfig(t *testing.T, opt *gocql.ClusterConfig) *gocql.ClusterCon
 		opt.Port, _ = strconv.Atoi(value)
 	}
 
-	opt.Keyspace = keyspace + "_" + strconv.FormatUint(uint64(rand.Int31n(100_000)), 10)
+	opt.Keyspace = keyspace // FIXME: + "_" + strconv.FormatUint(uint64(rand.Int31n(100_000)), 10)
 
 	return opt
 }
