@@ -3,6 +3,7 @@ package utils
 import (
 	"crypto/rand"
 	"encoding/base64"
+	"errors"
 	"os"
 	"path/filepath"
 	"testing"
@@ -214,7 +215,6 @@ func TestCopyBytesSuccess(t *testing.T) {
 	assert.Equal(bytes, data)
 }
 
-
 func TestGetBrokenImageBytesSuccess(t *testing.T) {
 	// Arrange
 	t.Parallel()
@@ -241,4 +241,28 @@ func BenchmarkBase64DecodeImage(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		_, _ = base64.StdEncoding.DecodeString("R0lGODlhAQABAIAAAP///wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==")
 	}
+}
+
+func TestMustPassPanicSuccessfully(t *testing.T) {
+	// Arrange
+	t.Parallel()
+	assert := require.New(t)
+	// Assert
+	assert.Panics(func() {
+		// Act
+		MustPass(1, errors.New("test"))
+	}, "Code panics")
+}
+
+func TestMustPassDoesNotPanic(t *testing.T) {
+	// Arrange
+	t.Parallel()
+	assert := require.New(t)
+	// Assert
+	assert.NotPanics(func() {
+		// Act
+		data := MustPass(1, nil)
+
+		assert.Equal(1, data)
+	})
 }

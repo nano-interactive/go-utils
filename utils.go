@@ -203,3 +203,11 @@ func init() {
 func GetBrokenImageBytes() []byte {
 	return pixel
 }
+
+func MustPass[T any](data T, err error) T {
+	if err != nil {
+		panic(err)
+	}
+
+	return data
+}
