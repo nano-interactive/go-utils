@@ -251,7 +251,7 @@ func TestMustPassPanicSuccessfully(t *testing.T) {
 	assert.Panics(func() {
 		// Act
 		MustPass(1, errors.New("test"))
-	}, "Code panics")
+	})
 }
 
 func TestMustPassDoesNotPanic(t *testing.T) {
