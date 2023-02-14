@@ -1,6 +1,7 @@
 package utils_test
 
 import (
+	"github.com/valyala/fasthttp"
 	"net"
 	"testing"
 
@@ -89,4 +90,53 @@ func TestAnonymizeIpInvalidIp(t *testing.T) {
 
 	// Assert
 	assert.Equal([]byte(utils.UnknownIp), anonymizedIp)
+}
+
+func TestRealIpReturnNilEmptyHeader(t *testing.T) {
+	// Arrange
+	t.Parallel()
+	assert := require.New(t)
+
+	header := fasthttp.ResponseHeader{}
+
+	// Act
+	ip := utils.RealIp(&header)
+
+	// Assert
+	assert.Nil(ip)
+}
+
+func TestRealIpReturnIpNormalIp(t *testing.T) {
+	// Arrange
+	t.Parallel()
+	assert := require.New(t)
+
+	header := fasthttp.ResponseHeader{}
+	ipString := "10.20.30.40"
+	header.Set(utils.HeaderXForwardedFor, ipString)
+
+	// Act
+	ip := utils.RealIp(&header)
+
+	// Assert
+	assert.NotNil(ip)
+	assert.Equal([]byte(ipString), ip)
+}
+
+func TestRealIpReturnIpCommaSeperated(t *testing.T) {
+	// Arrange
+	t.Parallel()
+	assert := require.New(t)
+
+	header := fasthttp.ResponseHeader{}
+	expected := "10.20.30.40"
+	ipString := expected + ",50.60.70.80"
+	header.Set(utils.HeaderXForwardedFor, ipString)
+
+	// Act
+	ip := utils.RealIp(&header)
+
+	// Assert
+	assert.NotNil(ip)
+	assert.Equal([]byte(expected), ip)
 }

@@ -14,8 +14,14 @@ var (
 )
 
 const (
-	UnknownIp = "UNKNOWN IP"
+	UnknownIp           = "UNKNOWN IP"
+	HeaderXForwardedFor = "X-Forwarded-For"
+	HeaderXRealIP       = "X-Real-IP"
 )
+
+type Peekable interface {
+	Peek(key string) []byte
+}
 
 // Returns IP address of local machine, empty string if fails
 func GetLocalIP() string {
@@ -80,4 +86,28 @@ func AnonymizeIp(ip []byte) []byte {
 	anonymous = append(anonymous, '.', '0')
 
 	return anonymous
+}
+
+// Extracts first ip address from Peekable interface seperated by coma
+// Returns nil if no values are presemt
+func RealIp(peekable Peekable) []byte {
+	ipHeader := peekable.Peek(HeaderXForwardedFor)
+
+	if len(ipHeader) == 0 {
+		ipHeader = peekable.Peek(HeaderXRealIP)
+	}
+
+	if len(ipHeader) == 0 {
+		return nil
+	}
+
+	firstIndex := bytes.IndexRune(ipHeader, ',')
+
+	ip := ipHeader
+
+	if firstIndex != -1 {
+		ip = ipHeader[:firstIndex]
+	}
+
+	return ip
 }
