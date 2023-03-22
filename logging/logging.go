@@ -14,7 +14,7 @@ const DateTimeFormat = "2006-01-02 15:04:05"
 
 // Set default options for Zerolog with log level and pretty print
 // If pretty print is false, it will write to Standard Output
-func ConfigureDefaultLogger(level string, prettyPrint bool) {
+func ConfigureDefaultLogger(level string, prettyPrint bool, output ...io.Writer) {
 	zerologLevel, err := zerolog.ParseLevel(level)
 	if err != nil {
 		panic("Failed to parse logging level: " + level)
@@ -31,6 +31,10 @@ func ConfigureDefaultLogger(level string, prettyPrint bool) {
 		w = zerolog.NewConsoleWriter()
 	} else {
 		w = os.Stdout
+	}
+
+	if len(output) > 0 {
+		w = zerolog.MultiLevelWriter(w, output[0])
 	}
 
 	log.Logger = log.Output(w)
