@@ -1,6 +1,11 @@
 package utils
 
-import "bytes"
+import (
+	"bytes"
+	"errors"
+	"net/url"
+	"strings"
+)
 
 var (
 	GooglePlay  = []byte("play.google")
@@ -10,7 +15,45 @@ var (
 	HTTP          = []byte("http://")
 	HTTPSProtocol = []byte("https:")
 	HTTPProtocol  = []byte("http:")
+
+	ErrInvalidUrl = errors.New("invalid url")
 )
+
+func TrimUrlForScylla(fullUrl string) (scyllaUrl string, hostName string, err error) {
+	var data strings.Builder
+
+	trimmedUrl := strings.TrimSpace(fullUrl)
+
+	urlObject, err := url.Parse(trimmedUrl)
+	if err != nil {
+		return "", "", err
+	}
+
+	data.Grow(len(urlObject.Host) + len(urlObject.Path) + len("https://") + 1)
+	data.WriteString("https://")
+	data.WriteString(urlObject.Host)
+	data.WriteString(urlObject.Path)
+	scyllaUrl = data.String()
+
+	if scyllaUrl[len(scyllaUrl)-1:] != "/" {
+		data.WriteString("/")
+	}
+	scyllaUrl = data.String()
+
+	return scyllaUrl, urlObject.Host, nil
+}
+
+func GetDomainFromUrl(fullUrl string) (string, error) {
+	fullUrlObject, err := url.Parse(fullUrl)
+	if err != nil {
+		return "", err
+	}
+	return fullUrlObject.Hostname(), nil
+}
+
+func encodeUrl(path string) string {
+	return "/" + url.PathEscape(strings.Trim(path, "/"))
+}
 
 // Truncates a given url
 func TruncateUrl(value []byte) []byte {
