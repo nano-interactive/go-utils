@@ -23,7 +23,9 @@ func ConfigureDefaultLogger(level string, prettyPrint bool, output ...io.Writer)
 	zerolog.SetGlobalLevel(zerologLevel)
 	zerolog.TimeFieldFormat = DateTimeFormat
 	zerolog.DurationFieldUnit = time.Microsecond
-	zerolog.TimestampFunc = time.Now().UTC
+	zerolog.TimestampFunc = func() time.Time {
+		return time.Now().UTC()
+	}
 
 	var w io.Writer
 
