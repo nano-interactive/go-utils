@@ -34,7 +34,7 @@ func getMongoDBConfig(t testing.TB, opt *options.ClientOptions) (*options.Client
 	return opt, database
 }
 
-func CreateMongoDB(t testing.TB, optMaker MongoOptions) *mongo.Client {
+func CreateMongoDBWithDBName(t testing.TB, optMaker MongoOptions) (*mongo.Client, string) {
 	t.Helper()
 
 	opt := optMaker.GetOptions()
@@ -60,6 +60,12 @@ func CreateMongoDB(t testing.TB, optMaker MongoOptions) *mongo.Client {
 			t.Fatalf("Failed to drop Mongo connection. Error %v", err)
 		}
 	})
+
+	return client, database
+}
+
+func CreateMongoDB(t testing.TB, optMaker MongoOptions) *mongo.Client {
+	client, _ := CreateMongoDBWithDBName(t, optMaker)
 
 	return client
 }
