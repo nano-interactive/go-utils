@@ -51,10 +51,6 @@ func GetDomainFromUrl(fullUrl string) (string, error) {
 	return fullUrlObject.Hostname(), nil
 }
 
-func encodeUrl(path string) string {
-	return "/" + url.PathEscape(strings.Trim(path, "/"))
-}
-
 // Truncates a given url
 func TruncateUrl(value []byte) []byte {
 	if bytes.Contains(value, GooglePlay) || bytes.Contains(value, ITunesApple) {
@@ -70,11 +66,11 @@ func TruncateUrl(value []byte) []byte {
 		value = append(value, byte('/'))
 	}
 
-	if bytes.Compare(value[0:4], []byte("http")) != 0 {
+	if !bytes.Equal(value[0:4], []byte("http")) {
 		value = append(HTTPS, value...)
 	}
 
-	if bytes.Compare(value[0:5], HTTPProtocol) == 0 {
+	if bytes.Equal(value[0:5], HTTPProtocol) {
 		value = append(HTTPSProtocol, value[5:]...)
 	}
 

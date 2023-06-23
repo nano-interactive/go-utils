@@ -8,9 +8,9 @@ import (
 type Env uint8
 
 const (
-	Testing Env = iota
-	Development
+	Development Env = iota
 	Production
+	Testing
 )
 
 // Parses environment and returns constant

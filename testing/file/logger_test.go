@@ -16,8 +16,8 @@ func TestReadLinesSuccess(t *testing.T) {
 	data := []string{"Test 1", "Test 2"}
 	file, _ := os.OpenFile(fileName, os.O_CREATE|os.O_RDWR, 0o777)
 	for _, item := range data {
-		file.Write([]byte(item))
-		file.Write([]byte("\n"))
+		_, _ = file.Write([]byte(item))
+		_, _ = file.Write([]byte("\n"))
 	}
 
 	// Act
@@ -56,8 +56,8 @@ func TestReadJsonLineSuccess(t *testing.T) {
 	}
 	file, _ := os.OpenFile(fileName, os.O_CREATE|os.O_RDWR, 0o777)
 	bytes, _ := json.Marshal(product)
-	file.Write(bytes)
-	file.Write([]byte("\n"))
+	_, _ = file.Write(bytes)
+	_, _ =file.Write([]byte("\n"))
 
 	// Act
 	productsFile, _ := ReadJsonLine[Product](t, file)()

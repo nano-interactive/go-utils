@@ -13,7 +13,7 @@ type ScyllaDBOptions interface {
 	GetOptions() *gocql.ClusterConfig
 }
 
-func getScyllaDBConfig(t *testing.T, opt *gocql.ClusterConfig) *gocql.ClusterConfig {
+func getScyllaDBConfig(t testing.TB, opt *gocql.ClusterConfig) *gocql.ClusterConfig {
 	t.Helper()
 
 	if value, exists := os.LookupEnv("SCYLLADB_HOSTS"); exists {
@@ -31,7 +31,7 @@ func getScyllaDBConfig(t *testing.T, opt *gocql.ClusterConfig) *gocql.ClusterCon
 	return opt
 }
 
-func CreateScyllaDB(t *testing.T, optMaker ScyllaDBOptions) *gocql.Session {
+func CreateScyllaDB(t testing.TB, optMaker ScyllaDBOptions) *gocql.Session {
 	t.Helper()
 
 	opt := optMaker.GetOptions()

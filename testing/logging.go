@@ -8,7 +8,7 @@ import (
 )
 
 // Returns new instance of zerolog and *zltest.Tester for testing puurposes
-func NewAppTestLogger(t *testing.T, level zerolog.Level) (zerolog.Logger, *zltest.Tester) {
+func NewAppTestLogger(t testing.TB, level zerolog.Level) (zerolog.Logger, *zltest.Tester) {
 	t.Helper()
 	tst := zltest.New(t)
 	testWriter := zerolog.NewTestWriter(t)

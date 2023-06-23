@@ -3,9 +3,7 @@ package testing
 import (
 	"context"
 	"math/rand"
-	"os"
 	"strconv"
-	"strings"
 	"testing"
 	"time"
 
@@ -19,19 +17,7 @@ type MongoOptions interface {
 
 func getMongoDBConfig(t testing.TB, opt *options.ClientOptions) (*options.ClientOptions, string) {
 	t.Helper()
-	database := "testing_database"
-
-	if value, exists := os.LookupEnv("MONGODB_HOSTS"); exists {
-		opt.SetHosts(strings.Split(value, ","))
-	}
-
-	if value, exists := os.LookupEnv("MONGODB_DATABASE"); exists {
-		database = value
-	}
-
-	database = database + "_" + strconv.FormatUint(uint64(rand.Int31n(100_000)), 10)
-
-	return opt, database
+	return opt, "testing_database_" + strconv.FormatUint(uint64(rand.Int31n(100_000)), 10)
 }
 
 func CreateMongoDBWithDBName(t testing.TB, optMaker MongoOptions) (*mongo.Client, string) {
@@ -62,10 +48,4 @@ func CreateMongoDBWithDBName(t testing.TB, optMaker MongoOptions) (*mongo.Client
 	})
 
 	return client, database
-}
-
-func CreateMongoDB(t testing.TB, optMaker MongoOptions) *mongo.Client {
-	client, _ := CreateMongoDBWithDBName(t, optMaker)
-
-	return client
 }

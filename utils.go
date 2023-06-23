@@ -131,11 +131,11 @@ func CreateFile(path string, flags int, dirMode, mode fs.FileMode) (file *os.Fil
 			return nil, err
 		}
 
-		if err := file.Chmod(mode); err != nil {
+		if err = file.Chmod(mode); err != nil {
 			return nil, err
 		}
 
-		if err := file.Close(); err != nil {
+		if err = file.Close(); err != nil {
 			return nil, err
 		}
 	}
