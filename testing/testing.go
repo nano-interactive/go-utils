@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+	"time"
 
 	"github.com/nano-interactive/go-utils"
 	"github.com/nano-interactive/go-utils/config"
@@ -127,3 +128,13 @@ func GetConfig[T any](t testing.TB, create func(*viper.Viper) (T, error)) T {
 	return cfg
 }
 
+
+func Timeout(t testing.TB, timeout time.Duration) context.Context {
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+
+	t.Cleanup(func() {
+		cancel()
+	})
+
+	return ctx
+}
