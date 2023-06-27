@@ -18,7 +18,6 @@ func GetRequestId() (string, error) {
 	var bytes [RequestIdLength]byte
 
 	_, err := rand.Read(bytes[:])
-
 	if err != nil {
 		return "", err
 	}

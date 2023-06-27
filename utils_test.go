@@ -214,7 +214,6 @@ func TestCopyBytesSuccess(t *testing.T) {
 	assert.Equal(bytes, data)
 }
 
-
 func TestGetBrokenImageBytesSuccess(t *testing.T) {
 	// Arrange
 	t.Parallel()

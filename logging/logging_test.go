@@ -1,9 +1,10 @@
 package logging
 
 import (
+	"testing"
+
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func TestNewSuccess(t *testing.T) {
@@ -39,7 +40,6 @@ func TestNewWrongLevel(t *testing.T) {
 	assert.PanicsWithValue("Failed to parse logging level: wrong", func() {
 		// Act
 		New("wrong", false)
-
 	}, "Code panics")
 }
 
@@ -52,7 +52,6 @@ func TestConfigureDefaultLoggerPanics(t *testing.T) {
 	assert.PanicsWithValue("Failed to parse logging level: wrong", func() {
 		// Act
 		ConfigureDefaultLogger("wrong", false)
-
 	}, "Code panics")
 }
 

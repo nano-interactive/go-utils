@@ -72,7 +72,6 @@ func (s *FastHttpSender) Test(req *http.Request, timeout ...time.Duration) (*htt
 	}
 
 	res, err := client.Do(req)
-
 	if err != nil {
 		s.testing.Fatalf("failed to send request: %v", err)
 	}

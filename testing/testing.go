@@ -128,7 +128,6 @@ func GetConfig[T any](t testing.TB, create func(*viper.Viper) (T, error)) T {
 	return cfg
 }
 
-
 func Timeout(t testing.TB, timeout time.Duration) context.Context {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 

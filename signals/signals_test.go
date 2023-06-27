@@ -1,9 +1,10 @@
 package signals
 
 import (
-	"github.com/stretchr/testify/require"
 	"syscall"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestInvalidSignalError(t *testing.T) {

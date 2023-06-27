@@ -57,7 +57,7 @@ func TestReadJsonLineSuccess(t *testing.T) {
 	file, _ := os.OpenFile(fileName, os.O_CREATE|os.O_RDWR, 0o777)
 	bytes, _ := json.Marshal(product)
 	_, _ = file.Write(bytes)
-	_, _ =file.Write([]byte("\n"))
+	_, _ = file.Write([]byte("\n"))
 
 	// Act
 	productsFile, _ := ReadJsonLine[Product](t, file)()

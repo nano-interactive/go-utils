@@ -1,9 +1,10 @@
 package utils_test
 
 import (
-	"github.com/valyala/fasthttp"
 	"net"
 	"testing"
+
+	"github.com/valyala/fasthttp"
 
 	"github.com/nano-interactive/go-utils"
 	"github.com/stretchr/testify/require"
