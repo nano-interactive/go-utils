@@ -161,7 +161,7 @@ func TestGetenv(t *testing.T) {
 	t.Parallel()
 	assert := require.New(t)
 
-	t.Run("DefaultValue", func(t *testing.T) {
+	t.Run("DefaultValue", func(_ *testing.T) {
 		value := Getenv("HELLO_ENV")
 		assert.Empty(value)
 
@@ -171,7 +171,7 @@ func TestGetenv(t *testing.T) {
 		assert.Equal("some_default_value", value)
 	})
 
-	t.Run("WithEnvSet", func(t *testing.T) {
+	t.Run("WithEnvSet", func(_ *testing.T) {
 		_ = os.Setenv("HELLO_ENV", "value")
 
 		value := Getenv("HELLO_ENV")
@@ -188,15 +188,15 @@ func TestIsInt(t *testing.T) {
 	t.Parallel()
 	assert := require.New(t)
 
-	t.Run("IsInt", func(t *testing.T) {
+	t.Run("IsInt", func(_ *testing.T) {
 		assert.True(IsInt("23445555"))
 	})
 
-	t.Run("NotAnInt", func(t *testing.T) {
+	t.Run("NotAnInt", func(_ *testing.T) {
 		assert.False(IsInt("fjkhadskjdfhasjd"))
 	})
 
-	t.Run("CannotStartWith0", func(t *testing.T) {
+	t.Run("CannotStartWith0", func(_ *testing.T) {
 		assert.False(IsInt("023355"))
 	})
 }

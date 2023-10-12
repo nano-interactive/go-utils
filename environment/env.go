@@ -11,6 +11,7 @@ const (
 	Development Env = iota
 	Production
 	Testing
+	Staging
 )
 
 // Parses environment and returns constant
@@ -22,6 +23,8 @@ func Parse(env string) (Env, error) {
 		return Development, nil
 	case "testing", "test":
 		return Testing, nil
+	case "staging", "stage":
+		return Staging, nil
 	default:
 		return 0, errors.New("Invalid Environment: prod, production, dev, development, develop, testing, test, Given: " + env)
 	}

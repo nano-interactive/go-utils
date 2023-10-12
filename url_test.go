@@ -131,7 +131,7 @@ func TestTrimUrlForScylla(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		t.Run(tt.fullUrl, func(t *testing.T) {
+		t.Run(tt.fullUrl, func(_ *testing.T) {
 			resultUrl, resultHost, err := TrimUrlForScylla(tt.fullUrl)
 
 			assert.NoError(err)

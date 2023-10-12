@@ -41,7 +41,7 @@ func TestDecodeQuery(t *testing.T) {
 	}
 
 	for i, item := range data {
-		t.Run("DecodingURL_"+strconv.FormatInt(int64(i), 10), func(t *testing.T) {
+		t.Run("DecodingURL_"+strconv.FormatInt(int64(i), 10), func(_ *testing.T) {
 			dst := make([]byte, len(item.src))
 			n, err := utils.DecodeQuery(dst, item.src)
 			assert.NoError(err)
@@ -78,7 +78,7 @@ func TestDecodeQuery_WithOverlappingMemory(t *testing.T) {
 		},
 	}
 	for i, item := range data {
-		t.Run("DecodingURL_"+strconv.FormatInt(int64(i), 10), func(t *testing.T) {
+		t.Run("DecodingURL_"+strconv.FormatInt(int64(i), 10), func(_ *testing.T) {
 			n, err := utils.DecodeQuery(item.src, item.src)
 			assert.NoError(err)
 			assert.NotEqual(0, n)
@@ -116,7 +116,7 @@ func TestDecodeQueryUnsafeString(t *testing.T) {
 	}
 
 	for i, item := range data {
-		t.Run("DecodingURL_"+strconv.FormatInt(int64(i), 10), func(t *testing.T) {
+		t.Run("DecodingURL_"+strconv.FormatInt(int64(i), 10), func(_ *testing.T) {
 			exp, err := utils.DecodeQueryUnsafeString(item.src)
 			assert.NoError(err)
 			assert.EqualValues(string(item.exp), exp)
@@ -153,7 +153,7 @@ func TestDecodeQueryUnsafe(t *testing.T) {
 	}
 
 	for i, item := range data {
-		t.Run("DecodingURL_"+strconv.FormatInt(int64(i), 10), func(t *testing.T) {
+		t.Run("DecodingURL_"+strconv.FormatInt(int64(i), 10), func(_ *testing.T) {
 			exp, err := utils.DecodeQueryUnsafe(item.src)
 			assert.NoError(err)
 			assert.EqualValues(item.exp, exp)

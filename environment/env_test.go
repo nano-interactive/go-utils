@@ -22,10 +22,12 @@ func TestParse(t *testing.T) {
 		{"develop", Development},
 		{"testing", Testing},
 		{"test", Testing},
+		{env: "staging", expected: Staging},
+		{env: "stage", expected: Staging},
 	}
 
 	for _, item := range data {
-		t.Run(fmt.Sprintf("Parsing String: %s", item.env), func(t *testing.T) {
+		t.Run(fmt.Sprintf("Parsing String: %s", item.env), func(_ *testing.T) {
 			expected, err := Parse(item.env)
 
 			assert.NoError(err)
@@ -47,7 +49,7 @@ func TestParseEnvironment_Error(t *testing.T) {
 	}
 
 	for _, item := range data {
-		t.Run(fmt.Sprintf("Parsing String: %s", item.env), func(t *testing.T) {
+		t.Run(fmt.Sprintf("Parsing String: %s", item.env), func(_ *testing.T) {
 			_, err := Parse(item.env)
 
 			assert.Error(err)
