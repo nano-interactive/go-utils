@@ -3,90 +3,78 @@ package http
 import (
 	"bytes"
 	"encoding/json"
+	"encoding/xml"
+	"github.com/gofiber/fiber/v2"
 	"io"
 	"net/http"
 	"testing"
 	"time"
 )
 
-// Type RequestSender
-// Sturcture contains in memory HTTP Server and Client for testing purposes
-type RequestSender interface {
-	io.Closer
-	Test(req *http.Request, timeout ...time.Duration) (*http.Response, error)
+type RequestSender[T any] interface {
+	Test(req *http.Request, timeout ...time.Duration) ExtendedResponse[T]
 }
 
 // Returns io.Reader from Body of test request
 func getBody[T any](t testing.TB, headers http.Header, body T) io.Reader {
 	switch headers.Get("Content-Type") {
-	case "application/json":
-		jsonStr, err := json.Marshal(body)
+	case fiber.MIMEApplicationXML, fiber.MIMEApplicationXMLCharsetUTF8:
+		bs, err := xml.Marshal(body)
 		if err != nil {
-			t.Fatalf("Error while sending request: %v", err)
+			t.Errorf("Error while creating XML from Body: %v", err)
+			t.FailNow()
 		}
 
-		return bytes.NewReader(jsonStr)
+		return bytes.NewReader(bs)
+	case fiber.MIMEApplicationJSON, fiber.MIMEApplicationJSONCharsetUTF8:
+		bs, err := json.Marshal(body)
+		if err != nil {
+			t.Errorf("Error while sending request: %v", err)
+			t.FailNow()
+		}
+
+		return bytes.NewReader(bs)
 	default:
 		return nil
 	}
 }
 
-// Returns a pointer to http.Response from GET request for testing purposes
-func Get[TSender RequestSender](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) *http.Response {
-	req := MakeRequest[any](t, http.MethodGet, uri, modifiers...)
-
-	res, err := app.Test(req)
-	if err != nil {
-		t.Fatalf("Error while sending request: %v", err)
-	}
-
-	return res
+func Get[TSender RequestSender[any]](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) ExtendedResponse[any] {
+	return app.Test(MakeRequest(t, http.MethodGet, uri, modifiers...))
 }
 
-// Returns a pointer to http.Response from POST request for testing purposes
-func Post[TSender RequestSender, TBody any](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) *http.Response {
-	req := MakeRequest[TBody](t, http.MethodPost, uri, modifiers...)
-
-	res, err := app.Test(req)
-	if err != nil {
-		t.Fatalf("Error while sending request: %v", err)
-	}
-
-	return res
+func GetWithResponse[TSender RequestSender[TRes], TRes any](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) ExtendedResponse[TRes] {
+	return app.Test(MakeRequest(t, http.MethodGet, uri, modifiers...))
 }
 
-// Returns a pointer to http.Response from PUT request for testing purposes
-func Put[TSender RequestSender, TBody any](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) *http.Response {
-	req := MakeRequest[TBody](t, http.MethodPut, uri, modifiers...)
-
-	res, err := app.Test(req)
-	if err != nil {
-		t.Fatalf("Error while sending request: %v", err)
-	}
-
-	return res
+func Post[TSender RequestSender[any]](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) ExtendedResponse[any] {
+	return app.Test(MakeRequest(t, http.MethodPost, uri, modifiers...))
 }
 
-// Returns a pointer to http.Response from PATCH request for testing purposes
-func Patch[TSender RequestSender, TBody any](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) *http.Response {
-	req := MakeRequest[TBody](t, http.MethodPatch, uri, modifiers...)
-
-	res, err := app.Test(req)
-	if err != nil {
-		t.Fatalf("Error while sending request: %v", err)
-	}
-
-	return res
+func PostWithResponse[TSender RequestSender[TRes], TRes any](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) ExtendedResponse[TRes] {
+	return app.Test(MakeRequest(t, http.MethodPost, uri, modifiers...))
 }
 
-// Returns a pointer to http.Response from DELETE request for testing purposes
-func Delete[TSender RequestSender](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) *http.Response {
-	req := MakeRequest[any](t, http.MethodDelete, uri, modifiers...)
+func Put[TSender RequestSender[any]](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) ExtendedResponse[any] {
+	return app.Test(MakeRequest(t, http.MethodPut, uri, modifiers...))
+}
 
-	res, err := app.Test(req)
-	if err != nil {
-		t.Fatalf("Error while sending request: %v", err)
-	}
+func PutWithResponse[TSender RequestSender[TRes], TRes any](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) ExtendedResponse[TRes] {
+	return app.Test(MakeRequest(t, http.MethodPut, uri, modifiers...))
+}
 
-	return res
+func Patch[TSender RequestSender[any]](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) ExtendedResponse[any] {
+	return app.Test(MakeRequest(t, http.MethodPatch, uri, modifiers...))
+}
+
+func PatchWithResponse[TSender RequestSender[TRes], TRes any](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) ExtendedResponse[TRes] {
+	return app.Test(MakeRequest(t, http.MethodPatch, uri, modifiers...))
+}
+
+func Delete[TSender RequestSender[any]](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) ExtendedResponse[any] {
+	return app.Test(MakeRequest(t, http.MethodDelete, uri, modifiers...))
+}
+
+func DeleteWithResponbe[TSender RequestSender[TRes], TRes any](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) ExtendedResponse[TRes] {
+	return app.Test(MakeRequest(t, http.MethodDelete, uri, modifiers...))
 }

@@ -40,7 +40,8 @@ func CreateScyllaDB(t testing.TB, optMaker ScyllaDBOptions) *gocql.Session {
 
 	scyllaSession, err := cluster.CreateSession()
 	if err != nil {
-		t.Fatalf("Failed to create scylla session: %v", err)
+		t.Errorf("Failed to create scylla session: %v", err)
+		t.FailNow()
 	}
 
 	t.Cleanup(func() {

@@ -2,8 +2,6 @@ package testing
 
 import (
 	"context"
-	"math/rand"
-	"strconv"
 	"testing"
 	"time"
 
@@ -17,7 +15,7 @@ type MongoOptions interface {
 
 func getMongoDBConfig(t testing.TB, opt *options.ClientOptions) (*options.ClientOptions, string) {
 	t.Helper()
-	return opt, "testing_database_" + strconv.FormatUint(uint64(rand.Int31n(100_000)), 10)
+	return opt, "testing_database_" + t.Name()
 }
 
 func CreateMongoDBWithDBName(t testing.TB, optMaker MongoOptions) (*mongo.Client, string) {
@@ -31,7 +29,8 @@ func CreateMongoDBWithDBName(t testing.TB, optMaker MongoOptions) (*mongo.Client
 
 	client, err := mongo.Connect(ctx, cfg)
 	if err != nil {
-		t.Fatalf("Failed to connect to Mongo. Error %v", err)
+		t.Errorf("Failed to connect to Mongo. Error %v", err)
+		t.FailNow()
 	}
 
 	t.Cleanup(func() {
@@ -39,11 +38,11 @@ func CreateMongoDBWithDBName(t testing.TB, optMaker MongoOptions) (*mongo.Client
 		defer cancel()
 
 		if err := client.Database(database).Drop(ctx); err != nil {
-			t.Fatalf("Failed to drop Mongo database. Error: %v", err)
+			t.Errorf("Failed to drop Mongo database. Error: %v", err)
 		}
 
 		if err := client.Disconnect(ctx); err != nil {
-			t.Fatalf("Failed to drop Mongo connection. Error %v", err)
+			t.Errorf("Failed to drop Mongo connection. Error %v", err)
 		}
 	})
 

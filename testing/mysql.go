@@ -39,7 +39,8 @@ func CreateMySQL(t testing.TB, optMaker MySQLOptions) (*sql.DB, string) {
 		),
 	)
 	if err != nil {
-		t.Fatalf("Failed to open new SQL connection: %v", err)
+		t.Errorf("Failed to open new SQL connection: %v", err)
+		t.FailNow()
 	}
 
 	dbName := opts.DB + "_" + strings.ReplaceAll(utils.RandomString(10), "-", "_")
@@ -49,8 +50,15 @@ func CreateMySQL(t testing.TB, optMaker MySQLOptions) (*sql.DB, string) {
 	)
 
 	if err != nil {
-		t.Fatal(err)
+		t.Errorf("Failed to create database with name %s: %v", dbName, err)
+		t.FailNow()
 	}
+
+	t.Cleanup(func() {
+		if err := client.Close(); err != nil {
+			t.Errorf("failed to close connection: %v", err)
+		}
+	})
 
 	t.Cleanup(func() {
 		client, err = sql.Open(
@@ -65,29 +73,30 @@ func CreateMySQL(t testing.TB, optMaker MySQLOptions) (*sql.DB, string) {
 		)
 
 		if err != nil {
-			t.Logf("failed to drop database: %s %v", dbName, err)
+			t.Errorf("failed to drop database: %s %v", dbName, err)
+			return
 		}
 
 		defer client.Close()
 
 		_, err = client.Exec(fmt.Sprintf("DROP DATABASE IF EXISTS %s;", dbName))
 		if err != nil {
-			t.Logf("failed to delete database %s: %v", dbName, err)
+			t.Errorf("failed to delete database %s: %v", dbName, err)
 		}
 	})
-
-	t.Logf("Username=%s Password=%s Host=%s DB=%s", opts.User, opts.Password, opts.Host, dbName)
 
 	_, err = client.Exec(
 		fmt.Sprintf("GRANT ALL PRIVILEGES ON %s.* TO '%s'@'%%' WITH GRANT OPTION;", dbName, opts.User),
 	)
 
 	if err != nil {
-		t.Fatal(err)
+		t.Errorf("Failed to grant privileges for database %s to user %s: %v", dbName, opts.User, err)
+		t.FailNow()
 	}
 
 	if err = client.Close(); err != nil {
-		t.Logf("failed to close connection: %v", err)
+		t.Errorf("failed to close connection: %v", err)
+		t.FailNow()
 	}
 
 	client, err = sql.Open(
@@ -103,24 +112,21 @@ func CreateMySQL(t testing.TB, optMaker MySQLOptions) (*sql.DB, string) {
 	)
 
 	if err != nil {
-		t.Fatalf("failed to open connection to database: %s %v", dbName, err)
+		t.Errorf("failed to open connection to database: %s %v", dbName, err)
+		t.FailNow()
 	}
 
 	s := sqlfile.New()
 	err = s.File(opts.MigrationFile)
 	if err != nil {
-		t.Fatalf("failed to read MySQL migrations file (DIR=%s): %v", opts.MigrationFile, err)
+		t.Errorf("failed to read MySQL migrations file (DIR=%s): %v", opts.MigrationFile, err)
+		t.FailNow()
 	}
 
 	if _, err = s.Exec(client); err != nil {
-		t.Fatalf("failed to read MySQL migrations file (DIR=%s): %v", opts.MigrationFile, err)
+		t.Errorf("failed to read MySQL migrations file (DIR=%s): %v", opts.MigrationFile, err)
+		t.FailNow()
 	}
-
-	t.Cleanup(func() {
-		if err = client.Close(); err != nil {
-			t.Logf("failed to close connection: %v", err)
-		}
-	})
 
 	return client, dbName
 }

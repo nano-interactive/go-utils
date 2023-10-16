@@ -7,6 +7,8 @@ import (
 
 type Env uint8
 
+var ErrInvalidEnv = errors.New("invalid Environment: prod, production, dev, development, develop, testing, test")
+
 const (
 	Development Env = iota
 	Production
@@ -14,7 +16,6 @@ const (
 	Staging
 )
 
-// Parses environment and returns constant
 func Parse(env string) (Env, error) {
 	switch strings.ToLower(env) {
 	case "prod", "production":
@@ -26,6 +27,16 @@ func Parse(env string) (Env, error) {
 	case "staging", "stage":
 		return Staging, nil
 	default:
-		return 0, errors.New("Invalid Environment: prod, production, dev, development, develop, testing, test, Given: " + env)
+		return 0, ErrInvalidEnv
 	}
+}
+
+func MustParse(env string) Env {
+	e, err := Parse(env)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return e
 }

@@ -44,8 +44,8 @@ func TestParseEnvironment_Error(t *testing.T) {
 		env      string
 		expected string
 	}{
-		{"", "Invalid Environment: prod, production, dev, development, develop, testing, test, Given: "},
-		{"something-else", "Invalid Environment: prod, production, dev, development, develop, testing, test, Given: something-else"},
+		{"", "invalid Environment: prod, production, dev, development, develop, testing, test"},
+		{"something-else", "invalid Environment: prod, production, dev, development, develop, testing, test"},
 	}
 
 	for _, item := range data {
@@ -56,4 +56,13 @@ func TestParseEnvironment_Error(t *testing.T) {
 			assert.EqualError(err, item.expected)
 		})
 	}
+}
+
+func TestMustParse_Panic(t *testing.T) {
+	t.Parallel()
+	assert := require.New(t)
+
+	assert.Panics(func() {
+		MustParse("something-else")
+	})
 }

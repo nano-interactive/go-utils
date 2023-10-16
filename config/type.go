@@ -7,15 +7,14 @@ import (
 
 type Type string
 
+var ErrInvalidConfigType = errors.New("invalid Configuration Type: JSON, YAML, TOML or \"\"(empty string)")
+
 const (
 	JSON Type = "json"
 	YAML Type = "yaml"
 	TOML Type = "toml"
 )
 
-// Parses configuration type
-// Allowed types: json, yaml, toml
-// If empty string is passed it returns yaml
 func ParseType(configType string) (Type, error) {
 	switch strings.ToLower(configType) {
 	case "json":
@@ -25,6 +24,14 @@ func ParseType(configType string) (Type, error) {
 	case "toml":
 		return TOML, nil
 	default:
-		return "", errors.New("Invalid Configuration Type: JSON, YAML, TOML or \"\"(empty string), Given: " + configType)
+		return "", ErrInvalidConfigType
 	}
+}
+func MustParseType(configType string) Type {
+	t, err := ParseType(configType)
+	if err != nil {
+		panic(err)
+	}
+
+	return t
 }

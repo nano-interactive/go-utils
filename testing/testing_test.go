@@ -12,9 +12,8 @@ func TestFindFileSuccess(t *testing.T) {
 	assert := require.New(t)
 
 	// Act
-	file, err := FindFile(".", "README.md")
+	file := FindFile(t, "README.md")
 
 	// Assert
 	assert.NotEmpty(file)
-	assert.NoError(err)
 }

@@ -7,29 +7,20 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"reflect"
 	"unicode"
 	"unsafe"
 )
 
-// #nosec G103
-// Returns a byte pointer without allocation
+//nolint:gosec
+/*#nosec G103*/
 func UnsafeBytes(s string) []byte {
-	var bs []byte
-
-	sh := (*reflect.StringHeader)(unsafe.Pointer(&s))
-	bh := (*reflect.SliceHeader)(unsafe.Pointer(&bs))
-	bh.Data = sh.Data
-	bh.Len = sh.Len
-	bh.Cap = sh.Len
-
-	return bs
+	return unsafe.Slice(unsafe.StringData(s), len(s))
 }
 
-// #nosec G103
-// Returns a string pointer without allocation
+//nolint:gosec
+/*#nosec G103*/
 func UnsafeString(b []byte) string {
-	return *(*string)(unsafe.Pointer(&b))
+	return unsafe.String(unsafe.SliceData(b), len(b))
 }
 
 // Returns bool value of HTTP status code if its failure or success

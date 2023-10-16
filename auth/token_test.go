@@ -29,7 +29,7 @@ func TestParseTokenFromHeaderInvalidHeader(t *testing.T) {
 
 	assert.Nil(token)
 	assert.Error(err)
-	assert.EqualError(err, "Invalid header")
+	assert.EqualError(err, "invalid token")
 }
 
 func TestParseTokenFromHeaderInvalidAuthType(t *testing.T) {
@@ -42,7 +42,7 @@ func TestParseTokenFromHeaderInvalidAuthType(t *testing.T) {
 
 	assert.Nil(token)
 	assert.Error(err)
-	assert.EqualError(err, "Invalid authorization type: Basic")
+	assert.EqualError(err, "invalid authorization type")
 }
 
 func TestParseTokenFromHeaderInvalidTokenContents(t *testing.T) {
@@ -55,5 +55,5 @@ func TestParseTokenFromHeaderInvalidTokenContents(t *testing.T) {
 
 	assert.Nil(token)
 	assert.Error(err)
-	assert.EqualError(err, "Invalid token")
+	assert.EqualError(err, "invalid token")
 }

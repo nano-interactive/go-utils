@@ -36,7 +36,7 @@ func TestName(t *testing.T) {
 	r := WithHeaders(t, headers)
 
 	// Assert
-	assert.Equal(r(req).Header.Get("Content-Type"), "application/json")
+	assert.Equal(r(req).Header.Get("Content-Type"), "application/json; charset=utf-8")
 }
 
 func TestWithCookie(t *testing.T) {

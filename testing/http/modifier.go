@@ -3,25 +3,25 @@ package http
 import (
 	"net/http"
 	"testing"
+
+	"github.com/gofiber/fiber/v2"
 )
 
-// type RequestModifier
-// Delegates http.Request functions
 type RequestModifier func(*http.Request) *http.Request
 
-// Provides a way to set Headers of a request for testing purposes
 func WithHeaders(t testing.TB, headers http.Header) RequestModifier {
+	t.Helper()
 	return func(req *http.Request) *http.Request {
-		if headers.Get("Content-Type") == "" {
-			headers.Set("Content-Type", "application/json")
+		if headers.Get(fiber.HeaderContentType) == "" {
+			headers.Set(fiber.HeaderContentType, fiber.MIMEApplicationJSONCharsetUTF8)
 		}
 
-		if headers.Get("Accept") == "" {
-			headers.Set("Accept", "application/json")
+		if headers.Get(fiber.HeaderAccept) == "" {
+			headers.Set(fiber.HeaderAccept, fiber.MIMEApplicationJSONCharsetUTF8)
 		}
 
-		if headers.Get("User-Agent") == "" {
-			headers.Set("User-Agent", "TestHTTPUserAgent")
+		if headers.Get(fiber.HeaderUserAgent) == "" {
+			headers.Set(fiber.HeaderUserAgent, "TestHTTPUserAgent")
 		}
 
 		req.Header = headers
@@ -30,18 +30,12 @@ func WithHeaders(t testing.TB, headers http.Header) RequestModifier {
 	}
 }
 
-// Provides a way to put query string params.
-//
-//	WithQuery(map[string]string{
-//		"id": "mongoid",
-//	})
-//
-// Returns URL?id=mongoid
 func WithQuery(t testing.TB, queryMap map[string]string) RequestModifier {
+	t.Helper()
 	return func(req *http.Request) *http.Request {
 		newReq, err := http.NewRequest(req.Method, req.URL.String(), nil)
 		if err != nil {
-			t.Log(err)
+			t.Errorf("Failed to create new http.Request: %v", err)
 			t.FailNow()
 		}
 
@@ -58,8 +52,8 @@ func WithQuery(t testing.TB, queryMap map[string]string) RequestModifier {
 	}
 }
 
-// Provides a way to set Body of a request for testing purposes
 func WithBody[T any](t testing.TB, body T) RequestModifier {
+	t.Helper()
 	return func(req *http.Request) *http.Request {
 		newReq, err := http.NewRequest(req.Method, req.URL.String(), getBody(t, req.Header, body))
 		if err != nil {
@@ -78,15 +72,8 @@ func WithBody[T any](t testing.TB, body T) RequestModifier {
 	}
 }
 
-// Provides a way to set Cookies of a request for testing purposes
-// Example:
-//
-//	cookies := []*http.Cookie{
-//			{Name: "jwt-token"},
-//		}
-//
-// WithCookies(t, cookies)
 func WithCookies(t testing.TB, cookies []*http.Cookie) RequestModifier {
+	t.Helper()
 	return func(req *http.Request) *http.Request {
 		for _, cookie := range cookies {
 			req.AddCookie(cookie)
@@ -96,8 +83,8 @@ func WithCookies(t testing.TB, cookies []*http.Cookie) RequestModifier {
 	}
 }
 
-// Provides a way to create a request for testing purposes
-func MakeRequest[T any](t testing.TB, method, uri string, modifiers ...RequestModifier) *http.Request {
+func MakeRequest(t testing.TB, method, uri string, modifiers ...RequestModifier) *http.Request {
+	t.Helper()
 	var defaults []func(*http.Request) *http.Request
 
 	switch method {

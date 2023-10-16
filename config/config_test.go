@@ -32,7 +32,7 @@ func TestNewWrongEnvironment(t *testing.T) {
 	// Assert
 	assert.Error(err)
 	assert.Nil(cfg)
-	assert.EqualError(err, "Invalid Environment: prod, production, dev, development, develop, testing, test, Given: wrong")
+	assert.EqualError(err, "invalid Environment: prod, production, dev, development, develop, testing, test")
 }
 
 func TestNewWrongParseType(t *testing.T) {
@@ -48,7 +48,7 @@ func TestNewWrongParseType(t *testing.T) {
 	// Assert
 	assert.Error(err)
 	assert.Nil(cfg)
-	assert.EqualError(err, "Invalid Configuration Type: JSON, YAML, TOML or \"\"(empty string), Given: txt")
+	assert.EqualError(err, "invalid Configuration Type: JSON, YAML, TOML or \"\"(empty string)")
 }
 
 func TestNewSuccess(t *testing.T) {
