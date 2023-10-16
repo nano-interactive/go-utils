@@ -30,7 +30,6 @@ jobs:
       - name: Run tests
         run: |
           go install github.com/gotesttools/gotestfmt/v2/cmd/gotestfmt@latest
-          cp config.example.yml config.yml
           task test
       - uses: codecov/codecov-action@v3
         with:
