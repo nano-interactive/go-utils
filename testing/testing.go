@@ -76,15 +76,35 @@ func FindFile(t testing.TB, fileName string) string {
 
 func ProjectRootDir(t testing.TB) string {
 	t.Helper()
+	workingDir := WorkingDir(t)
 
-	p, err := utils.GetAbsolutePath(filepath.Join(WorkingDir(t), "..", ".."))
+	const gomod = "go.mod"
 
-	if err != nil {
-		t.Errorf("Failed to get absolute path from %s: %v", filepath.Join(WorkingDir(t), "..", ".."), err)
-		t.Fail()
+	for entries, err := os.ReadDir(workingDir); err == nil; {
+		for _, entry := range entries {
+			if entry.Name() == gomod {
+				return workingDir
+			}
+		}
+
+		if workingDir == "/" {
+			t.Error("got to FS Root, file not found")
+			t.FailNow()
+		}
+
+		workingDir, err = utils.GetAbsolutePath(filepath.Join(workingDir, ".."))
+
+		if err != nil {
+			t.Errorf("failed to get absolute path from %s", filepath.Join(workingDir, ".."))
+			t.FailNow()
+		}
+
+		entries, err = os.ReadDir(workingDir)
 	}
 
-	return p
+	t.Errorf("%s not found", gomod)
+	t.FailNow()
+	return ""
 }
 
 func FindConfig(t testing.TB, configName ...string) string {
