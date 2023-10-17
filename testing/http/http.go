@@ -43,7 +43,7 @@ func Get[TSender RequestSender[any]](t testing.TB, app TSender, uri string, modi
 	return app.Test(MakeRequest(t, http.MethodGet, uri, modifiers...))
 }
 
-func GetWithResponse[TSender RequestSender[TRes], TRes any](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) ExtendedResponse[TRes] {
+func GetWithResponse[TRes any, TSender RequestSender[TRes]](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) ExtendedResponse[TRes] {
 	return app.Test(MakeRequest(t, http.MethodGet, uri, modifiers...))
 }
 
@@ -51,7 +51,7 @@ func Post[TSender RequestSender[any]](t testing.TB, app TSender, uri string, mod
 	return app.Test(MakeRequest(t, http.MethodPost, uri, modifiers...))
 }
 
-func PostWithResponse[TSender RequestSender[TRes], TRes any](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) ExtendedResponse[TRes] {
+func PostWithResponse[TRes any, TSender RequestSender[TRes]](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) ExtendedResponse[TRes] {
 	return app.Test(MakeRequest(t, http.MethodPost, uri, modifiers...))
 }
 
@@ -59,7 +59,7 @@ func Put[TSender RequestSender[any]](t testing.TB, app TSender, uri string, modi
 	return app.Test(MakeRequest(t, http.MethodPut, uri, modifiers...))
 }
 
-func PutWithResponse[TSender RequestSender[TRes], TRes any](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) ExtendedResponse[TRes] {
+func PutWithResponse[TRes any, TSender RequestSender[TRes]](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) ExtendedResponse[TRes] {
 	return app.Test(MakeRequest(t, http.MethodPut, uri, modifiers...))
 }
 
@@ -67,7 +67,7 @@ func Patch[TSender RequestSender[any]](t testing.TB, app TSender, uri string, mo
 	return app.Test(MakeRequest(t, http.MethodPatch, uri, modifiers...))
 }
 
-func PatchWithResponse[TSender RequestSender[TRes], TRes any](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) ExtendedResponse[TRes] {
+func PatchWithResponse[TRes any, TSender RequestSender[TRes]](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) ExtendedResponse[TRes] {
 	return app.Test(MakeRequest(t, http.MethodPatch, uri, modifiers...))
 }
 
@@ -75,6 +75,6 @@ func Delete[TSender RequestSender[any]](t testing.TB, app TSender, uri string, m
 	return app.Test(MakeRequest(t, http.MethodDelete, uri, modifiers...))
 }
 
-func DeleteWithResponbe[TSender RequestSender[TRes], TRes any](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) ExtendedResponse[TRes] {
+func DeleteWithResponbe[TRes any, TSender RequestSender[TRes]](t testing.TB, app TSender, uri string, modifiers ...RequestModifier) ExtendedResponse[TRes] {
 	return app.Test(MakeRequest(t, http.MethodDelete, uri, modifiers...))
 }
