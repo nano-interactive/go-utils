@@ -1,9 +1,10 @@
 package validators
 
 import (
-	"regexp"
+	"encoding/hex"
 
 	"github.com/invopop/validation"
+	"github.com/nano-interactive/go-utils"
 )
 
 type ObjectID string
@@ -11,12 +12,19 @@ type ObjectID string
 var (
 	ObjectIDRuleErr = validation.NewError("validation_is_mongoid", "Invalid ObjectID")
 	ObjectIDRule    = validation.NewStringRuleWithError(IsObjectId, ObjectIDRuleErr)
-
-	objectIdRegex = regexp.MustCompile("(?i)^[0-9a-f]{24}$")
 )
 
 func IsObjectId(val string) bool {
-	return objectIdRegex.MatchString(val)
+	l := len(val)
+
+	if l&1 == 1 && l != 24 {
+		return false
+	}
+
+	var data [12]byte
+
+	_, err := hex.Decode(data[:], utils.UnsafeBytes(val))
+	return err == nil
 }
 
 func (o ObjectID) Validate() error {
