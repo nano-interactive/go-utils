@@ -17,7 +17,7 @@ var (
 func IsObjectId(val string) bool {
 	l := len(val)
 
-	if l&1 == 1 && l != 24 {
+	if l != 24 {
 		return false
 	}
 
