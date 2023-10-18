@@ -11,6 +11,10 @@ import (
 	"github.com/nano-interactive/go-utils"
 )
 
+var NilObjectID = ObjectID{
+	ObjectID: primitive.NilObjectID,
+}
+
 type ObjectID struct {
 	primitive.ObjectID
 }
