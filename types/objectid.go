@@ -77,6 +77,15 @@ func (o *ObjectID) UnmarshalBSONValue(t bsontype.Type, bytes []byte) error {
 
 	return nil
 }
+
+func (o *ObjectID) MarshalBSON() ([]byte, error) {
+	if !o.IsNull() {
+		return bson.Marshal(nil)
+	}
+
+	return bson.Marshal(o.ObjectID)
+}
+
 func (o *ObjectID) MarshalBSONValue() (bsontype.Type, []byte, error) {
 	if !o.IsNull() {
 		return bson.MarshalValue(nil)
