@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"database/sql/driver"
 	"encoding/json"
+	"reflect"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -19,6 +20,7 @@ var jsonNullBytes []byte // points to jsonNull
 
 func init() {
 	jsonNullBytes = utils.UnsafeBytes(jsonNull)
+	bson.DefaultRegistry.RegisterTypeMapEntry(bson.TypeObjectID, reflect.TypeOf(ObjectID{}))
 }
 
 type (
