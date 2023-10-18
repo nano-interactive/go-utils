@@ -19,7 +19,7 @@ func BenchmarkIsObjectId(b *testing.B) {
 		objectId := "652e77eeadd7d603e4420c3d"
 
 		for i := 0; i < b.N; i++ {
-			IsObjectId(objectId)
+			NewObjectIDRule().Validate(objectId)
 		}
 	})
 
@@ -27,7 +27,7 @@ func BenchmarkIsObjectId(b *testing.B) {
 		objectId := "652e77eeadd7d603e4420c3d3"
 
 		for i := 0; i < b.N; i++ {
-			IsObjectId(objectId)
+			NewObjectIDRule().Validate(objectId)
 		}
 	})
 
@@ -35,7 +35,7 @@ func BenchmarkIsObjectId(b *testing.B) {
 		objectId := "652e77eeadd7d603e4420c3"
 
 		for i := 0; i < b.N; i++ {
-			IsObjectId(objectId)
+			NewObjectIDRule().Validate(objectId)
 		}
 	})
 }
