@@ -58,7 +58,7 @@ func (o *ObjectID) MarshalJSON() ([]byte, error) {
 func (o *ObjectID) UnmarshalBSONValue(t bsontype.Type, bytes []byte) error {
 	switch t {
 	case bson.TypeNull:
-		o.ObjectID = primitive.NilObjectID
+		*o = NilObjectID
 	case bson.TypeObjectID:
 		return bson.UnmarshalValue(t, bytes, &o.ObjectID)
 	case bson.TypeString:
