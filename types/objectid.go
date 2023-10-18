@@ -2,6 +2,7 @@ package types
 
 import (
 	"errors"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/bsontype"
@@ -12,6 +13,30 @@ import (
 
 type ObjectID struct {
 	primitive.ObjectID
+}
+
+func NewObjectID() ObjectID {
+	return ObjectID{
+		ObjectID: primitive.NewObjectID(),
+	}
+}
+
+func NewObjectIDFromTimestamp(t time.Time) ObjectID {
+	return ObjectID{
+		ObjectID: primitive.NewObjectIDFromTimestamp(t),
+	}
+}
+
+func ObjectIDFromHex(hex string) (ObjectID, error) {
+	val, err := primitive.ObjectIDFromHex(hex)
+
+	if err != nil {
+		return ObjectID{}, err
+	}
+
+	return ObjectID{
+		ObjectID: val,
+	}, nil
 }
 
 func (o *ObjectID) IsNull() bool {
