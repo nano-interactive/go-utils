@@ -91,7 +91,7 @@ func (o *NullBool) UnmarshalBSONValue(t bsontype.Type, bytes []byte) error {
 	return nil
 }
 func (o *NullBool) JSONUnmarshal(data []byte) error {
-	if string(data) == "null" {
+	if len(data) <= 0 {
 		o.Valid = false
 		o.Bool = false
 		return nil
