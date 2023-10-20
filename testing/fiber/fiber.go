@@ -7,6 +7,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	nano_http "github.com/nano-interactive/go-utils/testing/http"
+	"github.com/valyala/fasthttp"
 )
 
 // type GoFiberSender
@@ -60,4 +61,33 @@ func (s *GoFiberSender[T]) Test(req *http.Request, timeout ...time.Duration) nan
 	}
 
 	return nano_http.ExtendedResponse[T]{Response: res}
+}
+
+
+func CallHandler(tb testing.TB, h fiber.Handler, fn ...func(*fasthttp.Request)) (*fiber.Ctx, error) {
+	tb.Helper()
+
+	app := fiber.New()
+
+	fastHTTPCtx := &fasthttp.RequestCtx{
+		Request: fasthttp.Request{
+			Header:        fasthttp.RequestHeader{},
+			UseHostHeader: false,
+		},
+		Response: fasthttp.Response{},
+	}
+
+	if len(fn) > 0 {
+		for _, f := range fn {
+			f(&fastHTTPCtx.Request)
+		}
+	}
+
+	ctx := app.AcquireCtx(fastHTTPCtx)
+
+	tb.Cleanup(func() {
+		app.ReleaseCtx(ctx)
+	})
+
+	return ctx, h(ctx)
 }
