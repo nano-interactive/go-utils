@@ -111,7 +111,7 @@ func (o *NullBool) UnmarshalJSON(data []byte) error {
 
 	return nil
 }
-func (o *NullBool) MarshalJSON() ([]byte, error) {
+func (o NullBool) MarshalJSON() ([]byte, error) {
 	if o.Valid {
 		if o.Bool {
 			return []byte("true"), nil
