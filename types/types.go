@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"database/sql/driver"
 	"encoding/json"
+	"errors"
 	"reflect"
 	"time"
 
@@ -105,8 +106,7 @@ func (o *NullBool) UnmarshalJSON(data []byte) error {
 		o.Valid = true
 		o.Bool = false
 	default:
-		o.Valid = false
-		o.Bool = false
+		return errors.New("invalid bool data")
 	}
 
 	return nil
