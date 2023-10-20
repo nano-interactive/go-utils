@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"database/sql/driver"
 	"encoding/json"
+	"errors"
 	"reflect"
 	"time"
 
@@ -78,6 +79,7 @@ func (o *NullBool) UnmarshalBSONValue(t bsontype.Type, bytes []byte) error {
 	switch t {
 	case bson.TypeNull:
 		o.Valid = false
+		o.Bool = false
 	default:
 		var b bool
 		if err := bson.UnmarshalValue(t, bytes, &b); err != nil {
@@ -85,6 +87,26 @@ func (o *NullBool) UnmarshalBSONValue(t bsontype.Type, bytes []byte) error {
 		}
 		o.Valid = true
 		o.Bool = b
+	}
+
+	return nil
+}
+func (o *NullBool) UnmarshalJSON(data []byte) error {
+	if len(data) == 0 || bytes.Compare(jsonNullBytes, data) == 0 {
+		o.Valid = false
+		o.Bool = false
+		return nil
+	}
+
+	switch utils.UnsafeString(data) {
+	case "true":
+		o.Valid = true
+		o.Bool = true
+	case "false":
+		o.Valid = true
+		o.Bool = false
+	default:
+		return errors.New("invalid bool data")
 	}
 
 	return nil
