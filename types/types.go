@@ -78,7 +78,7 @@ func (o *NullBool) UnmarshalBSONValue(t bsontype.Type, bytes []byte) error {
 	switch t {
 	case bson.TypeNull:
 		o.Valid = false
-		o.Bool = true
+		o.Bool = false
 	default:
 		var b bool
 		if err := bson.UnmarshalValue(t, bytes, &b); err != nil {
@@ -90,19 +90,24 @@ func (o *NullBool) UnmarshalBSONValue(t bsontype.Type, bytes []byte) error {
 
 	return nil
 }
-func (o *NullBool) JSONUnmarshal(data []byte) error {
-	if len(data) <= 0 {
+func (o *NullBool) UnmarshalJSON(data []byte) error {
+	if len(data) == 0 || bytes.Compare(jsonNullBytes, data) == 0 {
 		o.Valid = false
 		o.Bool = false
 		return nil
 	}
 
-	var isTrue bool
-	if err := json.Unmarshal(data, &isTrue); err != nil {
-		return err
+	switch utils.UnsafeString(data) {
+	case "true":
+		o.Valid = true
+		o.Bool = true
+	case "false":
+		o.Valid = true
+		o.Bool = false
+	default:
+		o.Valid = false
+		o.Bool = false
 	}
-	o.Valid = true
-	o.Bool = isTrue
 
 	return nil
 }
