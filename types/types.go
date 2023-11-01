@@ -92,7 +92,7 @@ func (o *NullBool) UnmarshalBSONValue(t bsontype.Type, bytes []byte) error {
 	return nil
 }
 func (o *NullBool) UnmarshalJSON(data []byte) error {
-	if len(data) == 0 || bytes.Compare(jsonNullBytes, data) == 0 {
+	if len(data) == 0 || bytes.Equal(jsonNullBytes, data) {
 		o.Valid = false
 		o.Bool = false
 		return nil
