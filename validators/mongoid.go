@@ -2,6 +2,7 @@ package validators
 
 import (
 	"encoding/hex"
+
 	"github.com/nano-interactive/go-utils/types"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
@@ -35,8 +36,18 @@ func (ObjectIdRule) Validate(v any) error {
 		}
 		return nil
 	case primitive.ObjectID:
+		value := v.(primitive.ObjectID)
+		if value.IsZero() {
+			return ObjectIDRuleErr
+		}
+
 		return nil
 	case types.ObjectID:
+		value := v.(types.ObjectID)
+		if value.IsNull() {
+			return ObjectIDRuleErr
+		}
+
 		return nil
 	default:
 		return ObjectIDRuleErr
