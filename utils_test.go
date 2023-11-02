@@ -241,3 +241,13 @@ func BenchmarkBase64DecodeImage(b *testing.B) {
 		_, _ = base64.StdEncoding.DecodeString("R0lGODlhAQABAIAAAP///wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==")
 	}
 }
+
+func TestMain(t *testing.T) {
+	t.Parallel()
+	assert := require.New(t)
+	slices := []string{"A", "A", "B", "C"}
+
+	result := UniqueSliceElements(slices)
+
+	assert.Equal([]string{"A", "B", "C"}, result)
+}
