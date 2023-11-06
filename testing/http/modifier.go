@@ -9,6 +9,16 @@ import (
 
 type RequestModifier func(*http.Request) *http.Request
 
+func WithBearerToken(t testing.TB, token string) RequestModifier {
+	t.Helper()
+
+	return func(req *http.Request) *http.Request {
+		req.Header.Add(fiber.HeaderAuthorization, "Bearer "+token)
+
+		return req
+	}
+}
+
 func WithHeaders(t testing.TB, headers http.Header) RequestModifier {
 	t.Helper()
 	return func(req *http.Request) *http.Request {
