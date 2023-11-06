@@ -70,6 +70,11 @@ func CreateMySQL(t testing.TB, optMaker MySQLOptions) (*sql.DB, string) {
 		if err != nil {
 			t.Errorf("failed to delete database %s: %v", dbName, err)
 		}
+
+		if err = mysqlClient.Close(); err != nil {
+			t.Errorf("failed to close connection: %v", err)
+			t.FailNow()
+		}
 	})
 
 	_, err = mysqlClient.Exec(
@@ -78,11 +83,6 @@ func CreateMySQL(t testing.TB, optMaker MySQLOptions) (*sql.DB, string) {
 
 	if err != nil {
 		t.Errorf("Failed to grant privileges for database %s to user %s: %v", dbName, opts.User, err)
-		t.FailNow()
-	}
-
-	if err = mysqlClient.Close(); err != nil {
-		t.Errorf("failed to close connection: %v", err)
 		t.FailNow()
 	}
 
