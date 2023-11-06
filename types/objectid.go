@@ -43,11 +43,11 @@ func ObjectIDFromHex(hex string) (ObjectID, error) {
 	}, nil
 }
 
-func (o *ObjectID) IsNull() bool {
+func (o ObjectID) IsNull() bool {
 	return o.ObjectID.IsZero()
 }
 
-func (o *ObjectID) MarshalJSON() ([]byte, error) {
+func (o ObjectID) MarshalJSON() ([]byte, error) {
 	if o.IsNull() {
 		return utils.UnsafeBytes("null"), nil
 	}
