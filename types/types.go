@@ -334,7 +334,7 @@ func (o *NullUint64) UnmarshalBSONValue(t bsontype.Type, bytes []byte) error {
 }
 
 func (o NullByte) MarshalJSON() ([]byte, error) {
-	if o.Valid {
+	if !o.Valid {
 		return jsonNullBytes, nil
 	}
 
@@ -342,7 +342,7 @@ func (o NullByte) MarshalJSON() ([]byte, error) {
 }
 
 func (o NullFloat32) MarshalJSON() ([]byte, error) {
-	if o.Valid {
+	if !o.Valid {
 		return jsonNullBytes, nil
 	}
 
@@ -350,7 +350,7 @@ func (o NullFloat32) MarshalJSON() ([]byte, error) {
 }
 
 func (o NullFloat64) MarshalJSON() ([]byte, error) {
-	if o.Valid {
+	if !o.Valid {
 		return jsonNullBytes, nil
 	}
 
@@ -358,7 +358,7 @@ func (o NullFloat64) MarshalJSON() ([]byte, error) {
 }
 
 func (o NullTime) MarshalJSON() ([]byte, error) {
-	if o.Valid {
+	if !o.Valid {
 		return jsonNullBytes, nil
 	}
 
@@ -366,7 +366,7 @@ func (o NullTime) MarshalJSON() ([]byte, error) {
 }
 
 func (o NullString) MarshalJSON() ([]byte, error) {
-	if o.Valid {
+	if !o.Valid {
 		return jsonNullBytes, nil
 	}
 
@@ -374,7 +374,7 @@ func (o NullString) MarshalJSON() ([]byte, error) {
 }
 
 func (o NullInt16) MarshalJSON() ([]byte, error) {
-	if o.Valid {
+	if !o.Valid {
 		return jsonNullBytes, nil
 	}
 
@@ -382,7 +382,7 @@ func (o NullInt16) MarshalJSON() ([]byte, error) {
 }
 
 func (o NullInt32) MarshalJSON() ([]byte, error) {
-	if o.Valid {
+	if !o.Valid {
 		return jsonNullBytes, nil
 	}
 
@@ -390,7 +390,7 @@ func (o NullInt32) MarshalJSON() ([]byte, error) {
 }
 
 func (o NullInt64) MarshalJSON() ([]byte, error) {
-	if o.Valid {
+	if !o.Valid {
 		return jsonNullBytes, nil
 	}
 
@@ -398,7 +398,7 @@ func (o NullInt64) MarshalJSON() ([]byte, error) {
 }
 
 func (o NullUint16) MarshalJSON() ([]byte, error) {
-	if o.Valid {
+	if !o.Valid {
 		return jsonNullBytes, nil
 	}
 
@@ -406,7 +406,7 @@ func (o NullUint16) MarshalJSON() ([]byte, error) {
 }
 
 func (o NullUint32) MarshalJSON() ([]byte, error) {
-	if o.Valid {
+	if !o.Valid {
 		return jsonNullBytes, nil
 	}
 
@@ -414,7 +414,7 @@ func (o NullUint32) MarshalJSON() ([]byte, error) {
 }
 
 func (o NullUint64) MarshalJSON() ([]byte, error) {
-	if o.Valid {
+	if !o.Valid {
 		return jsonNullBytes, nil
 	}
 
