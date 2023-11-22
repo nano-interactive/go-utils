@@ -6,6 +6,7 @@ require (
 	github.com/gocql/gocql v1.6.0
 	github.com/gofiber/fiber/v2 v2.50.0
 	github.com/invopop/validation v0.3.0
+	github.com/jackc/pgx/v5 v5.5.0
 	github.com/rs/zerolog v1.31.0
 	github.com/rzajac/zltest v0.12.0
 	github.com/spf13/viper v1.17.0
@@ -27,6 +28,9 @@ require (
 	github.com/google/uuid v1.3.1 // indirect
 	github.com/hailocab/go-hostpool v0.0.0-20160125115350-e80d13ce29ed // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/jackc/pgpassfile v1.0.0 // indirect
+	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
+	github.com/jackc/puddle/v2 v2.2.1 // indirect
 	github.com/klauspost/compress v1.17.1 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
