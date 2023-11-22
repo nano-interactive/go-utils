@@ -55,14 +55,7 @@ func CreateTimescaledb(t testing.TB, optMaker TimescaledbOptions) (*sql.DB, stri
 		}
 	})
 
-	if _, err = tsdbClient.Exec(fmt.Sprintf(`CREATE DATABASE %s
-								WITH OWNER = nano
-								ENCODING = 'UTF8'
-								LC_COLLATE = 'en_US.utf8'
-								LC_CTYPE = 'en_US.utf8'
-								TABLESPACE = pg_default
-								CONNECTION LIMIT = -1
-								IS_TEMPLATE = False;`, dbName)); err != nil {
+	if _, err = tsdbClient.Exec(fmt.Sprintf("CREATE DATABASE %s;", dbName)); err != nil {
 		t.Errorf("Failed to create database with name %s: %v", dbName, err)
 		t.FailNow()
 	}
