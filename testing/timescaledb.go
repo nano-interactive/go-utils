@@ -70,12 +70,6 @@ func CreateTimescaledb(t testing.TB, optMaker TimescaledbOptions) (*sql.DB, stri
 		if err != nil {
 			t.Errorf("failed to delete database %s: %v", dbName, err)
 		}
-
-		if err = tsdbClient.Close(); err != nil {
-			t.Errorf("failed to close connection: %v", err)
-			t.FailNow()
-		}
-
 	})
 
 	if _, err = tsdbClient.Exec(fmt.Sprintf("GRANT ALL ON DATABASE %s TO %s;", dbName, opts.Username)); err != nil {
