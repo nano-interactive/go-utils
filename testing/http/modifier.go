@@ -22,19 +22,17 @@ func WithBearerToken(t testing.TB, token string) RequestModifier {
 func WithHeaders(t testing.TB, headers http.Header) RequestModifier {
 	t.Helper()
 	return func(req *http.Request) *http.Request {
-		if headers.Get(fiber.HeaderContentType) == "" {
-			headers.Set(fiber.HeaderContentType, fiber.MIMEApplicationJSONCharsetUTF8)
+		if req.Header == nil {
+			req.Header = headers
+
+			return req
 		}
 
-		if headers.Get(fiber.HeaderAccept) == "" {
-			headers.Set(fiber.HeaderAccept, fiber.MIMEApplicationJSONCharsetUTF8)
+		for key, header := range headers {
+			if len(header) > 0 {
+				req.Header.Set(key, header[0])
+			}
 		}
-
-		if headers.Get(fiber.HeaderUserAgent) == "" {
-			headers.Set(fiber.HeaderUserAgent, "TestHTTPUserAgent")
-		}
-
-		req.Header = headers
 
 		return req
 	}
@@ -99,14 +97,13 @@ func MakeRequest(t testing.TB, method, uri string, modifiers ...RequestModifier)
 
 	switch method {
 	case http.MethodPost, http.MethodPut, http.MethodPatch:
+		header := http.Header{}
+		header.Add(fiber.HeaderContentType, fiber.MIMEApplicationJSONCharsetUTF8)
 		defaults = []func(*http.Request) *http.Request{
-			WithHeaders(t, http.Header{}),
+			WithHeaders(t, header),
 			WithBody[any](t, nil),
 		}
 	default:
-		defaults = []func(*http.Request) *http.Request{
-			WithHeaders(t, http.Header{}),
-		}
 	}
 
 	req, err := http.NewRequest(method, uri, nil)
@@ -121,6 +118,14 @@ func MakeRequest(t testing.TB, method, uri string, modifiers ...RequestModifier)
 
 	for _, modifier := range modifiers {
 		req = modifier(req)
+	}
+
+	if req.Header.Get(fiber.HeaderAccept) == "" {
+		req.Header.Add(fiber.HeaderAccept, fiber.MIMEApplicationJSONCharsetUTF8)
+	}
+
+	if req.Header.Get(fiber.HeaderUserAgent) == "" {
+		req.Header.Add(fiber.HeaderUserAgent, "TestHTTPUserAgent")
 	}
 
 	return req

@@ -4,11 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"encoding/xml"
-	"github.com/gofiber/fiber/v2"
 	"io"
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 type RequestSender[T any] interface {
@@ -17,7 +18,8 @@ type RequestSender[T any] interface {
 
 // Returns io.Reader from Body of test request
 func getBody[T any](t testing.TB, headers http.Header, body T) io.Reader {
-	switch headers.Get("Content-Type") {
+	contentType := headers.Get(fiber.HeaderContentType)
+	switch contentType {
 	case fiber.MIMEApplicationXML, fiber.MIMEApplicationXMLCharsetUTF8:
 		bs, err := xml.Marshal(body)
 		if err != nil {
@@ -32,10 +34,14 @@ func getBody[T any](t testing.TB, headers http.Header, body T) io.Reader {
 			t.Errorf("Error while sending request: %v", err)
 			t.FailNow()
 		}
-
 		return bytes.NewReader(bs)
+
 	default:
-		return nil
+		var body1 any = body
+		if body1 == nil {
+			return nil
+		}
+		return body1.(io.Reader)
 	}
 }
 
