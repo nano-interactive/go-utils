@@ -65,15 +65,15 @@ func CreateMySQL(t testing.TB, optMaker MySQLOptions) (*sql.DB, string) {
 		t.FailNow()
 	}
 
+	var client *sql.DB
+
 	t.Cleanup(func() {
+		if client != nil {
+			_ = client.Close()
+		}
 		_, err = mysqlClient.Exec(fmt.Sprintf("DROP DATABASE IF EXISTS %s;", dbName))
 		if err != nil {
 			t.Errorf("failed to delete database %s: %v", dbName, err)
-		}
-
-		if err = mysqlClient.Close(); err != nil {
-			t.Errorf("failed to close connection: %v", err)
-			t.FailNow()
 		}
 	})
 
@@ -86,7 +86,7 @@ func CreateMySQL(t testing.TB, optMaker MySQLOptions) (*sql.DB, string) {
 		t.FailNow()
 	}
 
-	client, err := sql.Open(
+	client, err = sql.Open(
 		"mysql",
 		fmt.Sprintf(
 			"%s:%s@%s(%s)/%s",
