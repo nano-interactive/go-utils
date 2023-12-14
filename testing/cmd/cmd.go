@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/nano-interactive/go-utils/cmd"
+	"github.com/nano-interactive/go-utils/v2/cmd"
 	"github.com/spf13/cobra"
 )
 
