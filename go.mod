@@ -7,7 +7,6 @@ require (
 	github.com/gofiber/fiber/v2 v2.51.0
 	github.com/invopop/validation v0.3.0
 	github.com/jackc/pgx/v5 v5.5.1
-	github.com/nano-interactive/go-utils v1.8.0
 	github.com/rs/zerolog v1.31.0
 	github.com/rzajac/zltest v0.12.0
 	github.com/spf13/cobra v1.8.0
@@ -19,11 +18,10 @@ require (
 	go.mongodb.org/mongo-driver v1.13.1
 )
 
-replace github.com/gocql/gocql => github.com/scylladb/gocql v1.11.1
+replace github.com/gocql/gocql => github.com/scylladb/gocql v1.12.0
 
 require (
 	github.com/andybalholm/brotli v1.0.6 // indirect
-	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/golang/snappy v0.0.4 // indirect

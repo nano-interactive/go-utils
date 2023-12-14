@@ -5,8 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/gofiber/fiber/v2"
-	nano_http "github.com/nano-interactive/go-utils/testing/http"
+	nano_http "github.com/nano-interactive/go-utils/v2/testing/http"
 	"github.com/valyala/fasthttp"
 )
 

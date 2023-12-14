@@ -3,11 +3,10 @@ package validators
 import (
 	"encoding/hex"
 
-	"github.com/nano-interactive/go-utils/types"
+	"github.com/nano-interactive/go-utils/v2/types"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/invopop/validation"
-	"github.com/nano-interactive/go-utils"
 )
 
 type ObjectID string

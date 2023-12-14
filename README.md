@@ -1,6 +1,6 @@
 # GoUtils
 
-[Documentation](https://pkg.go.dev/github.com/nano-interactive/go-utils)
+[Documentation](https://pkg.go.dev/github.com/nano-interactive/go-utils/v2)
 
 [![Testing](https://github.com/nano-interactive/go-utils/actions/workflows/test.yml/badge.svg)](https://github.com/nano-interactive/go-utils/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/nano-interactive/go-utils/branch/master/graph/badge.svg?token=JQTAGQ11DS)](https://codecov.io/gh/nano-interactive/go-utils)
@@ -21,7 +21,7 @@
 package main
 
 import (
-    "github.com/nano-interactive/go-utils/config
+    "github.com/nano-interactive/go-utils/v2/config
 )
 
 // Defaults

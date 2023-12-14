@@ -7,8 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/nano-interactive/go-utils"
-	"github.com/nano-interactive/go-utils/config"
+	"github.com/nano-interactive/go-utils/v2/config"
 	"github.com/spf13/viper"
 )
 

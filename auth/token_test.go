@@ -3,7 +3,7 @@ package auth_test
 import (
 	"testing"
 
-	"github.com/nano-interactive/go-utils/auth"
+	"github.com/nano-interactive/go-utils/v2/auth"
 	"github.com/stretchr/testify/require"
 )
 

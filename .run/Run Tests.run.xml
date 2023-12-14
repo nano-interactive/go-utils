@@ -13,7 +13,7 @@
       </ENTRIES>
     </EXTENSION>
     <kind value="DIRECTORY" />
-    <package value="github.com/nano-interactive/go-utils" />
+    <package value="github.com/nano-interactive/go-utils/v2" />
     <directory value="$PROJECT_DIR$" />
     <filePath value="$PROJECT_DIR$" />
     <framework value="gotest" />

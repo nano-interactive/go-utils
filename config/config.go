@@ -3,7 +3,7 @@ package config
 import (
 	"fmt"
 
-	"github.com/nano-interactive/go-utils/environment"
+	"github.com/nano-interactive/go-utils/v2/environment"
 	"github.com/spf13/viper"
 )
 

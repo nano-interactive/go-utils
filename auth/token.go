@@ -6,7 +6,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/nano-interactive/go-utils"
+	"github.com/nano-interactive/go-utils/v2"
 )
 
 var (

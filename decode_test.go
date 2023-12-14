@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/nano-interactive/go-utils"
+	"github.com/nano-interactive/go-utils/v2"
 	"github.com/stretchr/testify/require"
 )
 

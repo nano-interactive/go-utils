@@ -11,8 +11,6 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/bsontype"
-
-	"github.com/nano-interactive/go-utils"
 )
 
 const jsonNull = "null"

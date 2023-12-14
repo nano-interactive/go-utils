@@ -6,8 +6,6 @@ import (
 
 	"github.com/gocql/gocql"
 	"github.com/tinylib/msgp/msgp"
-
-	"github.com/nano-interactive/go-utils"
 )
 
 var timeBase = time.Date(1582, time.October, 15, 0, 0, 0, 0, time.UTC).Unix()

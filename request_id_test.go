@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
-	"github.com/nano-interactive/go-utils/__mocks__/io"
+	"github.com/nano-interactive/go-utils/v2/__mocks__/io"
 )
 
 func TestGetRequestId(t *testing.T) {
