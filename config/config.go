@@ -8,7 +8,6 @@ import (
 )
 
 type (
-	// Configuration struct
 	Config struct {
 		ProjectName string
 		Env         string
@@ -21,14 +20,12 @@ type (
 	Modifier func(*viper.Viper)
 )
 
-// Default viper configuration
 var DefaultConfig = Config{
 	Env:  "development",
 	Name: "config",
 	Type: "yaml",
 }
 
-// Create a Viper configuration instance with modifiers
 func NewWithModifier(cfg Config, modifiers ...Modifier) (*viper.Viper, error) {
 	if cfg.Env == "" {
 		cfg.Env = DefaultConfig.Env
@@ -82,7 +79,6 @@ func NewWithModifier(cfg Config, modifiers ...Modifier) (*viper.Viper, error) {
 	return v, nil
 }
 
-// Create a Viper configuration instance
 func New(c ...Config) (*viper.Viper, error) {
 	cfg := DefaultConfig
 

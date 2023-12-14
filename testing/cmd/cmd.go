@@ -2,86 +2,105 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"os"
+	"strings"
 	"testing"
 	"time"
 
+	"github.com/nano-interactive/go-utils/cmd"
 	"github.com/spf13/cobra"
 )
 
 type (
 	Args struct {
-		In               io.Reader
-		Out              io.Writer
-		Args             map[string]string
-		ExecutingCommand string
-		Commands         []*cobra.Command
+		In           io.Reader
+		Out          io.Writer
+		Args         map[string]any
+		ContextItems map[string]any
 	}
 
 	Command struct {
 		cancel context.CancelFunc
-		done   <-chan struct{}
+		done   <-chan *cobra.Command
+	}
+
+	Result int
+
+	Option func(options *Options)
+
+	Options struct {
+		timeout time.Duration
+		args    Args
 	}
 )
 
-func (c Command) Wait() {
-	c.cancel()
-	<-c.done
-}
+const (
+	Done Result = iota
+	Timeout
+)
 
-func StartCommand[T any](t testing.TB, ctx context.Context, root *cobra.Command, args ...Args) Command {
+func startCommand(t testing.TB, ctx context.Context, root *cobra.Command, args Args) Command {
 	ctx, cancel := context.WithCancel(ctx)
 	t.Cleanup(func() {
 		cancel()
 	})
 
-	defaultArgs := Args{
-		Args:     make(map[string]string),
-		Commands: []*cobra.Command{},
-		In:       os.Stdin,
-		Out:      os.Stdout,
+	if args.In == nil {
+		args.In = os.Stdin
 	}
 
-	if len(args) > 0 {
-		defaultArgs = args[0]
-		if defaultArgs.In == nil {
-			defaultArgs.In = os.Stdin
-		}
+	if args.Out == nil {
+		args.Out = os.Stdout
+	}
 
-		if defaultArgs.Out == nil {
-			defaultArgs.Out = os.Stdout
-		}
+	if len(args.Args) == 0 {
+		args.Args = make(map[string]any)
+	}
 
-		if len(defaultArgs.Args) == 0 {
-			defaultArgs.Args = make(map[string]string)
+	if len(args.ContextItems) == 0 {
+		args.ContextItems = make(map[string]any)
+	}
+
+	arg := make([]string, 0, len(args.Args))
+
+	for k, v := range args.Args {
+		switch data := v.(type) {
+		case string:
+			arg = append(arg, "--"+k, data)
+		case []string:
+			arg = append(arg, "--"+k, strings.Join(data, ","))
+		case fmt.Stringer:
+			arg = append(arg, "--"+k, data.String())
+		case nil:
+			arg = append(arg, "--"+k)
+		default:
+			t.Fatalf("Failed to append to args %T", v)
 		}
 	}
 
-	arg := make([]string, 0)
-
-	for k, v := range defaultArgs.Args {
-		arg = append(arg, "--"+k, v)
+	for k, item := range args.ContextItems {
+		ctx = context.WithValue(ctx, k, item)
 	}
-
-	arg = append(arg, defaultArgs.ExecutingCommand)
 
 	root.SetArgs(arg)
-	root.SetIn(defaultArgs.In)
-	root.SetOut(defaultArgs.Out)
+	root.SetIn(args.In)
+	root.SetOut(args.Out)
 
-	done := make(chan struct{}, 1)
+	done := make(chan *cobra.Command, 1)
 	t.Cleanup(func() {
 		close(done)
 	})
 
 	go func(ctx context.Context) {
-		if err := root.ExecuteContext(ctx); err != nil {
+		c, err := root.ExecuteContextC(ctx)
+		if err != nil {
 			t.Error(err)
 			t.Fail()
 		}
 
-		done <- struct{}{}
+		done <- c
 	}(ctx)
 
 	return Command{
@@ -90,23 +109,81 @@ func StartCommand[T any](t testing.TB, ctx context.Context, root *cobra.Command,
 	}
 }
 
-type Result int
+type ()
 
-const (
-	Done Result = iota
-	Timeout
-)
-
-func StartCommandWithWait[T any](t testing.TB, ctx context.Context, root *cobra.Command, wait time.Duration, args ...Args) Result {
-	c := StartCommand[T](t, ctx, root, args...)
-	timer := time.NewTimer(wait)
-	defer c.cancel()
-	defer timer.Stop()
-
-	select {
-	case <-c.done:
-		return Done
-	case <-timer.C:
-		return Timeout
+func WithTimeout(wait time.Duration) Option {
+	return func(options *Options) {
+		options.timeout = wait
 	}
+}
+
+func WithArgs(args map[string]any) Option {
+	return func(options *Options) {
+		options.args.Args = args
+	}
+}
+
+func WithInput(in io.Reader) Option {
+	return func(options *Options) {
+		options.args.In = in
+	}
+}
+
+func WithOutput(in io.Writer) Option {
+	return func(options *Options) {
+		options.args.Out = in
+	}
+}
+
+func WithConfig(key string, cfg any) Option {
+	return func(options *Options) {
+		options.args.ContextItems[key] = cfg
+	}
+}
+
+func WithConfigDefault(cfg any) Option {
+	return func(options *Options) {
+		options.args.ContextItems[string(cmd.ConfigContextKey)] = cfg
+	}
+}
+
+func WithContextItems(items map[string]any) Option {
+	return func(options *Options) {
+		for key, value := range items {
+			options.args.ContextItems[key] = value
+		}
+	}
+}
+
+func StartCommand(tb testing.TB, ctx context.Context, root *cobra.Command, opts ...Option) Result {
+	opt := Options{
+		args: Args{
+			In:           os.Stdin,
+			Out:          os.Stdout,
+			Args:         make(map[string]any),
+			ContextItems: make(map[string]any),
+		},
+		timeout: 0,
+	}
+
+	for _, o := range opts {
+		o(&opt)
+	}
+
+	c := startCommand(tb, ctx, root, opt.args)
+	defer c.cancel()
+
+	if opt.timeout > 0 {
+		timer := time.NewTimer(opt.timeout)
+		defer timer.Stop()
+		select {
+		case <-c.done:
+			return Done
+		case <-timer.C:
+			return Timeout
+		}
+	}
+
+	<-c.done
+	return Done
 }
