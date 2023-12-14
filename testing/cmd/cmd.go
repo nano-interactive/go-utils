@@ -68,13 +68,13 @@ func startCommand(t testing.TB, ctx context.Context, root *cobra.Command, args A
 	for k, v := range args.Args {
 		switch data := v.(type) {
 		case string:
-			arg = append(arg, "--"+k, data)
+			arg = append(arg, k, data)
 		case []string:
-			arg = append(arg, "--"+k, strings.Join(data, ","))
+			arg = append(arg, k, strings.Join(data, ","))
 		case fmt.Stringer:
-			arg = append(arg, "--"+k, data.String())
+			arg = append(arg, k, data.String())
 		case nil:
-			arg = append(arg, "--"+k)
+			arg = append(arg, k)
 		default:
 			t.Fatalf("Failed to append to args %T", v)
 		}
