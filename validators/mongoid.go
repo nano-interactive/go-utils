@@ -2,6 +2,7 @@ package validators
 
 import (
 	"encoding/hex"
+	"github.com/nano-interactive/go-utils/v2"
 
 	"github.com/nano-interactive/go-utils/v2/types"
 	"go.mongodb.org/mongo-driver/bson/primitive"

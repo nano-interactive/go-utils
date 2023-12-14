@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/gocql/gocql"
+	"github.com/nano-interactive/go-utils/v2"
 	"github.com/tinylib/msgp/msgp"
 )
 

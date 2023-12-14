@@ -1,6 +1,7 @@
 package fiber
 
 import (
+	"github.com/gofiber/fiber/v2"
 	"net/http"
 	"testing"
 	"time"

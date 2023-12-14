@@ -2,6 +2,7 @@ package types
 
 import (
 	"errors"
+	"github.com/nano-interactive/go-utils/v2"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
