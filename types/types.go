@@ -91,6 +91,7 @@ func (o *NullBool) UnmarshalBSONValue(t bsontype.Type, bytes []byte) error {
 
 	return nil
 }
+
 func (o *NullBool) UnmarshalJSON(data []byte) error {
 	if len(data) == 0 || bytes.Equal(jsonNullBytes, data) {
 		o.Valid = false
@@ -111,6 +112,7 @@ func (o *NullBool) UnmarshalJSON(data []byte) error {
 
 	return nil
 }
+
 func (o NullBool) MarshalJSON() ([]byte, error) {
 	if o.Valid {
 		if o.Bool {
@@ -121,6 +123,7 @@ func (o NullBool) MarshalJSON() ([]byte, error) {
 	}
 	return jsonNullBytes, nil
 }
+
 func (o NullBool) MarshalBSONValue() (bsontype.Type, []byte, error) {
 	if !o.Valid {
 		return bson.TypeNull, nil, nil
@@ -200,6 +203,7 @@ func (o *NullString) UnmarshalBSONValue(t bsontype.Type, bytes []byte) error {
 
 	return nil
 }
+
 func (o NullInt16) MarshalBSONValue() (bsontype.Type, []byte, error) {
 	if !o.Valid {
 		return bson.TypeNull, nil, nil
@@ -207,6 +211,7 @@ func (o NullInt16) MarshalBSONValue() (bsontype.Type, []byte, error) {
 
 	return bson.MarshalValue(o.Int16)
 }
+
 func (o *NullInt16) UnmarshalBSONValue(t bsontype.Type, bytes []byte) error {
 	switch t {
 	case bson.TypeNull:
@@ -222,6 +227,7 @@ func (o *NullInt16) UnmarshalBSONValue(t bsontype.Type, bytes []byte) error {
 
 	return nil
 }
+
 func (o NullInt32) MarshalBSONValue() (bsontype.Type, []byte, error) {
 	if !o.Valid {
 		return bson.TypeNull, nil, nil
@@ -229,6 +235,7 @@ func (o NullInt32) MarshalBSONValue() (bsontype.Type, []byte, error) {
 
 	return bson.MarshalValue(o.Int32)
 }
+
 func (o *NullInt32) UnmarshalBSONValue(t bsontype.Type, bytes []byte) error {
 	switch t {
 	case bson.TypeNull:
@@ -244,6 +251,7 @@ func (o *NullInt32) UnmarshalBSONValue(t bsontype.Type, bytes []byte) error {
 
 	return nil
 }
+
 func (o NullInt64) MarshalBSONValue() (bsontype.Type, []byte, error) {
 	if !o.Valid {
 		return bson.TypeNull, nil, nil
@@ -251,6 +259,7 @@ func (o NullInt64) MarshalBSONValue() (bsontype.Type, []byte, error) {
 
 	return bson.MarshalValue(o.Int64)
 }
+
 func (o *NullInt64) UnmarshalBSONValue(t bsontype.Type, bytes []byte) error {
 	switch t {
 	case bson.TypeNull:
@@ -266,6 +275,7 @@ func (o *NullInt64) UnmarshalBSONValue(t bsontype.Type, bytes []byte) error {
 
 	return nil
 }
+
 func (o NullUint16) MarshalBSONValue() (bsontype.Type, []byte, error) {
 	if !o.Valid {
 		return bson.TypeNull, nil, nil
@@ -273,6 +283,7 @@ func (o NullUint16) MarshalBSONValue() (bsontype.Type, []byte, error) {
 
 	return bson.MarshalValue(o.Uint16)
 }
+
 func (o *NullUint16) UnmarshalBSONValue(t bsontype.Type, bytes []byte) error {
 	switch t {
 	case bson.TypeNull:
@@ -288,6 +299,7 @@ func (o *NullUint16) UnmarshalBSONValue(t bsontype.Type, bytes []byte) error {
 
 	return nil
 }
+
 func (o NullUint32) MarshalBSONValue() (bsontype.Type, []byte, error) {
 	if !o.Valid {
 		return bson.TypeNull, nil, nil
@@ -295,6 +307,7 @@ func (o NullUint32) MarshalBSONValue() (bsontype.Type, []byte, error) {
 
 	return bson.MarshalValue(o.Uint32)
 }
+
 func (o *NullUint32) UnmarshalBSONValue(t bsontype.Type, bytes []byte) error {
 	switch t {
 	case bson.TypeNull:
@@ -310,6 +323,7 @@ func (o *NullUint32) UnmarshalBSONValue(t bsontype.Type, bytes []byte) error {
 
 	return nil
 }
+
 func (o NullUint64) MarshalBSONValue() (bsontype.Type, []byte, error) {
 	if !o.Valid {
 		return bson.TypeNull, nil, nil
@@ -317,6 +331,7 @@ func (o NullUint64) MarshalBSONValue() (bsontype.Type, []byte, error) {
 
 	return bson.MarshalValue(o.Uint64)
 }
+
 func (o *NullUint64) UnmarshalBSONValue(t bsontype.Type, bytes []byte) error {
 	switch t {
 	case bson.TypeNull:

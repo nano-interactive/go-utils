@@ -54,7 +54,6 @@ func (s *GoFiberSender[T]) Test(req *http.Request, timeout ...time.Duration) nan
 	}
 
 	res, err := s.app.Test(req, t)
-
 	if err != nil {
 		s.testing.Errorf("Failed to DO request: %v", err)
 		return nano_http.ExtendedResponse[T]{}
@@ -62,7 +61,6 @@ func (s *GoFiberSender[T]) Test(req *http.Request, timeout ...time.Duration) nan
 
 	return nano_http.ExtendedResponse[T]{Response: res}
 }
-
 
 func CallHandler(tb testing.TB, h fiber.Handler, fn ...func(*fasthttp.Request)) (*fiber.Ctx, error) {
 	tb.Helper()

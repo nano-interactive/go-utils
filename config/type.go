@@ -27,6 +27,7 @@ func ParseType(configType string) (Type, error) {
 		return "", ErrInvalidConfigType
 	}
 }
+
 func MustParseType(configType string) Type {
 	t, err := ParseType(configType)
 	if err != nil {

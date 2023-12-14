@@ -2,12 +2,13 @@ package fasthttp
 
 import (
 	"context"
-	nano_http "github.com/nano-interactive/go-utils/testing/http"
-	"github.com/valyala/fasthttp/fasthttputil"
 	"net"
 	"net/http"
 	"testing"
 	"time"
+
+	nano_http "github.com/nano-interactive/go-utils/testing/http"
+	"github.com/valyala/fasthttp/fasthttputil"
 
 	"github.com/valyala/fasthttp"
 )

@@ -33,7 +33,6 @@ func ExtractTokenFromHeader(header string, authType AuthType) (string, error) {
 
 func ParseTokenFromHeader(header string, authType AuthType) ([]byte, error) {
 	headerToken, err := ExtractTokenFromHeader(header, authType)
-
 	if err != nil {
 		return nil, err
 	}

@@ -3,12 +3,13 @@ package testing
 import (
 	"database/sql"
 	"fmt"
-	"github.com/tanimutomo/sqlfile"
 	"strconv"
 	"strings"
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/tanimutomo/sqlfile"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
@@ -62,7 +63,6 @@ func CreateTimescaledb(t testing.TB, optMaker TimescaledbOptions) (*sql.DB, stri
 	var client *sql.DB
 
 	t.Cleanup(func() {
-
 		if client != nil {
 			_ = client.Close()
 		}
@@ -104,5 +104,4 @@ func CreateTimescaledb(t testing.TB, optMaker TimescaledbOptions) (*sql.DB, stri
 	}
 
 	return client, dbName
-
 }

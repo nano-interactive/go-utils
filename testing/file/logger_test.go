@@ -17,7 +17,6 @@ func TestReadLinesSuccess(t *testing.T) {
 	assert := require.New(t)
 	data := []string{"Test 1", "Test 2"}
 	file, err := os.OpenFile(fPath, os.O_CREATE|os.O_RDWR, 0o777)
-
 	if err != nil {
 		t.Errorf("Failed to open file %s: %v", fPath, err)
 		t.FailNow()

@@ -139,7 +139,6 @@ func GetConfig[T any](t testing.TB, create func(*viper.Viper) (T, error)) T {
 		Type:  "yaml",
 		Paths: []string{configPath},
 	})
-
 	if err != nil {
 		t.Error(err)
 		t.FailNow()

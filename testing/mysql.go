@@ -51,7 +51,6 @@ func CreateMySQL(t testing.TB, optMaker MySQLOptions) (*sql.DB, string) {
 			t.Errorf("Failed to open new SQL connection: %v", err)
 			t.FailNow()
 		}
-
 	})
 
 	dbName := strings.ReplaceAll(t.Name(), "/", "_") + "_" + strconv.FormatInt(time.Now().UTC().UnixMilli(), 10)
@@ -59,7 +58,6 @@ func CreateMySQL(t testing.TB, optMaker MySQLOptions) (*sql.DB, string) {
 	_, err := mysqlClient.Exec(
 		fmt.Sprintf("CREATE DATABASE %s CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;", dbName),
 	)
-
 	if err != nil {
 		t.Errorf("Failed to create database with name %s: %v", dbName, err)
 		t.FailNow()

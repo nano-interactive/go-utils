@@ -33,7 +33,6 @@ func NewObjectIDFromTimestamp(t time.Time) ObjectID {
 
 func ObjectIDFromHex(hex string) (ObjectID, error) {
 	val, err := primitive.ObjectIDFromHex(hex)
-
 	if err != nil {
 		return ObjectID{}, err
 	}

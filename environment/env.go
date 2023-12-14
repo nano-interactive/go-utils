@@ -33,7 +33,6 @@ func Parse(env string) (Env, error) {
 
 func MustParse(env string) Env {
 	e, err := Parse(env)
-
 	if err != nil {
 		panic(err)
 	}

@@ -9,6 +9,7 @@ require (
 	github.com/jackc/pgx/v5 v5.5.0
 	github.com/rs/zerolog v1.31.0
 	github.com/rzajac/zltest v0.12.0
+	github.com/spf13/cobra v1.8.0
 	github.com/spf13/viper v1.17.0
 	github.com/stretchr/testify v1.8.4
 	github.com/tanimutomo/sqlfile v1.0.0
@@ -28,6 +29,7 @@ require (
 	github.com/google/uuid v1.3.1 // indirect
 	github.com/hailocab/go-hostpool v0.0.0-20160125115350-e80d13ce29ed // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
 	github.com/jackc/puddle/v2 v2.2.1 // indirect
