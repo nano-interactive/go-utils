@@ -18,16 +18,23 @@ const (
 
 func PersistentPreRunE[T any](cfgFn func() (T, error), persistentPreRunE func(context.Context, T, *cobra.Command, []string) error) func(*cobra.Command, []string) error {
 	return func(cmd *cobra.Command, args []string) error {
-		cfg, err := cfgFn()
-		if err != nil {
-			return err
+		ctx := cmd.Context()
+		cfgVal := ctx.Value(ConfigContextKey)
+
+		if cfgVal != nil {
+			cfg, err := cfgFn()
+			if err != nil {
+				return err
+			}
+
+			cfgVal = cfg
 		}
 
-		ctx := context.WithValue(context.Background(), ConfigContextKey, cfg)
+		ctx = context.WithValue(context.Background(), ConfigContextKey, cfgVal)
 		ctx, cancel := signal.NotifyContext(ctx, os.Interrupt, syscall.SIGTERM)
 		ctx = context.WithValue(ctx, CancelContextKey, cancel)
 		cmd.SetContext(ctx)
-		return persistentPreRunE(ctx, cfg, cmd, args)
+		return persistentPreRunE(ctx, cfgVal, cmd, args)
 	}
 }
 
