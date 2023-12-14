@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"strings"
 	"testing"
 	"time"
 
@@ -70,7 +69,9 @@ func startCommand(t testing.TB, ctx context.Context, root *cobra.Command, args A
 		case string:
 			arg = append(arg, k, data)
 		case []string:
-			arg = append(arg, k, strings.Join(data, ","))
+			for _, i := range data {
+				arg = append(arg, k, i)
+			}
 		case fmt.Stringer:
 			arg = append(arg, k, data.String())
 		case nil:
