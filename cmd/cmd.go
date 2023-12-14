@@ -20,8 +20,13 @@ func PersistentPreRunE[T any](cfgFn func() (T, error), persistentPreRunE func(co
 	return func(cmd *cobra.Command, args []string) error {
 		ctx := cmd.Context()
 		cfgVal := ctx.Value(ConfigContextKey)
+		cfgVal2 := ctx.Value(string(ConfigContextKey))
 
-		if cfgVal != nil {
+		if cfgVal2 != nil {
+			cfgVal = cfgVal2
+		}
+
+		if cfgVal == nil {
 			cfg, err := cfgFn()
 			if err != nil {
 				return err
