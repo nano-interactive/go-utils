@@ -34,7 +34,7 @@ func PersistentPreRunE[T any](cfgFn func() (T, error), persistentPreRunE func(co
 		ctx, cancel := signal.NotifyContext(ctx, os.Interrupt, syscall.SIGTERM)
 		ctx = context.WithValue(ctx, CancelContextKey, cancel)
 		cmd.SetContext(ctx)
-		return persistentPreRunE(ctx, cfgVal, cmd, args)
+		return persistentPreRunE(ctx, cfgVal.(T), cmd, args)
 	}
 }
 
