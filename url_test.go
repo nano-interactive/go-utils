@@ -20,6 +20,7 @@ var data1 = []string{
 	"https://www.example.com/?one=two&two=http",              // query string two query params, with /
 	"http://www.example.com?one=two&two=https://yup.com?he",  // query string without / and with weird query param
 	"http://www.example.com/?one=two&two=https://yup.com?he", // query string with / and with weird query param
+	"http://www.example.com/?one=two&two=https://yup.com?he",
 }
 
 var data2 = []string{
@@ -128,6 +129,21 @@ func TestTrimUrlForScylla(t *testing.T) {
 			fullUrl:  "https://worldtravelling.com/30-stars-we-cant-believe-are-the-same-age/3/?utm_source=Facebook&utm_medium=FB&utm_campaign=DUP GZM_Big4_Vidazoo_CB_Stars The Same Age_P16_RSE - vv6WT WT FB WW An&utm_term=23854019217350509&layout=inf3&vtype=3&fbclid=IwAR3gbeafMqfoDzOPVu2B3P5QEgKtuydi3LmSU4SOft8xa3Akdzo7M0pUtec_aem_th_Aa0DfW8EaIsTtH4kOPKcCwfqRdQUA0TMYlHcRLLLVU1XMA8B43-t-prW7yMcfGw-_MNhLI8vE0TnopF5fjCUJRk4_KDT9WtJ_XXguF0o8qy4Lw",
 			wantUrl:  "https://worldtravelling.com/30-stars-we-cant-believe-are-the-same-age/3/",
 			wantHost: "worldtravelling.com",
+		},
+		{
+			fullUrl:  "https://www.zajenata.bg/напуснах-съпруга-си-заради-това-което-той-искаше-да-наÐfbclid=IwAR1z7R9Na9aasrmffWud0nzSCXwsH8TRa1qswcNFA9XtrM3uKvzAGPYkfMU",
+			wantUrl:  "https://www.zajenata.bg/напуснах-съпруга-си-заради-това-което-той-искаше-да-наÐfbclid=IwAR1z7R9Na9aasrmffWud0nzSCXwsH8TRa1qswcNFA9XtrM3uKvzAGPYkfMU/",
+			wantHost: "www.zajenata.bg",
+		},
+		{
+			fullUrl:  "https://www-lavanguardia-com.cdn.ampproject.org/v/s/www.lavanguardia.com/historiayvida/edad-moderna/20240225/9525175/caravaggio-pintor-homicida-vida-obra-puro-drama.amp.html?amp_gsa=1&amp_js_v=a9&usqp=mq331AQGsAEggAID#amp_tf=De %1$s&aoh=17090467534993&csi=0&referrer=https://www.google.com&ampshare=https://www.lavanguardia.com/historiayvida/edad-moderna/20240225/9525175/caravaggio-pintor-homicida-vida-obra-puro-drama.html",
+			wantUrl:  "https://www-lavanguardia-com.cdn.ampproject.org/v/s/www.lavanguardia.com/historiayvida/edad-moderna/20240225/9525175/caravaggio-pintor-homicida-vida-obra-puro-drama.amp.html/",
+			wantHost: "www-lavanguardia-com.cdn.ampproject.org",
+		},
+		{
+			fullUrl:  "https://www.football.london/chelsea-fc/news/var-confirm-controversial-moises-caicedo-28701601.amp#amp_tf=From %1$s&aoh=17090476429887&csi=1&referrer=https://www.google.com&ampshare=https://www.football.london/chelsea-fc/news/var-confirm-controversial-moises-caicedo-28701601",
+			wantUrl:  "https://www.football.london/chelsea-fc/news/var-confirm-controversial-moises-caicedo-28701601.amp/",
+			wantHost: "www.football.london",
 		},
 	}
 	for _, tt := range tests {
