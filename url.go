@@ -26,7 +26,17 @@ func TrimUrlForScylla(fullUrl string) (scyllaUrl string, hostName string, err er
 
 	urlObject, err := url.Parse(trimmedUrl)
 	if err != nil {
-		return "", "", err
+		//remove everything behind ? or #
+		if index := strings.Index(trimmedUrl, "?"); index > 0 {
+			trimmedUrl = trimmedUrl[0:index]
+		}
+		if index := strings.Index(trimmedUrl, "#"); index > 0 {
+			trimmedUrl = trimmedUrl[0:index]
+		}
+		urlObject, err = url.Parse(trimmedUrl)
+		if err != nil {
+			return "", "", err
+		}
 	}
 
 	data.Grow(len(urlObject.Host) + len(urlObject.Path) + len("https://") + 1)
