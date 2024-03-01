@@ -145,6 +145,68 @@ func TestTrimUrlForScylla(t *testing.T) {
 			wantUrl:  "https://www.football.london/chelsea-fc/news/var-confirm-controversial-moises-caicedo-28701601.amp/",
 			wantHost: "www.football.london",
 		},
+		{
+			fullUrl:  "https://www.proplanta.de/Agrar-Wetter/Saarbr/ufffdcken-7-Tage-Wettervorhersage.html",
+			wantUrl:  "https://www.proplanta.de/Agrar-Wetter/Saarbr/ufffdcken-7-Tage-Wettervorhersage.html/",
+			wantHost: "www.proplanta.de",
+		},
+		{
+			fullUrl:  "https://www.oraridiapertura24.it/filiale/muggi/ufffd-comune%20di%20muggi/ufffd%20(servizi%20demografici)-145894j.html",
+			wantUrl:  "https://www.oraridiapertura24.it/filiale/muggi/ufffd-comune di muggi/ufffd (servizi demografici)-145894j.html/",
+			wantHost: "www.oraridiapertura24.it",
+		},
+		{
+
+			fullUrl:  "https://www.goal.com/th/ข่าว/แดงเดือดมาตามนัด-แมนฯ-ยูฯ-ดวล\\ufffd\\ufffd",
+			wantUrl:  "https://www.goal.com/th/ข่าว/แดงเดือดมาตามนัด-แมนฯ-ยูฯ-ดวล\\ufffd\\ufffd/",
+			wantHost: "www.goal.com",
+		},
+		{
+
+			fullUrl:  "https://www.goal.com/th/ข่าว/แดงเดือดมาตามนัด-แมนฯ-ยูฯ-ดวล\ufffd\ufffd",
+			wantUrl:  "https://www.goal.com/th/ข่าว/แดงเดือดมาตามนัด-แมนฯ-ยูฯ-ดวล\ufffd\ufffd/",
+			wantHost: "www.goal.com",
+		},
+		{
+
+			fullUrl:  "https://www.goal.com/th/ข่าว/แดงเดือดมาตามนัด-แมนฯ-ยูฯ-ดวล\xf0\x8c\xbc",
+			wantUrl:  "https://www.goal.com/th/ข่าว/แดงเดือดมาตามนัด-แมนฯ-ยูฯ-ดวล/",
+			wantHost: "www.goal.com",
+		},
+		{
+
+			fullUrl:  "https://www.goal.com/th/ข่าว/แดงเดือดมาตามนัด-แมนฯ-ยูฯ-ดวล\xf8\xa1\xa1\xa1\xa1",
+			wantUrl:  "https://www.goal.com/th/ข่าว/แดงเดือดมาตามนัด-แมนฯ-ยูฯ-ดวล/",
+			wantHost: "www.goal.com",
+		},
+		{
+
+			fullUrl:  "https://www.goal.com/th/ข่าว/แดงเดือดมาตามนัด-แมนฯ-ยูฯ-ดวล\ufffd\ufffd",
+			wantUrl:  "https://www.goal.com/th/ข่าว/แดงเดือดมาตามนัด-แมนฯ-ยูฯ-ดวล��/",
+			wantHost: "www.goal.com",
+		},
+		{
+
+			fullUrl:  "https://www.goal.com/th/ข่าว/แดงเดือดมาตามนัด-แมนฯ-ยูฯ-ดวล��",
+			wantUrl:  "https://www.goal.com/th/ข่าว/แดงเดือดมาตามนัด-แมนฯ-ยูฯ-ดวล\ufffd\ufffd/",
+			wantHost: "www.goal.com",
+		},
+		{
+
+			fullUrl:  "https://www.goal.com/th/ข่าว/ʘԊ ԋꙨ ꙩんԽ խแดงเดือดมาตามนัด-แมนฯ-ยูฯ-ดวล",
+			wantUrl:  "https://www.goal.com/th/ข่าว/ʘԊ ԋꙨ ꙩんԽ խแดงเดือดมาตามนัด-แมนฯ-ยูฯ-ดวล/",
+			wantHost: "www.goal.com",
+		},
+		{
+			fullUrl:  "https://www.oraridiapertura24.it/filiale/muggi/ufffd-comune%20di%20muggi/ufffd%20(servizi%20demografici)-145894j.html",
+			wantUrl:  "https://www.oraridiapertura24.it/filiale/muggi/ufffd-comune di muggi/ufffd (servizi demografici)-145894j.html/",
+			wantHost: "www.oraridiapertura24.it",
+		},
+		{
+			fullUrl:  "https://www.deine-tierwelt.de/kleinanzeigen/voegel-c4114/q-rotfl%E3%BCgelsittich/",
+			wantUrl:  "https://www.deine-tierwelt.de/kleinanzeigen/voegel-c4114/q-rotflgelsittich/",
+			wantHost: "www.deine-tierwelt.de",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.fullUrl, func(_ *testing.T) {
