@@ -21,7 +21,6 @@ var (
 
 func TrimUrlForScylla(fullUrl string) (scyllaUrl string, hostName string, err error) {
 	var data strings.Builder
-
 	trimmedUrl := strings.TrimSpace(fullUrl)
 
 	urlObject, err := url.Parse(trimmedUrl)
@@ -49,6 +48,7 @@ func TrimUrlForScylla(fullUrl string) (scyllaUrl string, hostName string, err er
 		data.WriteString("/")
 	}
 	scyllaUrl = data.String()
+	scyllaUrl = strings.ToValidUTF8(scyllaUrl, "")
 
 	return scyllaUrl, urlObject.Host, nil
 }
