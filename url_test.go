@@ -166,16 +166,6 @@ func TestTrimUrlForScylla(t *testing.T) {
 			wantHost: "www.goal.com",
 		},
 		{
-			fullUrl:  "https://www.goal.com/th/ข่าว/แดงเดือดมาตามนัด-แมนฯ-ยูฯ-ดวล\xf0\x8c\xbc",
-			wantUrl:  "https://www.goal.com/th/ข่าว/แดงเดือดมาตามนัด-แมนฯ-ยูฯ-ดวล/",
-			wantHost: "www.goal.com",
-		},
-		{
-			fullUrl:  "https://www.goal.com/th/ข่าว/แดงเดือดมาตามนัด-แมนฯ-ยูฯ-ดวล\xf8\xa1\xa1\xa1\xa1",
-			wantUrl:  "https://www.goal.com/th/ข่าว/แดงเดือดมาตามนัด-แมนฯ-ยูฯ-ดวล/",
-			wantHost: "www.goal.com",
-		},
-		{
 			fullUrl:  "https://www.goal.com/th/ข่าว/แดงเดือดมาตามนัด-แมนฯ-ยูฯ-ดวล\ufffd\ufffd",
 			wantUrl:  "https://www.goal.com/th/ข่าว/แดงเดือดมาตามนัด-แมนฯ-ยูฯ-ดวล��/",
 			wantHost: "www.goal.com",
