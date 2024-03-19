@@ -190,6 +190,26 @@ func TestTrimUrlForScylla(t *testing.T) {
 			wantUrl:  "https://www.deine-tierwelt.de/kleinanzeigen/voegel-c4114/q-rotflgelsittich/",
 			wantHost: "www.deine-tierwelt.de",
 		},
+		{
+			fullUrl:  "https://www.spanishdict.com/translate/we are not 100%/",
+			wantUrl:  "https://www.spanishdict.com/translate/we are not 100%/",
+			wantHost: "www.spanishdict.com",
+		},
+		{
+			fullUrl:  "https://www.spanishdict.com/translate/•\\\\tEn 2016 se mudó al Ministerio de Energía donde trabaje hasta el 2022, en estos 6 años se desempeñó en diferentes roles todos enfocados en energía. En su últimos dos años allá trabajó como Económico Senior y gerente en del equipo de analistas aportando al desarrollo de la política para la nueva tecnología de captura de carbono. ",
+			wantUrl:  "https://www.spanishdict.com/translate/•\\\\tEn 2016 se mudó al Ministerio de Energía donde trabaje hasta el 2022, en estos 6 años se desempeñó en diferentes roles todos enfocados en energía. En su últimos dos años allá trabajó como Económico Senior y gerente en del equipo de analistas aportando al desarrollo de la política para la nueva tecnología de captura de carbono. ",
+			wantHost: "www.spanishdict.com",
+		},
+		{
+			fullUrl:  "https://www.gala.de/amp/lifestyle/film-tv-musik/joko-winterscheidt--er-holt-sich-seine-show-zurueck-24032084.html&amp_tf=Von %1$s&aoh=17095534826758&csi=1&referrer=https://www.google.com&ampshare=https://www.gala.de/lifestyle/film-tv-musik/joko-winterscheidt-siegt-gegen-klaas-und-holt-sich-seine-show-zurueck-24032084.html",
+			wantUrl:  "https://www.gala.de/amp/lifestyle/film-tv-musik/joko-winterscheidt--er-holt-sich-seine-show-zurueck-24032084.html&amp_tf=Von %1$s&aoh=17095534826758&csi=1&referrer=https://www.google.com&ampshare=https://www.gala.de/lifestyle/film-tv-musik/joko-winterscheidt-siegt-gegen-klaas-und-holt-sich-seine-show-zurueck-24032084.html",
+			wantHost: "https://www.gala.de/amp/lifestyle/film-tv-musik/joko-winterscheidt--er-holt-sich-seine-show-zurueck-24032084.html&amp_tf=Von %1$s&aoh=17095534826758&csi=1&referrer=https://www.google.com&ampshare=https://www.gala.de/lifestyle/film-tv-musik/joko-winterscheidt-siegt-gegen-klaas-und-holt-sich-seine-show-zurueck-24032084.html",
+		},
+		{
+			fullUrl:  "https://coolconversion.com/density-volume-mass/--1--m%C2%B3--of--sulphuric-acid-95%-conc.--in--tonne",
+			wantUrl:  "https://coolconversion.com/density-volume-mass/--1--m%C2%B3--of--sulphuric-acid-95%-conc.--in--tonne/",
+			wantHost: "coolconversion.com",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.fullUrl, func(_ *testing.T) {

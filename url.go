@@ -32,6 +32,8 @@ func TrimUrlForScylla(fullUrl string) (scyllaUrl string, hostName string, err er
 		if index := strings.Index(trimmedUrl, "#"); index > 0 {
 			trimmedUrl = trimmedUrl[0:index]
 		}
+		trimmedUrl = strings.ToValidUTF8(trimmedUrl, "")
+
 		urlObject, err = url.Parse(trimmedUrl)
 		if err != nil {
 			return "", "", err
