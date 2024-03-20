@@ -29,7 +29,7 @@ func TestName(t *testing.T) {
 	t.Parallel()
 	assert := require.New(t)
 	headers := http.Header{}
-	headers.Set("Content-Type", "")
+	headers.Set("Content-Type", "application/json; charset=utf-8")
 	req, _ := http.NewRequest(http.MethodGet, "", nil)
 
 	// Act
