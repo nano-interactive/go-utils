@@ -106,6 +106,11 @@ func TestTrimUrlForScylla(t *testing.T) {
 		wantHost string
 	}{
 		{
+			fullUrl:  "https://www.spanishdict.com/translate/we%20are%20not%20100%25",
+			wantUrl:  "https://www.spanishdict.com/translate/we%20are%20not%20100%25/",
+			wantHost: "www.spanishdict.com",
+		},
+		{
 			fullUrl:  "http://google.com",
 			wantUrl:  "https://google.com/",
 			wantHost: "google.com",
@@ -152,7 +157,7 @@ func TestTrimUrlForScylla(t *testing.T) {
 		},
 		{
 			fullUrl:  "https://www.oraridiapertura24.it/filiale/muggi/ufffd-comune%20di%20muggi/ufffd%20(servizi%20demografici)-145894j.html",
-			wantUrl:  "https://www.oraridiapertura24.it/filiale/muggi/ufffd-comune di muggi/ufffd (servizi demografici)-145894j.html/",
+			wantUrl:  "https://www.oraridiapertura24.it/filiale/muggi/ufffd-comune%20di%20muggi/ufffd%20(servizi%20demografici)-145894j.html/",
 			wantHost: "www.oraridiapertura24.it",
 		},
 		{
@@ -199,13 +204,29 @@ func TestTrimUrlForScylla(t *testing.T) {
 		},
 		{
 			fullUrl:  "https://www.oraridiapertura24.it/filiale/muggi/ufffd-comune%20di%20muggi/ufffd%20(servizi%20demografici)-145894j.html",
-			wantUrl:  "https://www.oraridiapertura24.it/filiale/muggi/ufffd-comune di muggi/ufffd (servizi demografici)-145894j.html/",
+			wantUrl:  "https://www.oraridiapertura24.it/filiale/muggi/ufffd-comune%20di%20muggi/ufffd%20(servizi%20demografici)-145894j.html/",
 			wantHost: "www.oraridiapertura24.it",
 		},
 		{
 			fullUrl:  "https://www.deine-tierwelt.de/kleinanzeigen/voegel-c4114/q-rotfl%E3%BCgelsittich/",
-			wantUrl:  "https://www.deine-tierwelt.de/kleinanzeigen/voegel-c4114/q-rotflgelsittich/",
+			wantUrl:  "https://www.deine-tierwelt.de/kleinanzeigen/voegel-c4114/q-rotfl%E3%BCgelsittich/",
 			wantHost: "www.deine-tierwelt.de",
+		},
+		{
+			fullUrl:  "https://www.oraridiapertura24.it/filiale/Salerno-Metropolis Caf\\xe8-1834213C.html/",
+			wantUrl:  "https://www.oraridiapertura24.it/filiale/Salerno-Metropolis Caf\\xe8-1834213C.html/",
+			wantHost: "www.oraridiapertura24.it",
+		},
+
+		{
+			fullUrl:  "https://coolconversion.com/density-volume-mass/--1--m%C2%B3--of--sulphuric-acid-95%-conc.--in--tonne",
+			wantUrl:  "https://coolconversion.com/density-volume-mass/--1--m%C2%B3--of--sulphuric-acid-95%-conc.--in--tonne/",
+			wantHost: "coolconversion.com",
+		},
+		{
+			fullUrl:  "https://www.spanishdict.com/translate/•\\\\tEn 2016 se mudó al Ministerio de Energía donde trabaje hasta el 2022, en estos 6 años se desempeñó en diferentes roles todos enfocados en energía. En su últimos dos años allá trabajó como Económico Senior y gerente en del equipo de analistas aportando al desarrollo de la política para la nueva tecnología de captura de carbono. ",
+			wantUrl:  "https://www.spanishdict.com/translate/•\\\\tEn 2016 se mudó al Ministerio de Energía donde trabaje hasta el 2022, en estos 6 años se desempeñó en diferentes roles todos enfocados en energía. En su últimos dos años allá trabajó como Económico Senior y gerente en del equipo de analistas aportando al desarrollo de la política para la nueva tecnología de captura de carbono./",
+			wantHost: "www.spanishdict.com",
 		},
 		{
 			fullUrl:  "https://www.spanishdict.com/translate/we are not 100%/",
@@ -213,28 +234,28 @@ func TestTrimUrlForScylla(t *testing.T) {
 			wantHost: "www.spanishdict.com",
 		},
 		{
-			fullUrl:  "https://www.spanishdict.com/translate/•\\\\tEn 2016 se mudó al Ministerio de Energía donde trabaje hasta el 2022, en estos 6 años se desempeñó en diferentes roles todos enfocados en energía. En su últimos dos años allá trabajó como Económico Senior y gerente en del equipo de analistas aportando al desarrollo de la política para la nueva tecnología de captura de carbono. ",
-			wantUrl:  "https://www.spanishdict.com/translate/•\\\\tEn 2016 se mudó al Ministerio de Energía donde trabaje hasta el 2022, en estos 6 años se desempeñó en diferentes roles todos enfocados en energía. En su últimos dos años allá trabajó como Económico Senior y gerente en del equipo de analistas aportando al desarrollo de la política para la nueva tecnología de captura de carbono. ",
-			wantHost: "www.spanishdict.com",
-		},
-		{
 			fullUrl:  "https://www.gala.de/amp/lifestyle/film-tv-musik/joko-winterscheidt--er-holt-sich-seine-show-zurueck-24032084.html&amp_tf=Von %1$s&aoh=17095534826758&csi=1&referrer=https://www.google.com&ampshare=https://www.gala.de/lifestyle/film-tv-musik/joko-winterscheidt-siegt-gegen-klaas-und-holt-sich-seine-show-zurueck-24032084.html",
-			wantUrl:  "https://www.gala.de/amp/lifestyle/film-tv-musik/joko-winterscheidt--er-holt-sich-seine-show-zurueck-24032084.html&amp_tf=Von %1$s&aoh=17095534826758&csi=1&referrer=https://www.google.com&ampshare=https://www.gala.de/lifestyle/film-tv-musik/joko-winterscheidt-siegt-gegen-klaas-und-holt-sich-seine-show-zurueck-24032084.html",
-			wantHost: "https://www.gala.de/amp/lifestyle/film-tv-musik/joko-winterscheidt--er-holt-sich-seine-show-zurueck-24032084.html&amp_tf=Von %1$s&aoh=17095534826758&csi=1&referrer=https://www.google.com&ampshare=https://www.gala.de/lifestyle/film-tv-musik/joko-winterscheidt-siegt-gegen-klaas-und-holt-sich-seine-show-zurueck-24032084.html",
-		},
-		{
-			fullUrl:  "https://coolconversion.com/density-volume-mass/--1--m%C2%B3--of--sulphuric-acid-95%-conc.--in--tonne",
-			wantUrl:  "https://coolconversion.com/density-volume-mass/--1--m%C2%B3--of--sulphuric-acid-95%-conc.--in--tonne/",
-			wantHost: "coolconversion.com",
+			wantUrl:  "https://www.gala.de/amp/lifestyle/film-tv-musik/joko-winterscheidt--er-holt-sich-seine-show-zurueck-24032084.html&amp_tf=Von %1$s&aoh=17095534826758&csi=1&referrer=https://www.google.com&ampshare=https://www.gala.de/lifestyle/film-tv-musik/joko-winterscheidt-siegt-gegen-klaas-und-holt-sich-seine-show-zurueck-24032084.html/",
+			wantHost: "www.gala.de",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.fullUrl, func(_ *testing.T) {
+
 			resultUrl, resultHost, err := TrimUrlForScylla(tt.fullUrl)
 
 			assert.NoError(err)
 			assert.Equal(tt.wantUrl, resultUrl)
 			assert.Equal(tt.wantHost, resultHost)
+
+			//to do check if double parse is changing anything
+			resultUrl, resultHost, err = TrimUrlForScylla(tt.fullUrl)
+			resultUrl, resultHost, err = TrimUrlForScylla(resultUrl)
+
+			assert.NoError(err)
+			assert.Equal(tt.wantUrl, resultUrl)
+			assert.Equal(tt.wantHost, resultHost)
+
 		})
 	}
 }
