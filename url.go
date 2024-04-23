@@ -22,7 +22,9 @@ var (
 func TrimUrlForScylla(fullUrl string) (scyllaUrl string, hostName string, err error) {
 
 	trimmedUrl := strings.TrimSpace(fullUrl)
-
+	if len(trimmedUrl) == 0 {
+		return "", "", ErrInvalidUrl
+	}
 	//remove everything behind ? or #
 	if index := strings.Index(trimmedUrl, "?"); index > 0 {
 		trimmedUrl = trimmedUrl[0:index]
