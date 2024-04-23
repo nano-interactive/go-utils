@@ -22,7 +22,9 @@ var (
 func TrimUrlForScylla(fullUrl string) (scyllaUrl string, hostName string, err error) {
 
 	trimmedUrl := strings.TrimSpace(fullUrl)
-
+	if len(trimmedUrl) == 0 {
+		return "", "", ErrInvalidUrl
+	}
 	//remove everything behind ? or #
 	if index := strings.Index(trimmedUrl, "?"); index > 0 {
 		trimmedUrl = trimmedUrl[0:index]
@@ -35,9 +37,14 @@ func TrimUrlForScylla(fullUrl string) (scyllaUrl string, hostName string, err er
 	if trimmedUrl[len(trimmedUrl)-1:] != "/" {
 		trimmedUrl = trimmedUrl + "/"
 	}
-	trimmedUrl = strings.Replace(trimmedUrl, "http://", "https://", 1)
 
-	if len(trimmedUrl) < 9 {
+	if strings.Index(trimmedUrl, "http") == -1 {
+		trimmedUrl = "https://" + trimmedUrl
+	} else {
+		trimmedUrl = strings.Replace(trimmedUrl, "http://", "https://", 1)
+	}
+
+	if len(trimmedUrl) < 11 {
 		return "", "", ErrInvalidUrl
 	}
 	host := trimmedUrl[8:]
