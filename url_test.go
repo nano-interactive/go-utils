@@ -238,6 +238,11 @@ func TestTrimUrlForScylla(t *testing.T) {
 			wantUrl:  "https://www.gala.de/amp/lifestyle/film-tv-musik/joko-winterscheidt--er-holt-sich-seine-show-zurueck-24032084.html&amp_tf=Von %1$s&aoh=17095534826758&csi=1&referrer=https://www.google.com&ampshare=https://www.gala.de/lifestyle/film-tv-musik/joko-winterscheidt-siegt-gegen-klaas-und-holt-sich-seine-show-zurueck-24032084.html/",
 			wantHost: "www.gala.de",
 		},
+		{
+			fullUrl:  "www.gala.de",
+			wantUrl:  "https://www.gala.de/",
+			wantHost: "www.gala.de",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.fullUrl, func(_ *testing.T) {
