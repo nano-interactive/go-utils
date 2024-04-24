@@ -37,7 +37,7 @@ func Uint16() (uint16, error) {
 		return 0, err
 	}
 
-	return binary.LittleEndian.Uint16(b), nil
+	return binary.NativeEndian.Uint16(b), nil
 }
 
 func Uint32() (uint32, error) {
@@ -46,7 +46,7 @@ func Uint32() (uint32, error) {
 		return 0, err
 	}
 
-	return binary.LittleEndian.Uint32(b), nil
+	return binary.NativeEndian.Uint32(b), nil
 }
 
 func Uint64() (uint64, error) {
@@ -55,5 +55,5 @@ func Uint64() (uint64, error) {
 		return 0, err
 	}
 
-	return binary.LittleEndian.Uint64(b), nil
+	return binary.NativeEndian.Uint64(b), nil
 }
