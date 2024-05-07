@@ -39,3 +39,18 @@ func MustParse(env string) Env {
 
 	return e
 }
+
+func (e Env) String() string {
+	switch e {
+	case Production:
+		return "production"
+	case Development:
+		return "development"
+	case Testing:
+		return "testing"
+	case Staging:
+		return "staging"
+	default:
+		panic("invalid environment")
+	}
+}
