@@ -42,10 +42,10 @@ func TestIsObjectId(t *testing.T) {
 
 func BenchmarkIsObjectId(b *testing.B) {
 	b.Run("Good", func(b *testing.B) {
-		objectId := "652e77eeadd7d603e4420c3d"
+		objectID := "652e77eeadd7d603e4420c3d"
 
 		for i := 0; i < b.N; i++ {
-			_ = NewObjectIDRule().Validate(objectId)
+			_ = NewObjectIDRule().Validate(objectID)
 		}
 	})
 
@@ -61,7 +61,7 @@ func BenchmarkIsObjectId(b *testing.B) {
 		objectId := "652e77eeadd7d603e4420c3"
 
 		for i := 0; i < b.N; i++ {
-			NewObjectIDRule().Validate(objectId)
+			_ = NewObjectIDRule().Validate(objectId)
 		}
 	})
 }

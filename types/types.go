@@ -6,9 +6,10 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"errors"
-	"github.com/nano-interactive/go-utils/v2"
 	"reflect"
 	"time"
+
+	"github.com/nano-interactive/go-utils/v2"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/bsontype"
@@ -436,7 +437,7 @@ func (o NullUint64) MarshalJSON() ([]byte, error) {
 }
 
 func (o *NullByte) UnmarshalJSON(value []byte) error {
-	if bytes.Compare(jsonNullBytes, value) == 0 {
+	if bytes.Equal(jsonNullBytes, value) {
 		o.Valid = false
 		return nil
 	}
@@ -452,7 +453,7 @@ func (o *NullByte) UnmarshalJSON(value []byte) error {
 }
 
 func (o *NullFloat32) UnmarshalJSON(value []byte) error {
-	if bytes.Compare(jsonNullBytes, value) == 0 {
+	if bytes.Equal(jsonNullBytes, value) {
 		o.Valid = false
 		return nil
 	}
@@ -468,7 +469,7 @@ func (o *NullFloat32) UnmarshalJSON(value []byte) error {
 }
 
 func (o *NullFloat64) UnmarshalJSON(value []byte) error {
-	if bytes.Compare(jsonNullBytes, value) == 0 {
+	if bytes.Equal(jsonNullBytes, value) {
 		o.Valid = false
 		return nil
 	}
@@ -484,7 +485,7 @@ func (o *NullFloat64) UnmarshalJSON(value []byte) error {
 }
 
 func (o *NullTime) UnmarshalJSON(value []byte) error {
-	if bytes.Compare(jsonNullBytes, value) == 0 {
+	if bytes.Equal(jsonNullBytes, value) {
 		o.Valid = false
 		return nil
 	}
@@ -500,7 +501,7 @@ func (o *NullTime) UnmarshalJSON(value []byte) error {
 }
 
 func (o *NullString) UnmarshalJSON(value []byte) error {
-	if bytes.Compare(jsonNullBytes, value) == 0 {
+	if bytes.Equal(jsonNullBytes, value) {
 		o.Valid = false
 		return nil
 	}
@@ -516,7 +517,7 @@ func (o *NullString) UnmarshalJSON(value []byte) error {
 }
 
 func (o *NullInt16) UnmarshalJSON(value []byte) error {
-	if bytes.Compare(jsonNullBytes, value) == 0 {
+	if bytes.Equal(jsonNullBytes, value) {
 		o.Valid = false
 		return nil
 	}
@@ -532,7 +533,7 @@ func (o *NullInt16) UnmarshalJSON(value []byte) error {
 }
 
 func (o *NullInt32) UnmarshalJSON(value []byte) error {
-	if bytes.Compare(jsonNullBytes, value) == 0 {
+	if bytes.Equal(jsonNullBytes, value) {
 		o.Valid = false
 		return nil
 	}
@@ -548,7 +549,7 @@ func (o *NullInt32) UnmarshalJSON(value []byte) error {
 }
 
 func (o *NullInt64) UnmarshalJSON(value []byte) error {
-	if bytes.Compare(jsonNullBytes, value) == 0 {
+	if bytes.Equal(jsonNullBytes, value) {
 		o.Valid = false
 		return nil
 	}
@@ -564,7 +565,7 @@ func (o *NullInt64) UnmarshalJSON(value []byte) error {
 }
 
 func (o *NullUint16) UnmarshalJSON(value []byte) error {
-	if bytes.Compare(jsonNullBytes, value) == 0 {
+	if bytes.Equal(jsonNullBytes, value) {
 		o.Valid = false
 		return nil
 	}
@@ -580,7 +581,7 @@ func (o *NullUint16) UnmarshalJSON(value []byte) error {
 }
 
 func (o *NullUint32) UnmarshalJSON(value []byte) error {
-	if bytes.Compare(jsonNullBytes, value) == 0 {
+	if bytes.Equal(jsonNullBytes, value) {
 		o.Valid = false
 		return nil
 	}
@@ -596,7 +597,7 @@ func (o *NullUint32) UnmarshalJSON(value []byte) error {
 }
 
 func (o *NullUint64) UnmarshalJSON(value []byte) error {
-	if bytes.Compare(jsonNullBytes, value) == 0 {
+	if bytes.Equal(jsonNullBytes, value) {
 		o.Valid = false
 		return nil
 	}

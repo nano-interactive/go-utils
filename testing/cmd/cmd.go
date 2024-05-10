@@ -82,6 +82,7 @@ func startCommand(t testing.TB, ctx context.Context, root *cobra.Command, args A
 	}
 
 	for k, item := range args.ContextItems {
+		//nolint:staticcheck
 		ctx = context.WithValue(ctx, k, item)
 	}
 
@@ -109,8 +110,6 @@ func startCommand(t testing.TB, ctx context.Context, root *cobra.Command, args A
 		done:   done,
 	}
 }
-
-type ()
 
 func WithTimeout(wait time.Duration) Option {
 	return func(options *Options) {

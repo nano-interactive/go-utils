@@ -2,11 +2,12 @@ package testing
 
 import (
 	"context"
-	"github.com/nano-interactive/go-utils/v2"
 	"os"
 	"path/filepath"
 	"testing"
 	"time"
+
+	"github.com/nano-interactive/go-utils/v2"
 
 	"github.com/nano-interactive/go-utils/v2/config"
 	"github.com/spf13/viper"
@@ -60,7 +61,6 @@ func FindFile(t testing.TB, fileName string) string {
 		}
 
 		workingDir, err = utils.GetAbsolutePath(filepath.Join(workingDir, ".."))
-
 		if err != nil {
 			t.Errorf("failed to get absolute path from %s", filepath.Join(workingDir, ".."))
 			t.FailNow()
@@ -93,7 +93,6 @@ func ProjectRootDir(t testing.TB) string {
 		}
 
 		workingDir, err = utils.GetAbsolutePath(filepath.Join(workingDir, ".."))
-
 		if err != nil {
 			t.Errorf("failed to get absolute path from %s", filepath.Join(workingDir, ".."))
 			t.FailNow()
