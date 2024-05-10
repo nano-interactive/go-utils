@@ -37,7 +37,7 @@ func TrimUrlForScylla(fullUrl string) (scyllaUrl string, hostName string, err er
 		trimmedUrl = trimmedUrl + "/"
 	}
 
-	if strings.Index(trimmedUrl, "http") == -1 {
+	if strings.Index(trimmedUrl, "http") == 0 {
 		trimmedUrl = "https://" + trimmedUrl
 	} else {
 		trimmedUrl = strings.Replace(trimmedUrl, "http://", "https://", 1)
@@ -58,7 +58,6 @@ func TrimUrlForScyllaOld(fullUrl string) (scyllaUrl string, hostName string, err
 	var data strings.Builder
 	trimmedUrl := strings.TrimSpace(fullUrl)
 
-	// todo remove url parse and use simple cut all after '?' and '#' , replace http with https if needed
 	urlObject, err := url.Parse(trimmedUrl)
 	if err != nil {
 		// remove everything behind ? or #

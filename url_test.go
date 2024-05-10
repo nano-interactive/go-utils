@@ -247,6 +247,10 @@ func TestTrimUrlForScylla(t *testing.T) {
 
 			// to do check if double parse is changing anything
 			resultUrl, resultHost, err = TrimUrlForScylla(tt.fullUrl)
+			assert.NoError(err)
+			assert.Equal(tt.wantUrl, resultUrl)
+			assert.Equal(tt.wantHost, resultHost)
+
 			resultUrl, resultHost, err = TrimUrlForScylla(resultUrl)
 
 			assert.NoError(err)
