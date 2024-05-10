@@ -1,4 +1,4 @@
-name: 'Testing'
+name: "Testing"
 
 on:
   push:
@@ -7,23 +7,22 @@ on:
   pull_request:
     branches:
       - master
+
 jobs:
-  test:
+  unit-tests:
     strategy:
       matrix:
-        os: [ubuntu-latest]
-        go: ['1.21']
-    runs-on: ${{ matrix.os }}
-    container: golang:${{ matrix.go }}-bullseye
+        go: ["1.22"]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
-      - uses: actions/setup-go@v4
+      - uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go }}
       - name: Install Task
-        uses: arduino/setup-task@v1
+        uses: arduino/setup-task@v2
         with:
           version: 3.x
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -31,11 +30,8 @@ jobs:
         run: |
           go install github.com/gotesttools/gotestfmt/v2/cmd/gotestfmt@latest
           task test
-      - uses: codecov/codecov-action@v3
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage.txt
-          flags: unit-tests
-          name: codecov-umbrella
-          fail_ci_if_error: false
-          verbose: false
+          slug: nano-interactive/go-utils

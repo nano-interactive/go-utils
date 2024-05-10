@@ -2,8 +2,6 @@ module github.com/nano-interactive/go-utils/v2
 
 go 1.22
 
-toolchain go1.22.2
-
 require (
 	github.com/gocql/gocql v1.6.0
 	github.com/gofiber/fiber/v2 v2.52.4
