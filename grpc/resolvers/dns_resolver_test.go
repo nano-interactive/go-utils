@@ -35,11 +35,11 @@ func (m *MockClientConn) ReportError(p0 error) {
 	_ = m.Called(p0)
 }
 
-func (m *MockClientConn) NewAddress(addresses []resolver.Address) {
+func (m *MockClientConn) NewAddress(_ []resolver.Address) {
 	panic("SHOULD PANIC: NOT EXPECTED ANYWHERE")
 }
 
-func (m *MockClientConn) ParseServiceConfig(serviceConfigJSON string) *serviceconfig.ParseResult {
+func (m *MockClientConn) ParseServiceConfig(_ string) *serviceconfig.ParseResult {
 	panic("SHOULD PANIC: NOT EXPECTED ANYWHERE")
 }
 
@@ -61,10 +61,10 @@ func (m *MockNetResolver) LookupSRV(p0 context.Context, p1 string, p2 string, p3
 	return args.String(0), args.Get(1).([]*net.SRV), args.Error(2)
 }
 
-func getDNSBuilder(resolver resolvers.NetResolver, resolving time.Duration) *resolvers.DnsResolverBuilder {
-	return resolvers.NewDnsResolverBuilder(
+func getDNSBuilder(resolver resolvers.NetResolver, resolving time.Duration) *resolvers.DNSResolverBuilder {
+	return resolvers.NewDNSResolverBuilder(
 		context.Background(),
-		resolvers.WithDnsReResolving(resolving),
+		resolvers.WithDNSReResolving(resolving),
 		resolvers.WithResolvingTimeout(3*time.Second),
 		resolvers.WithDefaultPort(3000),
 		resolvers.WithResolver(resolver),

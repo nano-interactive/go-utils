@@ -16,7 +16,7 @@ import (
 )
 
 type (
-	DnsResolver struct {
+	DNSResolver struct {
 		cc         resolver.ClientConn
 		resolver   NetResolver
 		resolveNow chan struct{}
@@ -26,7 +26,7 @@ type (
 		mu         sync.RWMutex
 	}
 
-	DnsResolverBuilder struct {
+	DNSResolverBuilder struct {
 		ctx     context.Context
 		options *option
 	}
@@ -54,7 +54,7 @@ func WithResolver(r NetResolver) Option {
 	}
 }
 
-func WithDnsReResolving(d time.Duration) Option {
+func WithDNSReResolving(d time.Duration) Option {
 	return func(o *option) {
 		o.dnsReResolving = d
 	}
@@ -78,7 +78,7 @@ func WithDefaultPort(p uint16) Option {
 	}
 }
 
-func NewDnsResolverBuilder(ctx context.Context, opts ...Option) *DnsResolverBuilder {
+func NewDNSResolverBuilder(ctx context.Context, opts ...Option) *DNSResolverBuilder {
 	cfg := &option{
 		dnsReResolving:   30 * time.Second,
 		defaultPort:      443,
@@ -89,13 +89,13 @@ func NewDnsResolverBuilder(ctx context.Context, opts ...Option) *DnsResolverBuil
 		opt(cfg)
 	}
 
-	return &DnsResolverBuilder{
+	return &DNSResolverBuilder{
 		ctx:     ctx,
 		options: cfg,
 	}
 }
 
-func (d *DnsResolverBuilder) Build(target resolver.Target, cc resolver.ClientConn, opts resolver.BuildOptions) (resolver.Resolver, error) {
+func (d *DNSResolverBuilder) Build(target resolver.Target, cc resolver.ClientConn, opts resolver.BuildOptions) (resolver.Resolver, error) {
 	ctx, cancel := context.WithCancel(d.ctx)
 	endpoint := target.Endpoint()
 
@@ -132,7 +132,7 @@ func (d *DnsResolverBuilder) Build(target resolver.Target, cc resolver.ClientCon
 		}
 	}
 
-	resolver := &DnsResolver{
+	resolver := &DNSResolver{
 		ips:        make([]resolver.Address, 0),
 		resolveNow: make(chan struct{}, 1),
 		cancel:     cancel,
@@ -154,11 +154,11 @@ func (d *DnsResolverBuilder) Build(target resolver.Target, cc resolver.ClientCon
 	return resolver, nil
 }
 
-func (b *DnsResolverBuilder) Scheme() string {
+func (d *DNSResolverBuilder) Scheme() string {
 	return "nanodns"
 }
 
-func (d *DnsResolver) resolve(ctx context.Context, host, port string, timeout time.Duration) error {
+func (d *DNSResolver) resolve(ctx context.Context, host, port string, timeout time.Duration) error {
 	ips, err := resolve(ctx, d.resolver, host, port, timeout)
 	if err != nil {
 		if errors.Is(err, errNoChange) {
@@ -199,7 +199,7 @@ func (d *DnsResolver) resolve(ctx context.Context, host, port string, timeout ti
 	return nil
 }
 
-func (d *DnsResolver) watcher(ctx context.Context, host, port string, refresh, timeout time.Duration) {
+func (d *DNSResolver) watcher(ctx context.Context, host, port string, refresh, timeout time.Duration) {
 	ticker := time.NewTicker(refresh)
 	reResolveTimeout := time.NewTicker(refresh)
 
@@ -277,20 +277,20 @@ func resolve(ctx context.Context, r NetResolver, host, port string, timeout time
 	return state, nil
 }
 
-func (d *DnsResolver) ResolveNow(resolver.ResolveNowOptions) {
+func (d *DNSResolver) ResolveNow(resolver.ResolveNowOptions) {
 	select {
 	case d.resolveNow <- struct{}{}:
 	default:
 	}
 }
 
-func (d *DnsResolver) Close() {
+func (d *DNSResolver) Close() {
 	d.cancel()
 	d.wg.Wait()
 	close(d.resolveNow)
 }
 
-func formatIP(addr string) (addrIP string, ok bool) {
+func formatIP(addr string) (string, bool) {
 	ip := net.ParseIP(addr)
 	if ip == nil {
 		return "", false
@@ -306,11 +306,11 @@ var (
 	errNoChange      = errors.New("no ip changes")
 )
 
-func parseTarget(target, defaultPort string) (host, port string, err error) {
+func parseTarget(target, defaultPort string) (string, string, error) {
 	if ip := net.ParseIP(target); ip != nil {
 		return target, defaultPort, nil
 	}
-	if host, port, err = net.SplitHostPort(target); err == nil {
+	if host, port, err := net.SplitHostPort(target); err == nil {
 		if port == "" {
 			return "", "", ErrEndsWithColon
 		}
@@ -319,8 +319,11 @@ func parseTarget(target, defaultPort string) (host, port string, err error) {
 		}
 		return host, port, nil
 	}
-	if host, port, err = net.SplitHostPort(target + ":" + defaultPort); err == nil {
-		return host, port, nil
+
+	host, port, err := net.SplitHostPort(target + ":" + defaultPort)
+	if err != nil {
+		return host, port, fmt.Errorf("invalid target address %v, error info: %w", target, err)
 	}
-	return "", "", fmt.Errorf("invalid target address %v, error info: %v", target, err)
+
+	return host, port, nil
 }
