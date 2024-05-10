@@ -37,7 +37,7 @@ func TrimUrlForScylla(fullUrl string) (scyllaUrl string, hostName string, err er
 		trimmedUrl = trimmedUrl + "/"
 	}
 
-	if strings.Index(trimmedUrl, "http") == 0 {
+	if strings.Index(trimmedUrl, "http") != 0 {
 		trimmedUrl = "https://" + trimmedUrl
 	} else {
 		trimmedUrl = strings.Replace(trimmedUrl, "http://", "https://", 1)
