@@ -78,7 +78,6 @@ func CreateMySQL(t testing.TB, optMaker MySQLOptions) (*sql.DB, string) {
 	_, err = mysqlClient.Exec(
 		fmt.Sprintf("GRANT ALL PRIVILEGES ON %s.* TO '%s'@'%%' WITH GRANT OPTION;", dbName, opts.User),
 	)
-
 	if err != nil {
 		t.Errorf("Failed to grant privileges for database %s to user %s: %v", dbName, opts.User, err)
 		t.FailNow()
@@ -95,7 +94,6 @@ func CreateMySQL(t testing.TB, optMaker MySQLOptions) (*sql.DB, string) {
 			dbName,
 		),
 	)
-
 	if err != nil {
 		t.Errorf("failed to open connection to database: %s %v", dbName, err)
 		t.FailNow()

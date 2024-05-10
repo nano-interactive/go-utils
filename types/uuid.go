@@ -107,7 +107,6 @@ func (u *CQLUUID) DecodeMsg(dc *msgp.Reader) (err error) {
 		case "CQLUUID":
 			var uuid [16]byte
 			_, err = dc.ReadBytes(uuid[:])
-
 			if err != nil {
 				err = msgp.WrapError(err, "CQLUUID")
 				return

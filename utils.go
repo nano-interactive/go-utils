@@ -73,7 +73,6 @@ func GetAbsolutePath(path string) (string, error) {
 
 	if !filepath.IsAbs(path) {
 		path, err = filepath.Abs(path)
-
 		if err != nil {
 			return "", err
 		}
@@ -105,7 +104,6 @@ func CreateDirectoryFromFile(path string, perm fs.FileMode) (string, error) {
 // Returns file instance and error if it fails
 func CreateFile(path string, flags int, dirMode, mode fs.FileMode) (file *os.File, err error) {
 	path, err = CreateDirectoryFromFile(path, dirMode|fs.ModeDir)
-
 	if err != nil {
 		return nil, err
 	}
@@ -117,7 +115,6 @@ func CreateFile(path string, flags int, dirMode, mode fs.FileMode) (file *os.Fil
 
 		//#nosec G304
 		file, err = os.Create(path)
-
 		if err != nil {
 			return nil, err
 		}
@@ -184,7 +181,6 @@ func init() {
 	if pixel == nil {
 		var err error
 		pixel, err = base64.StdEncoding.DecodeString(image)
-
 		if err != nil {
 			panic(err)
 		}

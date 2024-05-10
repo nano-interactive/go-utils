@@ -110,8 +110,6 @@ func startCommand(t testing.TB, ctx context.Context, root *cobra.Command, args A
 	}
 }
 
-type ()
-
 func WithTimeout(wait time.Duration) Option {
 	return func(options *Options) {
 		options.timeout = wait

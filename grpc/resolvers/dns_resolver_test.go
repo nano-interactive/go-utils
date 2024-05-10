@@ -7,13 +7,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/nano-interactive/go-utils/v2/grpc/resolvers"
 	"github.com/samber/lo"
+	"google.golang.org/grpc/resolver"
+	"google.golang.org/grpc/serviceconfig"
+
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
-	"google.golang.org/grpc/resolver"
 
-	"google.golang.org/grpc/serviceconfig"
+	"github.com/nano-interactive/go-utils/v2/grpc/resolvers"
 )
 
 type (
