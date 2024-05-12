@@ -109,7 +109,7 @@ func (d *DNSResolverBuilder) Build(target resolver.Target, cc resolver.ClientCon
 		addr := []resolver.Address{{Addr: ipAddr + ":" + port}}
 		_ = cc.UpdateState(resolver.State{Addresses: addr})
 		cancel()
-		return resolver.Get("dead").Build(target, cc, opts)
+		return resolver.Get("passthrough").Build(target, cc, opts)
 	}
 
 	if d.options.resolver == nil {
