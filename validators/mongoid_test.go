@@ -11,10 +11,17 @@ import (
 type request struct {
 	ID primitive.ObjectID
 }
+type nullableRequest struct {
+	ID primitive.ObjectID
+}
 
 func (r request) Validate() error {
 	return validation.ValidateStruct(&r,
 		validation.Field(&r.ID, NewObjectIDRule()))
+}
+func (r nullableRequest) Validate() error {
+	return validation.ValidateStruct(&r,
+		validation.Field(&r.ID, NewNullableObjectIDRule()))
 }
 
 func TestReq(t *testing.T) {
@@ -39,6 +46,13 @@ func TestIsObjectId(t *testing.T) {
 
 	assert.NoError(ObjectID(objectId).Validate())
 }
+func TestIsNullableObjectId(t *testing.T) {
+	t.Parallel()
+	assert := require.New(t)
+
+	assert.NoError(NullableObjectID("652e77eeadd7d603e4420c3d").Validate())
+	assert.NoError(NullableObjectID("").Validate())
+}
 
 func BenchmarkIsObjectId(b *testing.B) {
 	b.Run("Good", func(b *testing.B) {
@@ -57,7 +71,7 @@ func BenchmarkIsObjectId(b *testing.B) {
 		}
 	})
 
-	b.Run("EventButLessThan24", func(b *testing.B) {
+	b.Run("EvenButLessThan24", func(b *testing.B) {
 		objectId := "652e77eeadd7d603e4420c3"
 
 		for i := 0; i < b.N; i++ {

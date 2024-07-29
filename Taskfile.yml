@@ -3,7 +3,9 @@ version: '3'
 tasks:
   test:
     cmds:
-      - go test -covermode=atomic -race -tags=test_helpers -coverprofile=coverage.txt -timeout 5m -json -v ./... | gotestfmt -showteststatus
+      - go test -covermode=atomic -tags=test_helpers -failfast -race -coverprofile=coverage.txt -timeout 5m -json -v ./... | gotestfmt -showteststatus
+    env:
+        GOMAXPROCS: 4
   cli-tools:
     cmds:
       - go install github.com/gotesttools/gotestfmt/v2/cmd/gotestfmt@latest
@@ -31,3 +33,7 @@ tasks:
     cmds:
       - rm -f go.sum
       - go mod tidy
+  update:
+    cmds:
+      - go get -u ./... # Updates regular packages
+      - go get -u -t ./... # Updates Test packages

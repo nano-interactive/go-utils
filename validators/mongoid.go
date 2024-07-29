@@ -11,13 +11,19 @@ import (
 	"github.com/invopop/validation"
 )
 
-type ObjectID string
+type (
+	ObjectID             string
+	NullableObjectID     string
+	ObjectIdRule         int32
+	NullableObjectIdRule int32
+)
 
 var ObjectIDRuleErr = validation.NewError("validation_is_mongoid", "Invalid ObjectID")
 
-type ObjectIdRule int32
-
 func NewObjectIDRule() ObjectIdRule {
+	return 0
+}
+func NewNullableObjectIDRule() NullableObjectIdRule {
 	return 0
 }
 
@@ -37,15 +43,13 @@ func (ObjectIdRule) Validate(v any) error {
 		}
 		return nil
 	case primitive.ObjectID:
-		value := v.(primitive.ObjectID)
-		if value.IsZero() {
+		if val.IsZero() {
 			return ObjectIDRuleErr
 		}
 
 		return nil
 	case types.ObjectID:
-		value := v.(types.ObjectID)
-		if value.IsNull() {
+		if val.IsNull() {
 			return ObjectIDRuleErr
 		}
 
@@ -55,6 +59,30 @@ func (ObjectIdRule) Validate(v any) error {
 	}
 }
 
+func (NullableObjectIdRule) Validate(v any) error {
+	switch value := v.(type) {
+	case string:
+		if len(v.(string)) == 0 {
+			return nil
+		}
+	case primitive.ObjectID:
+		if value.IsZero() {
+			return nil
+		}
+	case types.ObjectID:
+		if value.IsNull() {
+			return nil
+		}
+	}
+
+	var rule ObjectIdRule
+
+	return rule.Validate(v)
+}
+
 func (o ObjectID) Validate() error {
 	return validation.Validate(string(o), NewObjectIDRule())
+}
+func (o NullableObjectID) Validate() error {
+	return validation.Validate(string(o), NewNullableObjectIDRule())
 }
