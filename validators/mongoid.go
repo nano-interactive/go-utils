@@ -60,6 +60,10 @@ func (ObjectIdRule) Validate(v any) error {
 }
 
 func (NullableObjectIdRule) Validate(v any) error {
+	if v == nil {
+		return nil
+	}
+
 	switch value := v.(type) {
 	case string:
 		if len(v.(string)) == 0 {
@@ -73,6 +77,8 @@ func (NullableObjectIdRule) Validate(v any) error {
 		if value.IsNull() {
 			return nil
 		}
+	default:
+		return ObjectIDRuleErr
 	}
 
 	var rule ObjectIdRule
