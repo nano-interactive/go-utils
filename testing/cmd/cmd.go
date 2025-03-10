@@ -13,10 +13,15 @@ import (
 )
 
 type (
+	Arg struct {
+		Key   string
+		Value any
+	}
+
 	Args struct {
 		In           io.Reader
 		Out          io.Writer
-		Args         map[string]any
+		Args         []Arg
 		ContextItems map[string]any
 	}
 
@@ -41,6 +46,7 @@ const (
 )
 
 func startCommand(t testing.TB, ctx context.Context, root *cobra.Command, args Args) Command {
+	t.Helper()
 	ctx, cancel := context.WithCancel(ctx)
 	t.Cleanup(func() {
 		cancel()
@@ -55,7 +61,7 @@ func startCommand(t testing.TB, ctx context.Context, root *cobra.Command, args A
 	}
 
 	if len(args.Args) == 0 {
-		args.Args = make(map[string]any)
+		args.Args = make([]Arg, 0)
 	}
 
 	if len(args.ContextItems) == 0 {
@@ -64,18 +70,19 @@ func startCommand(t testing.TB, ctx context.Context, root *cobra.Command, args A
 
 	arg := make([]string, 0, len(args.Args))
 
-	for k, v := range args.Args {
-		switch data := v.(type) {
+	for _, v := range args.Args {
+		key := v.Key
+		switch data := v.Value.(type) {
 		case string:
-			arg = append(arg, k, data)
+			arg = append(arg, key, data)
 		case []string:
 			for _, i := range data {
-				arg = append(arg, k, i)
+				arg = append(arg, key, i)
 			}
 		case fmt.Stringer:
-			arg = append(arg, k, data.String())
+			arg = append(arg, key, data.String())
 		case nil:
-			arg = append(arg, k)
+			arg = append(arg, key)
 		default:
 			t.Fatalf("Failed to append to args %T", v)
 		}
@@ -117,7 +124,7 @@ func WithTimeout(wait time.Duration) Option {
 	}
 }
 
-func WithArgs(args map[string]any) Option {
+func WithArgs(args []Arg) Option {
 	return func(options *Options) {
 		options.args.Args = args
 	}
@@ -160,7 +167,7 @@ func StartCommand(tb testing.TB, ctx context.Context, root *cobra.Command, opts 
 		args: Args{
 			In:           os.Stdin,
 			Out:          os.Stdout,
-			Args:         make(map[string]any),
+			Args:         make([]Arg, 0),
 			ContextItems: make(map[string]any),
 		},
 		timeout: 0,
