@@ -12,17 +12,38 @@ type (
 	}
 )
 
+// NewOrderedMap
+//
+// Initializes a new instance of the OrderedMap
 func NewOrderedMap[T comparable, V any](length int) OrderedMap[T, V] {
 	return OrderedMap[T, V]{
 		insertionOrder: make([]T, 0, length),
 		values:         make(map[T]V, length),
+		cmpFunc:        nil,
 	}
 }
 
+func NewOrderedMapWithCompareFunc[T comparable, V any](
+	length int,
+	cmpFunc func(a, b T) int,
+) OrderedMap[T, V] {
+	return OrderedMap[T, V]{
+		insertionOrder: make([]T, 0, length),
+		values:         make(map[T]V, length),
+		cmpFunc:        cmpFunc,
+	}
+}
+
+// SetCompareFunc
+//
+// Sets the comparison function to determine ordering.
 func (om *OrderedMap[T, V]) SetCompareFunc(cmpFunc func(a, b T) int) {
 	om.cmpFunc = cmpFunc
 }
 
+// UnsetCompareFunc
+//
+// Unsets the comparison function
 func (om *OrderedMap[T, V]) UnsetCompareFunc() {
 	om.cmpFunc = nil
 }

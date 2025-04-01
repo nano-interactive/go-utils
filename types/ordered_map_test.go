@@ -93,21 +93,24 @@ func TestOrderedMapIterWithCustomOrder(t *testing.T) {
 
 	assert := require.New(t)
 
-	om := types.NewOrderedMap[string, int](3)
+	om := types.NewOrderedMapWithCompareFunc[string, int](
+		3,
+		func(a, b string) int {
+			if a == b {
+				return 0
+			}
+
+			if a < b {
+				return -1
+			}
+
+			return 1
+		},
+	)
+
 	om.Set("foo", 78)
 	om.Set("var", 90)
 	om.Set("bar", 81)
-	om.SetCompareFunc(func(a, b string) int {
-		if a == b {
-			return 0
-		}
-
-		if a < b {
-			return -1
-		}
-
-		return 1
-	})
 
 	expectedKeys := []string{"bar", "foo", "var"}
 	actualKeys := make([]string, 0, len(expectedKeys))
