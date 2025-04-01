@@ -1,9 +1,14 @@
 package types
 
+import (
+	"slices"
+)
+
 type (
 	OrderedMap[T comparable, V any] struct {
 		insertionOrder []T
 		values         map[T]V
+		cmpFunc        func(a, b T) int
 	}
 )
 
@@ -12,6 +17,14 @@ func NewOrderedMap[T comparable, V any](length int) OrderedMap[T, V] {
 		insertionOrder: make([]T, 0, length),
 		values:         make(map[T]V, length),
 	}
+}
+
+func (om *OrderedMap[T, V]) SetCompareFunc(cmpFunc func(a, b T) int) {
+	om.cmpFunc = cmpFunc
+}
+
+func (om *OrderedMap[T, V]) UnsetCompareFunc() {
+	om.cmpFunc = nil
 }
 
 func (om OrderedMap[T, V]) Get(key T) (V, bool) {
@@ -45,10 +58,24 @@ func (om *OrderedMap[T, V]) Unset(key T) {
 func (om *OrderedMap[T, V]) Reset() {
 	om.insertionOrder = make([]T, 0)
 	om.values = make(map[T]V, 0)
+	om.cmpFunc = nil
 }
 
-func (om OrderedMap[T, V]) Iter(yield func(key T, Value V) bool) {
-	for _, key := range om.insertionOrder {
+// Iter iterates through the map.
+// If the CompareFunc is unset, it iterates in insertion order.
+// Otherewise, it iterates in the order dictated by CompareFunc.
+//
+// Call SetCompareFunc to set the comparison function.
+func (om OrderedMap[T, V]) Iter(yield func(key T, value V) bool) {
+	order := om.insertionOrder
+	if om.cmpFunc != nil {
+		order = make([]T, len(om.insertionOrder))
+		copy(order, om.insertionOrder)
+
+		slices.SortFunc(order, om.cmpFunc)
+	}
+
+	for _, key := range order {
 		value := om.values[key]
 		if !yield(key, value) {
 			return

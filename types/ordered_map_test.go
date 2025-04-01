@@ -87,3 +87,39 @@ func TestOrderedMapIter(t *testing.T) {
 	assert.Equal(expectedKeys, actualKeys)
 	assert.Equal(expectedValues, actualValues)
 }
+
+func TestOrderedMapIterWithCustomOrder(t *testing.T) {
+	t.Parallel()
+
+	assert := require.New(t)
+
+	om := types.NewOrderedMap[string, int](3)
+	om.Set("foo", 78)
+	om.Set("var", 90)
+	om.Set("bar", 81)
+	om.SetCompareFunc(func(a, b string) int {
+		if a == b {
+			return 0
+		}
+
+		if a < b {
+			return -1
+		}
+
+		return 1
+	})
+
+	expectedKeys := []string{"bar", "foo", "var"}
+	actualKeys := make([]string, 0, len(expectedKeys))
+
+	expectedValues := []int{81, 78, 90}
+	actualValues := make([]int, 0, len(expectedValues))
+
+	for k, v := range om.Iter {
+		actualKeys = append(actualKeys, k)
+		actualValues = append(actualValues, v)
+	}
+
+	assert.Equal(expectedKeys, actualKeys)
+	assert.Equal(expectedValues, actualValues)
+}
