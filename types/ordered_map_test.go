@@ -1,0 +1,89 @@
+package types_test
+
+import (
+	"testing"
+
+	"github.com/nano-interactive/go-utils/v2/types"
+	"github.com/stretchr/testify/require"
+)
+
+func TestOrderedMapGetAndSet(t *testing.T) {
+	t.Parallel()
+
+	assert := require.New(t)
+
+	om := types.NewOrderedMap[string, int](3)
+
+	v, exists := om.Get("invalid-key")
+
+	assert.Equal(0, v)
+	assert.False(exists)
+
+	om.Set("foo", 2)
+
+	v, exists = om.Get("foo")
+
+	assert.Equal(2, v)
+	assert.True(exists)
+}
+
+func TestOrderedMapUnset(t *testing.T) {
+	t.Parallel()
+
+	assert := require.New(t)
+
+	om := types.NewOrderedMap[string, int](3)
+	om.Set("foo", -1)
+	om.Unset("foo")
+
+	v, exists := om.Get("foo")
+
+	assert.Equal(0, v)
+	assert.False(exists)
+}
+
+func TestOrderedMapReset(t *testing.T) {
+	t.Parallel()
+
+	assert := require.New(t)
+
+	om := types.NewOrderedMap[string, int](3)
+	om.Set("foo", 1)
+	om.Set("bar", 2)
+	om.Set("baz", 3)
+
+	om.Reset()
+
+	actualValues := make([]int, 0)
+
+	for _, v := range om.Iter {
+		actualValues = append(actualValues, v)
+	}
+
+	assert.Empty(actualValues)
+}
+
+func TestOrderedMapIter(t *testing.T) {
+	t.Parallel()
+
+	assert := require.New(t)
+
+	om := types.NewOrderedMap[string, int](3)
+	om.Set("foo", 78)
+	om.Set("var", 90)
+	om.Set("bar", 81)
+
+	expectedKeys := []string{"foo", "var", "bar"}
+	actualKeys := make([]string, 0, len(expectedKeys))
+
+	expectedValues := []int{78, 90, 81}
+	actualValues := make([]int, 0, len(expectedValues))
+
+	for k, v := range om.Iter {
+		actualKeys = append(actualKeys, k)
+		actualValues = append(actualValues, v)
+	}
+
+	assert.Equal(expectedKeys, actualKeys)
+	assert.Equal(expectedValues, actualValues)
+}
