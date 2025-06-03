@@ -236,6 +236,11 @@ func TestTrimUrlForScylla(t *testing.T) {
 			wantUrl:  "https://www.gala.de/",
 			wantHost: "www.gala.de",
 		},
+		{
+			fullUrl:  "https://www.ndtv.com./",
+			wantUrl:  "https://www.ndtv.com/",
+			wantHost: "www.ndtv.com",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.fullUrl, func(_ *testing.T) {
