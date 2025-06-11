@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"github.com/stretchr/testify/assert"
 	"net/url"
 	"testing"
 
@@ -291,4 +292,58 @@ func TestUrl(t *testing.T) {
 	// + %20
 
 	require.Equal(t, "https://the-crossword-solver.com/word/___+major+%28%22the+great+bear%22+constellation%29/", parsed.String())
+}
+
+func TestCleanDomain(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected string
+	}{
+		{"  https://www.Example.com/  ", "example.com"},
+		{"http://example.com/", "example.com"},
+		{"https://example.com", "example.com"},
+		{"www.example.com", "example.com"},
+		{"example.com/", "example.com"},
+		{"  www.example.com/test  ", "example.com/test"},
+		{"EXAMPLE.com", "example.com"},
+		{"https://sub.domain.co.uk/", "sub.domain.co.uk"},
+		{"http://www.example.com", "example.com"},
+		{"  example.com  ", "example.com"},
+		{"", ""},
+		{"  /  ", ""},
+	}
+
+	for _, tt := range tests {
+		result := CleanDomain(tt.input)
+		assert.Equal(t, tt.expected, result, "input: %q", tt.input)
+	}
+}
+
+func TestExtractTldPlusOne(t *testing.T) {
+	tests := []struct {
+		input       string
+		expected    string
+		expectError bool
+	}{
+		{"https://www.example.com/", "example.com", false},
+		{"http://example.com", "example.com", false},
+		{"example.com", "example.com", false},
+		{"https://subdomain.example.co.uk", "example.co.uk", false},
+		{"http://www.example.org/path", "example.org", false},
+		{"www.google.com", "google.com", false},
+		{"https://login.microsoftonline.com", "microsoftonline.com", false},
+		{"not a url", "", true},
+		{"", "", true},
+		{"https://localhost/", "", true}, // localhost is not a public suffix domain
+	}
+
+	for _, tt := range tests {
+		result, err := ExtractTldPlusOne(tt.input)
+		if tt.expectError {
+			assert.Error(t, err, "expected error for input: %q", tt.input)
+		} else {
+			assert.NoError(t, err, "unexpected error for input: %q", tt.input)
+			assert.Equal(t, tt.expected, result, "incorrect result for input: %q", tt.input)
+		}
+	}
 }

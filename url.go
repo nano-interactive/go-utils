@@ -3,7 +3,8 @@ package utils
 import (
 	"bytes"
 	"errors"
-	"net/url"
+	"golang.org/x/net/publicsuffix"
+	net_url "net/url"
 	"strings"
 )
 
@@ -61,7 +62,7 @@ func TrimUrlForScyllaOld(fullUrl string) (scyllaUrl string, hostName string, err
 	var data strings.Builder
 	trimmedUrl := strings.TrimSpace(fullUrl)
 
-	urlObject, err := url.Parse(trimmedUrl)
+	urlObject, err := net_url.Parse(trimmedUrl)
 	if err != nil {
 		// remove everything behind ? or #
 		if index := strings.Index(trimmedUrl, "?"); index > 0 {
@@ -72,7 +73,7 @@ func TrimUrlForScyllaOld(fullUrl string) (scyllaUrl string, hostName string, err
 		}
 		trimmedUrl = strings.ToValidUTF8(trimmedUrl, "")
 
-		urlObject, err = url.Parse(trimmedUrl)
+		urlObject, err = net_url.Parse(trimmedUrl)
 		if err != nil {
 			return "", "", err
 		}
@@ -94,7 +95,7 @@ func TrimUrlForScyllaOld(fullUrl string) (scyllaUrl string, hostName string, err
 }
 
 func GetDomainFromUrl(fullUrl string) (string, error) {
-	fullUrlObject, err := url.Parse(fullUrl)
+	fullUrlObject, err := net_url.Parse(fullUrl)
 	if err != nil {
 		return "", err
 	}
@@ -125,4 +126,46 @@ func TruncateUrl(value []byte) []byte {
 	}
 
 	return value
+}
+
+func CleanDomain(domain string) string {
+	domain = strings.TrimSpace(domain)
+	domain = strings.ToLower(domain)
+
+	// Remove scheme if present
+	domain = strings.TrimPrefix(domain, "http://")
+	domain = strings.TrimPrefix(domain, "https://")
+
+	// Remove "www." prefix and trailing slash
+	domain = strings.TrimPrefix(domain, "www.")
+	domain = strings.TrimSuffix(domain, "/")
+
+	return domain
+}
+
+func ExtractTldPlusOne(url string) (string, error) {
+	var host string
+	url = strings.ReplaceAll(url, "http://", "https://")
+
+	if strings.HasSuffix(url, "/") {
+		url = url[:len(url)-1]
+	}
+	host = url
+
+	parsed, err := net_url.Parse(url)
+	if err == nil {
+		host = parsed.Hostname()
+	}
+
+	eTLDPlusOne, errEtldError := publicsuffix.EffectiveTLDPlusOne(host)
+
+	eTLDPlusOne = strings.ToLower(eTLDPlusOne)
+	if strings.HasPrefix(eTLDPlusOne, "www.") {
+		eTLDPlusOne = strings.TrimPrefix(eTLDPlusOne, "www.")
+	}
+	if strings.HasPrefix(eTLDPlusOne, "https://") {
+		eTLDPlusOne = strings.TrimPrefix(eTLDPlusOne, "https://")
+	}
+
+	return eTLDPlusOne, errEtldError
 }
