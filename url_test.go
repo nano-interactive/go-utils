@@ -219,7 +219,7 @@ func TestTrimUrlForScylla(t *testing.T) {
 		},
 		{
 			fullUrl:  "https://www.spanishdict.com/translate/•\\\\tEn 2016 se mudó al Ministerio de Energía donde trabaje hasta el 2022, en estos 6 años se desempeñó en diferentes roles todos enfocados en energía. En su últimos dos años allá trabajó como Económico Senior y gerente en del equipo de analistas aportando al desarrollo de la política para la nueva tecnología de captura de carbono. ",
-			wantUrl:  "https://www.spanishdict.com/translate/•\\\\tEn 2016 se mudó al Ministerio de Energía donde trabaje hasta el 2022, en estos 6 años se desempeñó en diferentes roles todos enfocados en energía. En su últimos dos años allá trabajó como Económico Senior y gerente en del equipo de analistas aportando al desarrollo de la política para la nueva tecnología de captura de carbono./",
+			wantUrl:  "https://www.spanishdict.com/translate/•\\\\tEn 2016 se mudó al Ministerio de Energía donde trabaje hasta el 2022, en estos 6 años se desempeñó en diferentes roles todos enfocados en energía. En su últimos dos años allá trabajó como Económico Senior y gerente en del equipo de analistas aportando al desarrollo de la política para la nueva tecnología de captura de carbono/",
 			wantHost: "www.spanishdict.com",
 		},
 		{
@@ -328,17 +328,18 @@ func TestExtractTldPlusOne(t *testing.T) {
 		{"https://www.example.com/", "example.com", false},
 		{"http://example.com", "example.com", false},
 		{"example.com", "example.com", false},
-		{"https://subdomain.example.co.uk", "example.co.uk", false},
-		{"http://www.example.org/path", "example.org", false},
-		{"www.google.com", "google.com", false},
-		{"https://login.microsoftonline.com", "microsoftonline.com", false},
+		{"www.example.com", "example.com", false},
+		{"sub.domain.co.uk", "domain.co.uk", false},
+		{"https://sub.domain.co.uk/", "domain.co.uk", false},
 		{"not a url", "", true},
-		{"", "", true},
-		{"https://localhost/", "", true}, // localhost is not a public suffix domain
+		{"", "", true},                              // now explicitly triggers "empty url" error
+		{"localhost", "", true},                     // localhost has no public suffix
+		{"ftp://example.com", "example.com", false}, // handled via fallback to https
 	}
 
 	for _, tt := range tests {
 		result, err := ExtractTldPlusOne(tt.input)
+
 		if tt.expectError {
 			assert.Error(t, err, "expected error for input: %q", tt.input)
 		} else {

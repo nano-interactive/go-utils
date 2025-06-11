@@ -17,6 +17,7 @@ require (
 	github.com/tinylib/msgp v1.2.5
 	github.com/valyala/fasthttp v1.55.0
 	go.mongodb.org/mongo-driver v1.17.3
+	golang.org/x/net v0.26.0
 	google.golang.org/grpc v1.65.0
 )
 

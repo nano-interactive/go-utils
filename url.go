@@ -35,6 +35,7 @@ func TrimUrlForScylla(fullUrl string) (scyllaUrl string, hostName string, err er
 	trimmedUrl = strings.ToValidUTF8(trimmedUrl, "")
 
 	// Remove trailing './' if present
+	trimmedUrl = strings.TrimSuffix(trimmedUrl, ".")
 	trimmedUrl = strings.TrimSuffix(trimmedUrl, "./")
 
 	if trimmedUrl[len(trimmedUrl)-1:] != "/" {
@@ -144,14 +145,22 @@ func CleanDomain(domain string) string {
 }
 
 func ExtractTldPlusOne(url string) (string, error) {
+	if url == "" {
+		return "", errors.New("empty url")
+	}
+
 	var host string
 	url = strings.ReplaceAll(url, "http://", "https://")
+
+	if !strings.Contains(url, "://") {
+		url = "https://" + url
+	}
 
 	if strings.HasSuffix(url, "/") {
 		url = url[:len(url)-1]
 	}
-	host = url
 
+	host = url
 	parsed, err := net_url.Parse(url)
 	if err == nil {
 		host = parsed.Hostname()
