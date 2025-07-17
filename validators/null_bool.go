@@ -4,8 +4,7 @@ import "errors"
 
 // NullBoolValidator validates if a value is boolean pointer.
 // Useful for checking if a variable exists in configuration or not.
-type NullBoolValidator struct {
-}
+type NullBoolValidator struct{}
 
 func (r NullBoolValidator) Validate(value any) error {
 	ptr := value.(*bool)

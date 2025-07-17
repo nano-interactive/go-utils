@@ -2,9 +2,10 @@ package validators_test
 
 import (
 	"errors"
+	"testing"
+
 	"github.com/nano-interactive/go-utils/v2/validators"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestNullBoolValidator(t *testing.T) {

@@ -23,6 +23,7 @@ var ObjectIDRuleErr = validation.NewError("validation_is_mongoid", "Invalid Obje
 func NewObjectIDRule() ObjectIdRule {
 	return 0
 }
+
 func NewNullableObjectIDRule() NullableObjectIdRule {
 	return 0
 }
@@ -89,6 +90,7 @@ func (NullableObjectIdRule) Validate(v any) error {
 func (o ObjectID) Validate() error {
 	return validation.Validate(string(o), NewObjectIDRule())
 }
+
 func (o NullableObjectID) Validate() error {
 	return validation.Validate(string(o), NewNullableObjectIDRule())
 }

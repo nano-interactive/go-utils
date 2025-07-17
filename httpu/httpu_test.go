@@ -69,6 +69,7 @@ func TestCurlFromRequest(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			result, err := httpu.CurlFromRequest(tt.request)
 
 			if tt.err != nil {

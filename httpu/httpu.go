@@ -10,9 +10,7 @@ import (
 	"github.com/nano-interactive/go-utils/v2/constants"
 )
 
-var (
-	ErrNoRequestURL = errors.New("request url is empty")
-)
+var ErrNoRequestURL = errors.New("request url is empty")
 
 func CurlFromRequest(request *http.Request) (string, error) {
 	if request.URL == nil {

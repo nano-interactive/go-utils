@@ -19,6 +19,7 @@ func (r request) Validate() error {
 	return validation.ValidateStruct(&r,
 		validation.Field(&r.ID, NewObjectIDRule()))
 }
+
 func (r nullableRequest) Validate() error {
 	return validation.ValidateStruct(&r,
 		validation.Field(&r.ID, NewNullableObjectIDRule()))
@@ -46,6 +47,7 @@ func TestIsObjectId(t *testing.T) {
 
 	assert.NoError(ObjectID(objectId).Validate())
 }
+
 func TestIsNullableObjectId(t *testing.T) {
 	t.Parallel()
 	assert := require.New(t)

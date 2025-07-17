@@ -3,9 +3,10 @@ package utils
 import (
 	"bytes"
 	"errors"
-	"golang.org/x/net/publicsuffix"
 	net_url "net/url"
 	"strings"
+
+	"golang.org/x/net/publicsuffix"
 )
 
 var (
