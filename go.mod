@@ -1,6 +1,6 @@
 module github.com/nano-interactive/go-utils/v2
 
-go 1.23
+go 1.24
 
 require (
 	github.com/gocql/gocql v1.7.0
