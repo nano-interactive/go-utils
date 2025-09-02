@@ -7,6 +7,39 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func TestOrderedMapLen(t *testing.T) {
+	t.Parallel()
+
+	assert := require.New(t)
+
+	emptyMap := types.NewOrderedMap[string, string](0)
+	filledMap := types.NewOrderedMap[string, string](1)
+	filledMap.Set("Opeth", "Isolation Years")
+	cases := []struct {
+		Name        string
+		ExpectedLen int
+		Input       types.OrderedMap[string, string]
+	}{
+		{
+			Name:        "has no values",
+			ExpectedLen: 0,
+			Input:       emptyMap,
+		},
+		{
+			Name:        "has some values",
+			ExpectedLen: 1,
+			Input:       filledMap,
+		},
+	}
+
+	for _, testCase := range cases {
+		t.Run(testCase.Name, func(t *testing.T) {
+			t.Parallel()
+			assert.Equal(testCase.ExpectedLen, testCase.Input.Len())
+		})
+	}
+}
+
 func TestOrderedMapGetAndSet(t *testing.T) {
 	t.Parallel()
 

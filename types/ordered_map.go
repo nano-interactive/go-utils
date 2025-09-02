@@ -38,6 +38,13 @@ func NewOrderedMapWithCompareFunc[K comparable, V any](
 	}
 }
 
+// Len
+//
+// Returns the length of the internal map.
+func (om *OrderedMap[K, V]) Len() int {
+	return len(om.values)
+}
+
 // SetCompareFunc
 //
 // Sets the comparison function to determine ordering.
